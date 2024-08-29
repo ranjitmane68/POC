@@ -7,14 +7,12 @@ import {
 
 import { OTLPLogExporter } from "@opentelemetry/exporter-logs-otlp-http";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
-import { SeverityNumber, logs, type } from "@opentelemetry/api-logs";
+import { SeverityNumber, logs } from "@opentelemetry/api-logs";
 import { Resource } from "@opentelemetry/resources";
 import {
   SEMRESATTRS_SERVICE_NAME,
   SEMRESATTRS_SERVICE_NAMESPACE,
 } from "@opentelemetry/semantic-conventions";
-import { LogsAPI } from "@opentelemetry/api-logs/build/src/api/logs";
-
 const collectorOptions = {
   url: "http://localhost:4318/v1/traces", // url is optional and can be omitted - default is http://localhost:4318/v1/traces
   headers: {}, // an optional object containing custom headers to be sent with each request
@@ -37,6 +35,7 @@ loggerProvider.addLogRecordProcessor(
 loggerProvider.addLogRecordProcessor(
   new BatchLogRecordProcessor(
     new OTLPLogExporter({
+      //url: "http://localhost:4318/v1/logs", // URL of dev server
       url: "http://localhost:4318/v1/logs", // URL of dev server
       headers: { Authorization: "Basic YWRtaW46YWRtaW4=" },
       timeoutMillis: 10000,
@@ -47,11 +46,11 @@ loggerProvider.addLogRecordProcessor(
 logs.setGlobalLoggerProvider(loggerProvider);
 
 loggerProvider.getLogger("default", "1.0.0").emit({
-  severityNumber: SeverityNumber.DEBUG,
-  severityText: SeverityNumber[SeverityNumber.DEBUG],
-  body: "Logs with SeverityNumber.DEBUG from Sample AngularJS App",
+  body: "Testing message body 987654321",
   attributes: "Testing attributes",
 });
-loggerProvider.getLogger("default", "1.0.0").log();
 
-console.log("OpenTelemetry initialized with Datadog exporter", Date.now());
+// Register the provider globally
+//provider.register();
+
+console.log("OpenTelemetry initialized with Datadog exporter");
