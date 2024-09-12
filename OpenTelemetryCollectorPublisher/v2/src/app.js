@@ -48,14 +48,18 @@ logger.emit({
 });
 
 // Register the provider globally
-//provider.register();
+provider.register();
 
-var ddLogFn = function(msg, attr) {
+var ddLog = function(msg, attr) {
   console.log(msg);
   logger.emit({
     body: msg,
     attributes: attr
   });
+}
+
+module.exports = {
+  log: ddLog
 }
 
 console.log("OpenTelemetry initialized with Datadog exporter");

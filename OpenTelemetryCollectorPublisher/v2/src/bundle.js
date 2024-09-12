@@ -31789,25 +31789,21 @@ BufferWriter._configure();
 "use strict";
 
 var _ref;
+
 var _sdkLogs = require("@opentelemetry/sdk-logs");
+
 var _exporterLogsOtlpHttp = require("@opentelemetry/exporter-logs-otlp-http");
+
 var _exporterTraceOtlpHttp = require("@opentelemetry/exporter-trace-otlp-http");
+
 var _apiLogs = require("@opentelemetry/api-logs");
+
 var _resources = require("@opentelemetry/resources");
+
 var _semanticConventions = require("@opentelemetry/semantic-conventions");
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var collectorOptions = {
   url: "http://localhost:4318/v1/traces",
   // url is optional and can be omitted - default is http://localhost:4318/v1/traces
@@ -31832,7 +31828,8 @@ loggerProvider.addLogRecordProcessor(new _sdkLogs.BatchLogRecordProcessor(new _e
   timeoutMillis: 10000
 })));
 _apiLogs.logs.setGlobalLoggerProvider(loggerProvider);
-var logger = loggerProvider.getLogger("default", "1.0.0");
+const logger = loggerProvider.getLogger("default", "1.0.0");
+
 logger.emit({
   body: "Successfully logging to datadog server !!! ",
   attributes: "Testing attributes"
@@ -31841,8 +31838,23 @@ logger.emit({
 // Register the provider globally
 //provider.register();
 
+var ddLogFn = function(msg, attr) {
+  console.log(msg);
+  logger.emit({
+    body: msg,
+    attributes: attr
+  });
+}
+
+module.exports = {
+  log: ddLogFn
+}
+
 console.log("OpenTelemetry initialized with Datadog exporter");
+},{"@opentelemetry/api-logs":6,"@opentelemetry/exporter-logs-otlp-http":103,"@opentelemetry/exporter-trace-otlp-http":107,"@opentelemetry/resources":147,"@opentelemetry/sdk-logs":161,"@opentelemetry/semantic-conventions":213}],238:[function(require,module,exports){
+var logger = require('./app');
 
-module.exports = {logger};
+// Attach the add function to the global window object
+window.log = logger.log;
 
-},{"@opentelemetry/api-logs":6,"@opentelemetry/exporter-logs-otlp-http":103,"@opentelemetry/exporter-trace-otlp-http":107,"@opentelemetry/resources":147,"@opentelemetry/sdk-logs":161,"@opentelemetry/semantic-conventions":213}]},{},[237]);
+},{"./app":237}]},{},[238]);
