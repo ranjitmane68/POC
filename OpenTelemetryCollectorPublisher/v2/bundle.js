@@ -341,10 +341,11 @@ module.exports = {
 var logger = require("./app-babel");
 var tracer = require("./tracer-babel");
 window.logData = logger.logData;
-window.tracer = tracer.getTracer;
+window.getTracer = tracer.getTracer;
 window.startSpan = tracer.startSpan;
 window.endSpan = tracer.endSpan;
 window.setAttribute = tracer.setAttribute;
+window.logWithTraceContext = tracer.logWithTraceContext;
 
 },{"./app-babel":3,"./tracer-babel":564}],5:[function(require,module,exports){
 "use strict";
@@ -42948,26 +42949,41 @@ window.addEventListener("unhandledrejection", function (event) {
   });
   span.end();
 });
-customTracer: _sdkTraceWeb.Tracer;
-customSpan: _sdkTraceWeb.Span;
+var customTracer;
+var customSpan;
 function getCustomTracer(tracerName) {
-  this.customTracer = provider.getTracer(tracerName);
+  customTracer = provider.getTracer(tracerName);
+  return customTracer;
 }
 function startSpan(spanName) {
-  this.customSpan = this.customTracer.startSpan(spanName);
-  return this.customSpan;
+  customSpan = customTracer.startSpan(spanName);
+  return customSpan;
 }
 function endSpan() {
-  this.customSpan.end();
+  customSpan.end();
 }
 function setAttribute(attr, value) {
-  this.customSpan.setAttribute(attr, value);
+  customSpan.setAttribute(attr, value);
+}
+
+// Custom logger that includes trace and span context
+function logWithTraceContext(tracerName, message) {
+  // Get the active tracer and span
+  var span = provider.getTracer(tracerName).getCurrentSpan();
+  if (span) {
+    var traceId = span.spanContext().traceId;
+    var spanId = span.spanContext().spanId;
+    console.log("[TraceID: ".concat(traceId, "] [SpanID: ").concat(spanId, "] ").concat(message));
+  } else {
+    console.log(message);
+  }
 }
 module.exports = {
   getTracer: getCustomTracer,
   startSpan: startSpan,
   endSpan: endSpan,
-  setAttribute: setAttribute
+  setAttribute: setAttribute,
+  logWithTraceContext: logWithTraceContext
 };
 
 },{"@opentelemetry/exporter-trace-otlp-http":115,"@opentelemetry/instrumentation":183,"@opentelemetry/instrumentation-document-load":120,"@opentelemetry/instrumentation-fetch":127,"@opentelemetry/instrumentation-user-interaction":142,"@opentelemetry/instrumentation-xml-http-request":166,"@opentelemetry/resources":230,"@opentelemetry/sdk-trace-base":407,"@opentelemetry/sdk-trace-web":447,"@opentelemetry/semantic-conventions":539}]},{},[4]);

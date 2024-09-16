@@ -78,22 +78,38 @@ window.addEventListener("unhandledrejection", function (event) {
   span.end();
 });
 
-customTracer: Tracer;
-customSpan: Span;
+var customTracer;
+var customSpan;
 
 function getCustomTracer(tracerName) {
-  this.customTracer = provider.getTracer(tracerName);
+  customTracer = provider.getTracer(tracerName);
+  return customTracer;
 }
 function startSpan(spanName) {
-  this.customSpan = this.customTracer.startSpan(spanName);
-  return this.customSpan;
+  customSpan = customTracer.startSpan(spanName);
+  return customSpan;
 }
 function endSpan() {
-  this.customSpan.end();
+  customSpan.end();
 }
 
 function setAttribute(attr, value) {
-  this.customSpan.setAttribute(attr, value);
+  customSpan.setAttribute(attr, value);
+}
+
+// Custom logger that includes trace and span context
+function logWithTraceContext(tracerName, message) {
+  // Get the active tracer and span
+  const span = provider.getTracer(tracerName).getCurrentSpan();
+
+  if (span) {
+    const traceId = span.spanContext().traceId;
+    const spanId = span.spanContext().spanId;
+
+    console.log(`[TraceID: ${traceId}] [SpanID: ${spanId}] ${message}`);
+  } else {
+    console.log(message);
+  }
 }
 
 module.exports = {
@@ -101,4 +117,5 @@ module.exports = {
   startSpan: startSpan,
   endSpan: endSpan,
   setAttribute: setAttribute,
+  logWithTraceContext: logWithTraceContext,
 };
