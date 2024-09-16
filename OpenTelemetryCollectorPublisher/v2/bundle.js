@@ -337,11 +337,12 @@ module.exports = {
   logData: ddLog
 };
 
-},{"@opentelemetry/api-logs":8,"@opentelemetry/exporter-logs-otlp-http":105,"@opentelemetry/resources":146,"@opentelemetry/sdk-logs":160,"@opentelemetry/semantic-conventions":212}],4:[function(require,module,exports){
+},{"@opentelemetry/api-logs":8,"@opentelemetry/exporter-logs-otlp-http":111,"@opentelemetry/resources":230,"@opentelemetry/sdk-logs":284,"@opentelemetry/semantic-conventions":510}],4:[function(require,module,exports){
 var logger = require("./app-babel");
+var tracer = require("./tracer-babel");
 window.logData = logger.logData;
 
-},{"./app-babel":3}],5:[function(require,module,exports){
+},{"./app-babel":3,"./tracer-babel":537}],5:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -4196,7 +4197,7 @@ exports.SDK_INFO = {
     [semantic_conventions_1.SEMRESATTRS_TELEMETRY_SDK_VERSION]: version_1.VERSION,
 };
 
-},{"../../version":104,"@opentelemetry/semantic-conventions":212}],84:[function(require,module,exports){
+},{"../../version":104,"@opentelemetry/semantic-conventions":105}],84:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unrefTimer = void 0;
@@ -5679,12 +5680,3007 @@ exports.VERSION = '1.25.1';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./trace"), exports);
+__exportStar(require("./resource"), exports);
+
+},{"./resource":108,"./trace":110}],106:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createConstMap = void 0;
+/**
+ * Creates a const map from the given values
+ * @param values - An array of values to be used as keys and values in the map.
+ * @returns A populated version of the map with the values and keys derived from the values.
+ */
+/*#__NO_SIDE_EFFECTS__*/
+function createConstMap(values) {
+    // eslint-disable-next-line prefer-const, @typescript-eslint/no-explicit-any
+    let res = {};
+    const len = values.length;
+    for (let lp = 0; lp < len; lp++) {
+        const val = values[lp];
+        if (val) {
+            res[String(val).toUpperCase().replace(/[-.]/g, '_')] = val;
+        }
+    }
+    return res;
+}
+exports.createConstMap = createConstMap;
+
+},{}],107:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SEMRESATTRS_K8S_STATEFULSET_NAME = exports.SEMRESATTRS_K8S_STATEFULSET_UID = exports.SEMRESATTRS_K8S_DEPLOYMENT_NAME = exports.SEMRESATTRS_K8S_DEPLOYMENT_UID = exports.SEMRESATTRS_K8S_REPLICASET_NAME = exports.SEMRESATTRS_K8S_REPLICASET_UID = exports.SEMRESATTRS_K8S_CONTAINER_NAME = exports.SEMRESATTRS_K8S_POD_NAME = exports.SEMRESATTRS_K8S_POD_UID = exports.SEMRESATTRS_K8S_NAMESPACE_NAME = exports.SEMRESATTRS_K8S_NODE_UID = exports.SEMRESATTRS_K8S_NODE_NAME = exports.SEMRESATTRS_K8S_CLUSTER_NAME = exports.SEMRESATTRS_HOST_IMAGE_VERSION = exports.SEMRESATTRS_HOST_IMAGE_ID = exports.SEMRESATTRS_HOST_IMAGE_NAME = exports.SEMRESATTRS_HOST_ARCH = exports.SEMRESATTRS_HOST_TYPE = exports.SEMRESATTRS_HOST_NAME = exports.SEMRESATTRS_HOST_ID = exports.SEMRESATTRS_FAAS_MAX_MEMORY = exports.SEMRESATTRS_FAAS_INSTANCE = exports.SEMRESATTRS_FAAS_VERSION = exports.SEMRESATTRS_FAAS_ID = exports.SEMRESATTRS_FAAS_NAME = exports.SEMRESATTRS_DEVICE_MODEL_NAME = exports.SEMRESATTRS_DEVICE_MODEL_IDENTIFIER = exports.SEMRESATTRS_DEVICE_ID = exports.SEMRESATTRS_DEPLOYMENT_ENVIRONMENT = exports.SEMRESATTRS_CONTAINER_IMAGE_TAG = exports.SEMRESATTRS_CONTAINER_IMAGE_NAME = exports.SEMRESATTRS_CONTAINER_RUNTIME = exports.SEMRESATTRS_CONTAINER_ID = exports.SEMRESATTRS_CONTAINER_NAME = exports.SEMRESATTRS_AWS_LOG_STREAM_ARNS = exports.SEMRESATTRS_AWS_LOG_STREAM_NAMES = exports.SEMRESATTRS_AWS_LOG_GROUP_ARNS = exports.SEMRESATTRS_AWS_LOG_GROUP_NAMES = exports.SEMRESATTRS_AWS_EKS_CLUSTER_ARN = exports.SEMRESATTRS_AWS_ECS_TASK_REVISION = exports.SEMRESATTRS_AWS_ECS_TASK_FAMILY = exports.SEMRESATTRS_AWS_ECS_TASK_ARN = exports.SEMRESATTRS_AWS_ECS_LAUNCHTYPE = exports.SEMRESATTRS_AWS_ECS_CLUSTER_ARN = exports.SEMRESATTRS_AWS_ECS_CONTAINER_ARN = exports.SEMRESATTRS_CLOUD_PLATFORM = exports.SEMRESATTRS_CLOUD_AVAILABILITY_ZONE = exports.SEMRESATTRS_CLOUD_REGION = exports.SEMRESATTRS_CLOUD_ACCOUNT_ID = exports.SEMRESATTRS_CLOUD_PROVIDER = void 0;
+exports.CLOUDPLATFORMVALUES_GCP_COMPUTE_ENGINE = exports.CLOUDPLATFORMVALUES_AZURE_APP_SERVICE = exports.CLOUDPLATFORMVALUES_AZURE_FUNCTIONS = exports.CLOUDPLATFORMVALUES_AZURE_AKS = exports.CLOUDPLATFORMVALUES_AZURE_CONTAINER_INSTANCES = exports.CLOUDPLATFORMVALUES_AZURE_VM = exports.CLOUDPLATFORMVALUES_AWS_ELASTIC_BEANSTALK = exports.CLOUDPLATFORMVALUES_AWS_LAMBDA = exports.CLOUDPLATFORMVALUES_AWS_EKS = exports.CLOUDPLATFORMVALUES_AWS_ECS = exports.CLOUDPLATFORMVALUES_AWS_EC2 = exports.CLOUDPLATFORMVALUES_ALIBABA_CLOUD_FC = exports.CLOUDPLATFORMVALUES_ALIBABA_CLOUD_ECS = exports.CloudProviderValues = exports.CLOUDPROVIDERVALUES_GCP = exports.CLOUDPROVIDERVALUES_AZURE = exports.CLOUDPROVIDERVALUES_AWS = exports.CLOUDPROVIDERVALUES_ALIBABA_CLOUD = exports.SemanticResourceAttributes = exports.SEMRESATTRS_WEBENGINE_DESCRIPTION = exports.SEMRESATTRS_WEBENGINE_VERSION = exports.SEMRESATTRS_WEBENGINE_NAME = exports.SEMRESATTRS_TELEMETRY_AUTO_VERSION = exports.SEMRESATTRS_TELEMETRY_SDK_VERSION = exports.SEMRESATTRS_TELEMETRY_SDK_LANGUAGE = exports.SEMRESATTRS_TELEMETRY_SDK_NAME = exports.SEMRESATTRS_SERVICE_VERSION = exports.SEMRESATTRS_SERVICE_INSTANCE_ID = exports.SEMRESATTRS_SERVICE_NAMESPACE = exports.SEMRESATTRS_SERVICE_NAME = exports.SEMRESATTRS_PROCESS_RUNTIME_DESCRIPTION = exports.SEMRESATTRS_PROCESS_RUNTIME_VERSION = exports.SEMRESATTRS_PROCESS_RUNTIME_NAME = exports.SEMRESATTRS_PROCESS_OWNER = exports.SEMRESATTRS_PROCESS_COMMAND_ARGS = exports.SEMRESATTRS_PROCESS_COMMAND_LINE = exports.SEMRESATTRS_PROCESS_COMMAND = exports.SEMRESATTRS_PROCESS_EXECUTABLE_PATH = exports.SEMRESATTRS_PROCESS_EXECUTABLE_NAME = exports.SEMRESATTRS_PROCESS_PID = exports.SEMRESATTRS_OS_VERSION = exports.SEMRESATTRS_OS_NAME = exports.SEMRESATTRS_OS_DESCRIPTION = exports.SEMRESATTRS_OS_TYPE = exports.SEMRESATTRS_K8S_CRONJOB_NAME = exports.SEMRESATTRS_K8S_CRONJOB_UID = exports.SEMRESATTRS_K8S_JOB_NAME = exports.SEMRESATTRS_K8S_JOB_UID = exports.SEMRESATTRS_K8S_DAEMONSET_NAME = exports.SEMRESATTRS_K8S_DAEMONSET_UID = void 0;
+exports.TelemetrySdkLanguageValues = exports.TELEMETRYSDKLANGUAGEVALUES_WEBJS = exports.TELEMETRYSDKLANGUAGEVALUES_RUBY = exports.TELEMETRYSDKLANGUAGEVALUES_PYTHON = exports.TELEMETRYSDKLANGUAGEVALUES_PHP = exports.TELEMETRYSDKLANGUAGEVALUES_NODEJS = exports.TELEMETRYSDKLANGUAGEVALUES_JAVA = exports.TELEMETRYSDKLANGUAGEVALUES_GO = exports.TELEMETRYSDKLANGUAGEVALUES_ERLANG = exports.TELEMETRYSDKLANGUAGEVALUES_DOTNET = exports.TELEMETRYSDKLANGUAGEVALUES_CPP = exports.OsTypeValues = exports.OSTYPEVALUES_Z_OS = exports.OSTYPEVALUES_SOLARIS = exports.OSTYPEVALUES_AIX = exports.OSTYPEVALUES_HPUX = exports.OSTYPEVALUES_DRAGONFLYBSD = exports.OSTYPEVALUES_OPENBSD = exports.OSTYPEVALUES_NETBSD = exports.OSTYPEVALUES_FREEBSD = exports.OSTYPEVALUES_DARWIN = exports.OSTYPEVALUES_LINUX = exports.OSTYPEVALUES_WINDOWS = exports.HostArchValues = exports.HOSTARCHVALUES_X86 = exports.HOSTARCHVALUES_PPC64 = exports.HOSTARCHVALUES_PPC32 = exports.HOSTARCHVALUES_IA64 = exports.HOSTARCHVALUES_ARM64 = exports.HOSTARCHVALUES_ARM32 = exports.HOSTARCHVALUES_AMD64 = exports.AwsEcsLaunchtypeValues = exports.AWSECSLAUNCHTYPEVALUES_FARGATE = exports.AWSECSLAUNCHTYPEVALUES_EC2 = exports.CloudPlatformValues = exports.CLOUDPLATFORMVALUES_GCP_APP_ENGINE = exports.CLOUDPLATFORMVALUES_GCP_CLOUD_FUNCTIONS = exports.CLOUDPLATFORMVALUES_GCP_KUBERNETES_ENGINE = exports.CLOUDPLATFORMVALUES_GCP_CLOUD_RUN = void 0;
+const utils_1 = require("../internal/utils");
+//----------------------------------------------------------------------------------------------------------
+// DO NOT EDIT, this is an Auto-generated file from scripts/semconv/templates//templates/SemanticAttributes.ts.j2
+//----------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------
+// Constant values for SemanticResourceAttributes
+//----------------------------------------------------------------------------------------------------------
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_CLOUD_PROVIDER = 'cloud.provider';
+const TMP_CLOUD_ACCOUNT_ID = 'cloud.account.id';
+const TMP_CLOUD_REGION = 'cloud.region';
+const TMP_CLOUD_AVAILABILITY_ZONE = 'cloud.availability_zone';
+const TMP_CLOUD_PLATFORM = 'cloud.platform';
+const TMP_AWS_ECS_CONTAINER_ARN = 'aws.ecs.container.arn';
+const TMP_AWS_ECS_CLUSTER_ARN = 'aws.ecs.cluster.arn';
+const TMP_AWS_ECS_LAUNCHTYPE = 'aws.ecs.launchtype';
+const TMP_AWS_ECS_TASK_ARN = 'aws.ecs.task.arn';
+const TMP_AWS_ECS_TASK_FAMILY = 'aws.ecs.task.family';
+const TMP_AWS_ECS_TASK_REVISION = 'aws.ecs.task.revision';
+const TMP_AWS_EKS_CLUSTER_ARN = 'aws.eks.cluster.arn';
+const TMP_AWS_LOG_GROUP_NAMES = 'aws.log.group.names';
+const TMP_AWS_LOG_GROUP_ARNS = 'aws.log.group.arns';
+const TMP_AWS_LOG_STREAM_NAMES = 'aws.log.stream.names';
+const TMP_AWS_LOG_STREAM_ARNS = 'aws.log.stream.arns';
+const TMP_CONTAINER_NAME = 'container.name';
+const TMP_CONTAINER_ID = 'container.id';
+const TMP_CONTAINER_RUNTIME = 'container.runtime';
+const TMP_CONTAINER_IMAGE_NAME = 'container.image.name';
+const TMP_CONTAINER_IMAGE_TAG = 'container.image.tag';
+const TMP_DEPLOYMENT_ENVIRONMENT = 'deployment.environment';
+const TMP_DEVICE_ID = 'device.id';
+const TMP_DEVICE_MODEL_IDENTIFIER = 'device.model.identifier';
+const TMP_DEVICE_MODEL_NAME = 'device.model.name';
+const TMP_FAAS_NAME = 'faas.name';
+const TMP_FAAS_ID = 'faas.id';
+const TMP_FAAS_VERSION = 'faas.version';
+const TMP_FAAS_INSTANCE = 'faas.instance';
+const TMP_FAAS_MAX_MEMORY = 'faas.max_memory';
+const TMP_HOST_ID = 'host.id';
+const TMP_HOST_NAME = 'host.name';
+const TMP_HOST_TYPE = 'host.type';
+const TMP_HOST_ARCH = 'host.arch';
+const TMP_HOST_IMAGE_NAME = 'host.image.name';
+const TMP_HOST_IMAGE_ID = 'host.image.id';
+const TMP_HOST_IMAGE_VERSION = 'host.image.version';
+const TMP_K8S_CLUSTER_NAME = 'k8s.cluster.name';
+const TMP_K8S_NODE_NAME = 'k8s.node.name';
+const TMP_K8S_NODE_UID = 'k8s.node.uid';
+const TMP_K8S_NAMESPACE_NAME = 'k8s.namespace.name';
+const TMP_K8S_POD_UID = 'k8s.pod.uid';
+const TMP_K8S_POD_NAME = 'k8s.pod.name';
+const TMP_K8S_CONTAINER_NAME = 'k8s.container.name';
+const TMP_K8S_REPLICASET_UID = 'k8s.replicaset.uid';
+const TMP_K8S_REPLICASET_NAME = 'k8s.replicaset.name';
+const TMP_K8S_DEPLOYMENT_UID = 'k8s.deployment.uid';
+const TMP_K8S_DEPLOYMENT_NAME = 'k8s.deployment.name';
+const TMP_K8S_STATEFULSET_UID = 'k8s.statefulset.uid';
+const TMP_K8S_STATEFULSET_NAME = 'k8s.statefulset.name';
+const TMP_K8S_DAEMONSET_UID = 'k8s.daemonset.uid';
+const TMP_K8S_DAEMONSET_NAME = 'k8s.daemonset.name';
+const TMP_K8S_JOB_UID = 'k8s.job.uid';
+const TMP_K8S_JOB_NAME = 'k8s.job.name';
+const TMP_K8S_CRONJOB_UID = 'k8s.cronjob.uid';
+const TMP_K8S_CRONJOB_NAME = 'k8s.cronjob.name';
+const TMP_OS_TYPE = 'os.type';
+const TMP_OS_DESCRIPTION = 'os.description';
+const TMP_OS_NAME = 'os.name';
+const TMP_OS_VERSION = 'os.version';
+const TMP_PROCESS_PID = 'process.pid';
+const TMP_PROCESS_EXECUTABLE_NAME = 'process.executable.name';
+const TMP_PROCESS_EXECUTABLE_PATH = 'process.executable.path';
+const TMP_PROCESS_COMMAND = 'process.command';
+const TMP_PROCESS_COMMAND_LINE = 'process.command_line';
+const TMP_PROCESS_COMMAND_ARGS = 'process.command_args';
+const TMP_PROCESS_OWNER = 'process.owner';
+const TMP_PROCESS_RUNTIME_NAME = 'process.runtime.name';
+const TMP_PROCESS_RUNTIME_VERSION = 'process.runtime.version';
+const TMP_PROCESS_RUNTIME_DESCRIPTION = 'process.runtime.description';
+const TMP_SERVICE_NAME = 'service.name';
+const TMP_SERVICE_NAMESPACE = 'service.namespace';
+const TMP_SERVICE_INSTANCE_ID = 'service.instance.id';
+const TMP_SERVICE_VERSION = 'service.version';
+const TMP_TELEMETRY_SDK_NAME = 'telemetry.sdk.name';
+const TMP_TELEMETRY_SDK_LANGUAGE = 'telemetry.sdk.language';
+const TMP_TELEMETRY_SDK_VERSION = 'telemetry.sdk.version';
+const TMP_TELEMETRY_AUTO_VERSION = 'telemetry.auto.version';
+const TMP_WEBENGINE_NAME = 'webengine.name';
+const TMP_WEBENGINE_VERSION = 'webengine.version';
+const TMP_WEBENGINE_DESCRIPTION = 'webengine.description';
+/**
+ * Name of the cloud provider.
+ */
+exports.SEMRESATTRS_CLOUD_PROVIDER = TMP_CLOUD_PROVIDER;
+/**
+ * The cloud account ID the resource is assigned to.
+ */
+exports.SEMRESATTRS_CLOUD_ACCOUNT_ID = TMP_CLOUD_ACCOUNT_ID;
+/**
+ * The geographical region the resource is running. Refer to your provider&#39;s docs to see the available regions, for example [Alibaba Cloud regions](https://www.alibabacloud.com/help/doc-detail/40654.htm), [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/), [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), or [Google Cloud regions](https://cloud.google.com/about/locations).
+ */
+exports.SEMRESATTRS_CLOUD_REGION = TMP_CLOUD_REGION;
+/**
+ * Cloud regions often have multiple, isolated locations known as zones to increase availability. Availability zone represents the zone where the resource is running.
+ *
+ * Note: Availability zones are called &#34;zones&#34; on Alibaba Cloud and Google Cloud.
+ */
+exports.SEMRESATTRS_CLOUD_AVAILABILITY_ZONE = TMP_CLOUD_AVAILABILITY_ZONE;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.SEMRESATTRS_CLOUD_PLATFORM = TMP_CLOUD_PLATFORM;
+/**
+ * The Amazon Resource Name (ARN) of an [ECS container instance](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_instances.html).
+ */
+exports.SEMRESATTRS_AWS_ECS_CONTAINER_ARN = TMP_AWS_ECS_CONTAINER_ARN;
+/**
+ * The ARN of an [ECS cluster](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/clusters.html).
+ */
+exports.SEMRESATTRS_AWS_ECS_CLUSTER_ARN = TMP_AWS_ECS_CLUSTER_ARN;
+/**
+ * The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task.
+ */
+exports.SEMRESATTRS_AWS_ECS_LAUNCHTYPE = TMP_AWS_ECS_LAUNCHTYPE;
+/**
+ * The ARN of an [ECS task definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html).
+ */
+exports.SEMRESATTRS_AWS_ECS_TASK_ARN = TMP_AWS_ECS_TASK_ARN;
+/**
+ * The task definition family this task definition is a member of.
+ */
+exports.SEMRESATTRS_AWS_ECS_TASK_FAMILY = TMP_AWS_ECS_TASK_FAMILY;
+/**
+ * The revision for this task definition.
+ */
+exports.SEMRESATTRS_AWS_ECS_TASK_REVISION = TMP_AWS_ECS_TASK_REVISION;
+/**
+ * The ARN of an EKS cluster.
+ */
+exports.SEMRESATTRS_AWS_EKS_CLUSTER_ARN = TMP_AWS_EKS_CLUSTER_ARN;
+/**
+ * The name(s) of the AWS log group(s) an application is writing to.
+ *
+ * Note: Multiple log groups must be supported for cases like multi-container applications, where a single application has sidecar containers, and each write to their own log group.
+ */
+exports.SEMRESATTRS_AWS_LOG_GROUP_NAMES = TMP_AWS_LOG_GROUP_NAMES;
+/**
+ * The Amazon Resource Name(s) (ARN) of the AWS log group(s).
+ *
+ * Note: See the [log group ARN format documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/iam-access-control-overview-cwl.html#CWL_ARN_Format).
+ */
+exports.SEMRESATTRS_AWS_LOG_GROUP_ARNS = TMP_AWS_LOG_GROUP_ARNS;
+/**
+ * The name(s) of the AWS log stream(s) an application is writing to.
+ */
+exports.SEMRESATTRS_AWS_LOG_STREAM_NAMES = TMP_AWS_LOG_STREAM_NAMES;
+/**
+ * The ARN(s) of the AWS log stream(s).
+ *
+ * Note: See the [log stream ARN format documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/iam-access-control-overview-cwl.html#CWL_ARN_Format). One log group can contain several log streams, so these ARNs necessarily identify both a log group and a log stream.
+ */
+exports.SEMRESATTRS_AWS_LOG_STREAM_ARNS = TMP_AWS_LOG_STREAM_ARNS;
+/**
+ * Container name.
+ */
+exports.SEMRESATTRS_CONTAINER_NAME = TMP_CONTAINER_NAME;
+/**
+ * Container ID. Usually a UUID, as for example used to [identify Docker containers](https://docs.docker.com/engine/reference/run/#container-identification). The UUID might be abbreviated.
+ */
+exports.SEMRESATTRS_CONTAINER_ID = TMP_CONTAINER_ID;
+/**
+ * The container runtime managing this container.
+ */
+exports.SEMRESATTRS_CONTAINER_RUNTIME = TMP_CONTAINER_RUNTIME;
+/**
+ * Name of the image the container was built on.
+ */
+exports.SEMRESATTRS_CONTAINER_IMAGE_NAME = TMP_CONTAINER_IMAGE_NAME;
+/**
+ * Container image tag.
+ */
+exports.SEMRESATTRS_CONTAINER_IMAGE_TAG = TMP_CONTAINER_IMAGE_TAG;
+/**
+ * Name of the [deployment environment](https://en.wikipedia.org/wiki/Deployment_environment) (aka deployment tier).
+ */
+exports.SEMRESATTRS_DEPLOYMENT_ENVIRONMENT = TMP_DEPLOYMENT_ENVIRONMENT;
+/**
+ * A unique identifier representing the device.
+ *
+ * Note: The device identifier MUST only be defined using the values outlined below. This value is not an advertising identifier and MUST NOT be used as such. On iOS (Swift or Objective-C), this value MUST be equal to the [vendor identifier](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor). On Android (Java or Kotlin), this value MUST be equal to the Firebase Installation ID or a globally unique UUID which is persisted across sessions in your application. More information can be found [here](https://developer.android.com/training/articles/user-data-ids) on best practices and exact implementation details. Caution should be taken when storing personal data or anything which can identify a user. GDPR and data protection laws may apply, ensure you do your own due diligence.
+ */
+exports.SEMRESATTRS_DEVICE_ID = TMP_DEVICE_ID;
+/**
+ * The model identifier for the device.
+ *
+ * Note: It&#39;s recommended this value represents a machine readable version of the model identifier rather than the market or consumer-friendly name of the device.
+ */
+exports.SEMRESATTRS_DEVICE_MODEL_IDENTIFIER = TMP_DEVICE_MODEL_IDENTIFIER;
+/**
+ * The marketing name for the device model.
+ *
+ * Note: It&#39;s recommended this value represents a human readable version of the device model rather than a machine readable alternative.
+ */
+exports.SEMRESATTRS_DEVICE_MODEL_NAME = TMP_DEVICE_MODEL_NAME;
+/**
+ * The name of the single function that this runtime instance executes.
+ *
+ * Note: This is the name of the function as configured/deployed on the FaaS platform and is usually different from the name of the callback function (which may be stored in the [`code.namespace`/`code.function`](../../trace/semantic_conventions/span-general.md#source-code-attributes) span attributes).
+ */
+exports.SEMRESATTRS_FAAS_NAME = TMP_FAAS_NAME;
+/**
+* The unique ID of the single function that this runtime instance executes.
+*
+* Note: Depending on the cloud provider, use:
+
+* **AWS Lambda:** The function [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html).
+Take care not to use the &#34;invoked ARN&#34; directly but replace any
+[alias suffix](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html) with the resolved function version, as the same runtime instance may be invokable with multiple
+different aliases.
+* **GCP:** The [URI of the resource](https://cloud.google.com/iam/docs/full-resource-names)
+* **Azure:** The [Fully Qualified Resource ID](https://docs.microsoft.com/en-us/rest/api/resources/resources/get-by-id).
+
+On some providers, it may not be possible to determine the full ID at startup,
+which is why this field cannot be made required. For example, on AWS the account ID
+part of the ARN is not available without calling another AWS API
+which may be deemed too slow for a short-running lambda function.
+As an alternative, consider setting `faas.id` as a span attribute instead.
+*/
+exports.SEMRESATTRS_FAAS_ID = TMP_FAAS_ID;
+/**
+* The immutable version of the function being executed.
+*
+* Note: Depending on the cloud provider and platform, use:
+
+* **AWS Lambda:** The [function version](https://docs.aws.amazon.com/lambda/latest/dg/configuration-versions.html)
+  (an integer represented as a decimal string).
+* **Google Cloud Run:** The [revision](https://cloud.google.com/run/docs/managing/revisions)
+  (i.e., the function name plus the revision suffix).
+* **Google Cloud Functions:** The value of the
+  [`K_REVISION` environment variable](https://cloud.google.com/functions/docs/env-var#runtime_environment_variables_set_automatically).
+* **Azure Functions:** Not applicable. Do not set this attribute.
+*/
+exports.SEMRESATTRS_FAAS_VERSION = TMP_FAAS_VERSION;
+/**
+ * The execution environment ID as a string, that will be potentially reused for other invocations to the same function/function version.
+ *
+ * Note: * **AWS Lambda:** Use the (full) log stream name.
+ */
+exports.SEMRESATTRS_FAAS_INSTANCE = TMP_FAAS_INSTANCE;
+/**
+ * The amount of memory available to the serverless function in MiB.
+ *
+ * Note: It&#39;s recommended to set this attribute since e.g. too little memory can easily stop a Java AWS Lambda function from working correctly. On AWS Lambda, the environment variable `AWS_LAMBDA_FUNCTION_MEMORY_SIZE` provides this information.
+ */
+exports.SEMRESATTRS_FAAS_MAX_MEMORY = TMP_FAAS_MAX_MEMORY;
+/**
+ * Unique host ID. For Cloud, this must be the instance_id assigned by the cloud provider.
+ */
+exports.SEMRESATTRS_HOST_ID = TMP_HOST_ID;
+/**
+ * Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user.
+ */
+exports.SEMRESATTRS_HOST_NAME = TMP_HOST_NAME;
+/**
+ * Type of host. For Cloud, this must be the machine type.
+ */
+exports.SEMRESATTRS_HOST_TYPE = TMP_HOST_TYPE;
+/**
+ * The CPU architecture the host system is running on.
+ */
+exports.SEMRESATTRS_HOST_ARCH = TMP_HOST_ARCH;
+/**
+ * Name of the VM image or OS install the host was instantiated from.
+ */
+exports.SEMRESATTRS_HOST_IMAGE_NAME = TMP_HOST_IMAGE_NAME;
+/**
+ * VM image ID. For Cloud, this value is from the provider.
+ */
+exports.SEMRESATTRS_HOST_IMAGE_ID = TMP_HOST_IMAGE_ID;
+/**
+ * The version string of the VM image as defined in [Version Attributes](README.md#version-attributes).
+ */
+exports.SEMRESATTRS_HOST_IMAGE_VERSION = TMP_HOST_IMAGE_VERSION;
+/**
+ * The name of the cluster.
+ */
+exports.SEMRESATTRS_K8S_CLUSTER_NAME = TMP_K8S_CLUSTER_NAME;
+/**
+ * The name of the Node.
+ */
+exports.SEMRESATTRS_K8S_NODE_NAME = TMP_K8S_NODE_NAME;
+/**
+ * The UID of the Node.
+ */
+exports.SEMRESATTRS_K8S_NODE_UID = TMP_K8S_NODE_UID;
+/**
+ * The name of the namespace that the pod is running in.
+ */
+exports.SEMRESATTRS_K8S_NAMESPACE_NAME = TMP_K8S_NAMESPACE_NAME;
+/**
+ * The UID of the Pod.
+ */
+exports.SEMRESATTRS_K8S_POD_UID = TMP_K8S_POD_UID;
+/**
+ * The name of the Pod.
+ */
+exports.SEMRESATTRS_K8S_POD_NAME = TMP_K8S_POD_NAME;
+/**
+ * The name of the Container in a Pod template.
+ */
+exports.SEMRESATTRS_K8S_CONTAINER_NAME = TMP_K8S_CONTAINER_NAME;
+/**
+ * The UID of the ReplicaSet.
+ */
+exports.SEMRESATTRS_K8S_REPLICASET_UID = TMP_K8S_REPLICASET_UID;
+/**
+ * The name of the ReplicaSet.
+ */
+exports.SEMRESATTRS_K8S_REPLICASET_NAME = TMP_K8S_REPLICASET_NAME;
+/**
+ * The UID of the Deployment.
+ */
+exports.SEMRESATTRS_K8S_DEPLOYMENT_UID = TMP_K8S_DEPLOYMENT_UID;
+/**
+ * The name of the Deployment.
+ */
+exports.SEMRESATTRS_K8S_DEPLOYMENT_NAME = TMP_K8S_DEPLOYMENT_NAME;
+/**
+ * The UID of the StatefulSet.
+ */
+exports.SEMRESATTRS_K8S_STATEFULSET_UID = TMP_K8S_STATEFULSET_UID;
+/**
+ * The name of the StatefulSet.
+ */
+exports.SEMRESATTRS_K8S_STATEFULSET_NAME = TMP_K8S_STATEFULSET_NAME;
+/**
+ * The UID of the DaemonSet.
+ */
+exports.SEMRESATTRS_K8S_DAEMONSET_UID = TMP_K8S_DAEMONSET_UID;
+/**
+ * The name of the DaemonSet.
+ */
+exports.SEMRESATTRS_K8S_DAEMONSET_NAME = TMP_K8S_DAEMONSET_NAME;
+/**
+ * The UID of the Job.
+ */
+exports.SEMRESATTRS_K8S_JOB_UID = TMP_K8S_JOB_UID;
+/**
+ * The name of the Job.
+ */
+exports.SEMRESATTRS_K8S_JOB_NAME = TMP_K8S_JOB_NAME;
+/**
+ * The UID of the CronJob.
+ */
+exports.SEMRESATTRS_K8S_CRONJOB_UID = TMP_K8S_CRONJOB_UID;
+/**
+ * The name of the CronJob.
+ */
+exports.SEMRESATTRS_K8S_CRONJOB_NAME = TMP_K8S_CRONJOB_NAME;
+/**
+ * The operating system type.
+ */
+exports.SEMRESATTRS_OS_TYPE = TMP_OS_TYPE;
+/**
+ * Human readable (not intended to be parsed) OS version information, like e.g. reported by `ver` or `lsb_release -a` commands.
+ */
+exports.SEMRESATTRS_OS_DESCRIPTION = TMP_OS_DESCRIPTION;
+/**
+ * Human readable operating system name.
+ */
+exports.SEMRESATTRS_OS_NAME = TMP_OS_NAME;
+/**
+ * The version string of the operating system as defined in [Version Attributes](../../resource/semantic_conventions/README.md#version-attributes).
+ */
+exports.SEMRESATTRS_OS_VERSION = TMP_OS_VERSION;
+/**
+ * Process identifier (PID).
+ */
+exports.SEMRESATTRS_PROCESS_PID = TMP_PROCESS_PID;
+/**
+ * The name of the process executable. On Linux based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`.
+ */
+exports.SEMRESATTRS_PROCESS_EXECUTABLE_NAME = TMP_PROCESS_EXECUTABLE_NAME;
+/**
+ * The full path to the process executable. On Linux based systems, can be set to the target of `proc/[pid]/exe`. On Windows, can be set to the result of `GetProcessImageFileNameW`.
+ */
+exports.SEMRESATTRS_PROCESS_EXECUTABLE_PATH = TMP_PROCESS_EXECUTABLE_PATH;
+/**
+ * The command used to launch the process (i.e. the command name). On Linux based systems, can be set to the zeroth string in `proc/[pid]/cmdline`. On Windows, can be set to the first parameter extracted from `GetCommandLineW`.
+ */
+exports.SEMRESATTRS_PROCESS_COMMAND = TMP_PROCESS_COMMAND;
+/**
+ * The full command used to launch the process as a single string representing the full command. On Windows, can be set to the result of `GetCommandLineW`. Do not set this if you have to assemble it just for monitoring; use `process.command_args` instead.
+ */
+exports.SEMRESATTRS_PROCESS_COMMAND_LINE = TMP_PROCESS_COMMAND_LINE;
+/**
+ * All the command arguments (including the command/executable itself) as received by the process. On Linux-based systems (and some other Unixoid systems supporting procfs), can be set according to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. For libc-based executables, this would be the full argv vector passed to `main`.
+ */
+exports.SEMRESATTRS_PROCESS_COMMAND_ARGS = TMP_PROCESS_COMMAND_ARGS;
+/**
+ * The username of the user that owns the process.
+ */
+exports.SEMRESATTRS_PROCESS_OWNER = TMP_PROCESS_OWNER;
+/**
+ * The name of the runtime of this process. For compiled native binaries, this SHOULD be the name of the compiler.
+ */
+exports.SEMRESATTRS_PROCESS_RUNTIME_NAME = TMP_PROCESS_RUNTIME_NAME;
+/**
+ * The version of the runtime of this process, as returned by the runtime without modification.
+ */
+exports.SEMRESATTRS_PROCESS_RUNTIME_VERSION = TMP_PROCESS_RUNTIME_VERSION;
+/**
+ * An additional description about the runtime of the process, for example a specific vendor customization of the runtime environment.
+ */
+exports.SEMRESATTRS_PROCESS_RUNTIME_DESCRIPTION = TMP_PROCESS_RUNTIME_DESCRIPTION;
+/**
+ * Logical name of the service.
+ *
+ * Note: MUST be the same for all instances of horizontally scaled services. If the value was not specified, SDKs MUST fallback to `unknown_service:` concatenated with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`. If `process.executable.name` is not available, the value MUST be set to `unknown_service`.
+ */
+exports.SEMRESATTRS_SERVICE_NAME = TMP_SERVICE_NAME;
+/**
+ * A namespace for `service.name`.
+ *
+ * Note: A string value having a meaning that helps to distinguish a group of services, for example the team name that owns a group of services. `service.name` is expected to be unique within the same namespace. If `service.namespace` is not specified in the Resource then `service.name` is expected to be unique for all services that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace.
+ */
+exports.SEMRESATTRS_SERVICE_NAMESPACE = TMP_SERVICE_NAMESPACE;
+/**
+ * The string ID of the service instance.
+ *
+ * Note: MUST be unique for each instance of the same `service.namespace,service.name` pair (in other words `service.namespace,service.name,service.instance.id` triplet MUST be globally unique). The ID helps to distinguish instances of the same service that exist at the same time (e.g. instances of a horizontally scaled service). It is preferable for the ID to be persistent and stay the same for the lifetime of the service instance, however it is acceptable that the ID is ephemeral and changes during important lifetime events for the service (e.g. service restarts). If the service has no inherent unique ID that can be used as the value of this attribute it is recommended to generate a random Version 1 or Version 4 RFC 4122 UUID (services aiming for reproducible UUIDs may also use Version 5, see RFC 4122 for more recommendations).
+ */
+exports.SEMRESATTRS_SERVICE_INSTANCE_ID = TMP_SERVICE_INSTANCE_ID;
+/**
+ * The version string of the service API or implementation.
+ */
+exports.SEMRESATTRS_SERVICE_VERSION = TMP_SERVICE_VERSION;
+/**
+ * The name of the telemetry SDK as defined above.
+ */
+exports.SEMRESATTRS_TELEMETRY_SDK_NAME = TMP_TELEMETRY_SDK_NAME;
+/**
+ * The language of the telemetry SDK.
+ */
+exports.SEMRESATTRS_TELEMETRY_SDK_LANGUAGE = TMP_TELEMETRY_SDK_LANGUAGE;
+/**
+ * The version string of the telemetry SDK.
+ */
+exports.SEMRESATTRS_TELEMETRY_SDK_VERSION = TMP_TELEMETRY_SDK_VERSION;
+/**
+ * The version string of the auto instrumentation agent, if used.
+ */
+exports.SEMRESATTRS_TELEMETRY_AUTO_VERSION = TMP_TELEMETRY_AUTO_VERSION;
+/**
+ * The name of the web engine.
+ */
+exports.SEMRESATTRS_WEBENGINE_NAME = TMP_WEBENGINE_NAME;
+/**
+ * The version of the web engine.
+ */
+exports.SEMRESATTRS_WEBENGINE_VERSION = TMP_WEBENGINE_VERSION;
+/**
+ * Additional description of the web engine (e.g. detailed version and edition information).
+ */
+exports.SEMRESATTRS_WEBENGINE_DESCRIPTION = TMP_WEBENGINE_DESCRIPTION;
+/**
+ * Create exported Value Map for SemanticResourceAttributes values
+ * @deprecated Use the SEMRESATTRS_XXXXX constants rather than the SemanticResourceAttributes.XXXXX for bundle minification
+ */
+exports.SemanticResourceAttributes = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_CLOUD_PROVIDER,
+    TMP_CLOUD_ACCOUNT_ID,
+    TMP_CLOUD_REGION,
+    TMP_CLOUD_AVAILABILITY_ZONE,
+    TMP_CLOUD_PLATFORM,
+    TMP_AWS_ECS_CONTAINER_ARN,
+    TMP_AWS_ECS_CLUSTER_ARN,
+    TMP_AWS_ECS_LAUNCHTYPE,
+    TMP_AWS_ECS_TASK_ARN,
+    TMP_AWS_ECS_TASK_FAMILY,
+    TMP_AWS_ECS_TASK_REVISION,
+    TMP_AWS_EKS_CLUSTER_ARN,
+    TMP_AWS_LOG_GROUP_NAMES,
+    TMP_AWS_LOG_GROUP_ARNS,
+    TMP_AWS_LOG_STREAM_NAMES,
+    TMP_AWS_LOG_STREAM_ARNS,
+    TMP_CONTAINER_NAME,
+    TMP_CONTAINER_ID,
+    TMP_CONTAINER_RUNTIME,
+    TMP_CONTAINER_IMAGE_NAME,
+    TMP_CONTAINER_IMAGE_TAG,
+    TMP_DEPLOYMENT_ENVIRONMENT,
+    TMP_DEVICE_ID,
+    TMP_DEVICE_MODEL_IDENTIFIER,
+    TMP_DEVICE_MODEL_NAME,
+    TMP_FAAS_NAME,
+    TMP_FAAS_ID,
+    TMP_FAAS_VERSION,
+    TMP_FAAS_INSTANCE,
+    TMP_FAAS_MAX_MEMORY,
+    TMP_HOST_ID,
+    TMP_HOST_NAME,
+    TMP_HOST_TYPE,
+    TMP_HOST_ARCH,
+    TMP_HOST_IMAGE_NAME,
+    TMP_HOST_IMAGE_ID,
+    TMP_HOST_IMAGE_VERSION,
+    TMP_K8S_CLUSTER_NAME,
+    TMP_K8S_NODE_NAME,
+    TMP_K8S_NODE_UID,
+    TMP_K8S_NAMESPACE_NAME,
+    TMP_K8S_POD_UID,
+    TMP_K8S_POD_NAME,
+    TMP_K8S_CONTAINER_NAME,
+    TMP_K8S_REPLICASET_UID,
+    TMP_K8S_REPLICASET_NAME,
+    TMP_K8S_DEPLOYMENT_UID,
+    TMP_K8S_DEPLOYMENT_NAME,
+    TMP_K8S_STATEFULSET_UID,
+    TMP_K8S_STATEFULSET_NAME,
+    TMP_K8S_DAEMONSET_UID,
+    TMP_K8S_DAEMONSET_NAME,
+    TMP_K8S_JOB_UID,
+    TMP_K8S_JOB_NAME,
+    TMP_K8S_CRONJOB_UID,
+    TMP_K8S_CRONJOB_NAME,
+    TMP_OS_TYPE,
+    TMP_OS_DESCRIPTION,
+    TMP_OS_NAME,
+    TMP_OS_VERSION,
+    TMP_PROCESS_PID,
+    TMP_PROCESS_EXECUTABLE_NAME,
+    TMP_PROCESS_EXECUTABLE_PATH,
+    TMP_PROCESS_COMMAND,
+    TMP_PROCESS_COMMAND_LINE,
+    TMP_PROCESS_COMMAND_ARGS,
+    TMP_PROCESS_OWNER,
+    TMP_PROCESS_RUNTIME_NAME,
+    TMP_PROCESS_RUNTIME_VERSION,
+    TMP_PROCESS_RUNTIME_DESCRIPTION,
+    TMP_SERVICE_NAME,
+    TMP_SERVICE_NAMESPACE,
+    TMP_SERVICE_INSTANCE_ID,
+    TMP_SERVICE_VERSION,
+    TMP_TELEMETRY_SDK_NAME,
+    TMP_TELEMETRY_SDK_LANGUAGE,
+    TMP_TELEMETRY_SDK_VERSION,
+    TMP_TELEMETRY_AUTO_VERSION,
+    TMP_WEBENGINE_NAME,
+    TMP_WEBENGINE_VERSION,
+    TMP_WEBENGINE_DESCRIPTION,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for CloudProviderValues enum definition
+ *
+ * Name of the cloud provider.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_CLOUDPROVIDERVALUES_ALIBABA_CLOUD = 'alibaba_cloud';
+const TMP_CLOUDPROVIDERVALUES_AWS = 'aws';
+const TMP_CLOUDPROVIDERVALUES_AZURE = 'azure';
+const TMP_CLOUDPROVIDERVALUES_GCP = 'gcp';
+/**
+ * Name of the cloud provider.
+ */
+exports.CLOUDPROVIDERVALUES_ALIBABA_CLOUD = TMP_CLOUDPROVIDERVALUES_ALIBABA_CLOUD;
+/**
+ * Name of the cloud provider.
+ */
+exports.CLOUDPROVIDERVALUES_AWS = TMP_CLOUDPROVIDERVALUES_AWS;
+/**
+ * Name of the cloud provider.
+ */
+exports.CLOUDPROVIDERVALUES_AZURE = TMP_CLOUDPROVIDERVALUES_AZURE;
+/**
+ * Name of the cloud provider.
+ */
+exports.CLOUDPROVIDERVALUES_GCP = TMP_CLOUDPROVIDERVALUES_GCP;
+/**
+ * The constant map of values for CloudProviderValues.
+ * @deprecated Use the CLOUDPROVIDERVALUES_XXXXX constants rather than the CloudProviderValues.XXXXX for bundle minification.
+ */
+exports.CloudProviderValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_CLOUDPROVIDERVALUES_ALIBABA_CLOUD,
+    TMP_CLOUDPROVIDERVALUES_AWS,
+    TMP_CLOUDPROVIDERVALUES_AZURE,
+    TMP_CLOUDPROVIDERVALUES_GCP,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for CloudPlatformValues enum definition
+ *
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_CLOUDPLATFORMVALUES_ALIBABA_CLOUD_ECS = 'alibaba_cloud_ecs';
+const TMP_CLOUDPLATFORMVALUES_ALIBABA_CLOUD_FC = 'alibaba_cloud_fc';
+const TMP_CLOUDPLATFORMVALUES_AWS_EC2 = 'aws_ec2';
+const TMP_CLOUDPLATFORMVALUES_AWS_ECS = 'aws_ecs';
+const TMP_CLOUDPLATFORMVALUES_AWS_EKS = 'aws_eks';
+const TMP_CLOUDPLATFORMVALUES_AWS_LAMBDA = 'aws_lambda';
+const TMP_CLOUDPLATFORMVALUES_AWS_ELASTIC_BEANSTALK = 'aws_elastic_beanstalk';
+const TMP_CLOUDPLATFORMVALUES_AZURE_VM = 'azure_vm';
+const TMP_CLOUDPLATFORMVALUES_AZURE_CONTAINER_INSTANCES = 'azure_container_instances';
+const TMP_CLOUDPLATFORMVALUES_AZURE_AKS = 'azure_aks';
+const TMP_CLOUDPLATFORMVALUES_AZURE_FUNCTIONS = 'azure_functions';
+const TMP_CLOUDPLATFORMVALUES_AZURE_APP_SERVICE = 'azure_app_service';
+const TMP_CLOUDPLATFORMVALUES_GCP_COMPUTE_ENGINE = 'gcp_compute_engine';
+const TMP_CLOUDPLATFORMVALUES_GCP_CLOUD_RUN = 'gcp_cloud_run';
+const TMP_CLOUDPLATFORMVALUES_GCP_KUBERNETES_ENGINE = 'gcp_kubernetes_engine';
+const TMP_CLOUDPLATFORMVALUES_GCP_CLOUD_FUNCTIONS = 'gcp_cloud_functions';
+const TMP_CLOUDPLATFORMVALUES_GCP_APP_ENGINE = 'gcp_app_engine';
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_ALIBABA_CLOUD_ECS = TMP_CLOUDPLATFORMVALUES_ALIBABA_CLOUD_ECS;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_ALIBABA_CLOUD_FC = TMP_CLOUDPLATFORMVALUES_ALIBABA_CLOUD_FC;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_AWS_EC2 = TMP_CLOUDPLATFORMVALUES_AWS_EC2;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_AWS_ECS = TMP_CLOUDPLATFORMVALUES_AWS_ECS;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_AWS_EKS = TMP_CLOUDPLATFORMVALUES_AWS_EKS;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_AWS_LAMBDA = TMP_CLOUDPLATFORMVALUES_AWS_LAMBDA;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_AWS_ELASTIC_BEANSTALK = TMP_CLOUDPLATFORMVALUES_AWS_ELASTIC_BEANSTALK;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_AZURE_VM = TMP_CLOUDPLATFORMVALUES_AZURE_VM;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_AZURE_CONTAINER_INSTANCES = TMP_CLOUDPLATFORMVALUES_AZURE_CONTAINER_INSTANCES;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_AZURE_AKS = TMP_CLOUDPLATFORMVALUES_AZURE_AKS;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_AZURE_FUNCTIONS = TMP_CLOUDPLATFORMVALUES_AZURE_FUNCTIONS;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_AZURE_APP_SERVICE = TMP_CLOUDPLATFORMVALUES_AZURE_APP_SERVICE;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_GCP_COMPUTE_ENGINE = TMP_CLOUDPLATFORMVALUES_GCP_COMPUTE_ENGINE;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_GCP_CLOUD_RUN = TMP_CLOUDPLATFORMVALUES_GCP_CLOUD_RUN;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_GCP_KUBERNETES_ENGINE = TMP_CLOUDPLATFORMVALUES_GCP_KUBERNETES_ENGINE;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_GCP_CLOUD_FUNCTIONS = TMP_CLOUDPLATFORMVALUES_GCP_CLOUD_FUNCTIONS;
+/**
+ * The cloud platform in use.
+ *
+ * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ */
+exports.CLOUDPLATFORMVALUES_GCP_APP_ENGINE = TMP_CLOUDPLATFORMVALUES_GCP_APP_ENGINE;
+/**
+ * The constant map of values for CloudPlatformValues.
+ * @deprecated Use the CLOUDPLATFORMVALUES_XXXXX constants rather than the CloudPlatformValues.XXXXX for bundle minification.
+ */
+exports.CloudPlatformValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_CLOUDPLATFORMVALUES_ALIBABA_CLOUD_ECS,
+    TMP_CLOUDPLATFORMVALUES_ALIBABA_CLOUD_FC,
+    TMP_CLOUDPLATFORMVALUES_AWS_EC2,
+    TMP_CLOUDPLATFORMVALUES_AWS_ECS,
+    TMP_CLOUDPLATFORMVALUES_AWS_EKS,
+    TMP_CLOUDPLATFORMVALUES_AWS_LAMBDA,
+    TMP_CLOUDPLATFORMVALUES_AWS_ELASTIC_BEANSTALK,
+    TMP_CLOUDPLATFORMVALUES_AZURE_VM,
+    TMP_CLOUDPLATFORMVALUES_AZURE_CONTAINER_INSTANCES,
+    TMP_CLOUDPLATFORMVALUES_AZURE_AKS,
+    TMP_CLOUDPLATFORMVALUES_AZURE_FUNCTIONS,
+    TMP_CLOUDPLATFORMVALUES_AZURE_APP_SERVICE,
+    TMP_CLOUDPLATFORMVALUES_GCP_COMPUTE_ENGINE,
+    TMP_CLOUDPLATFORMVALUES_GCP_CLOUD_RUN,
+    TMP_CLOUDPLATFORMVALUES_GCP_KUBERNETES_ENGINE,
+    TMP_CLOUDPLATFORMVALUES_GCP_CLOUD_FUNCTIONS,
+    TMP_CLOUDPLATFORMVALUES_GCP_APP_ENGINE,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for AwsEcsLaunchtypeValues enum definition
+ *
+ * The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_AWSECSLAUNCHTYPEVALUES_EC2 = 'ec2';
+const TMP_AWSECSLAUNCHTYPEVALUES_FARGATE = 'fargate';
+/**
+ * The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task.
+ */
+exports.AWSECSLAUNCHTYPEVALUES_EC2 = TMP_AWSECSLAUNCHTYPEVALUES_EC2;
+/**
+ * The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task.
+ */
+exports.AWSECSLAUNCHTYPEVALUES_FARGATE = TMP_AWSECSLAUNCHTYPEVALUES_FARGATE;
+/**
+ * The constant map of values for AwsEcsLaunchtypeValues.
+ * @deprecated Use the AWSECSLAUNCHTYPEVALUES_XXXXX constants rather than the AwsEcsLaunchtypeValues.XXXXX for bundle minification.
+ */
+exports.AwsEcsLaunchtypeValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_AWSECSLAUNCHTYPEVALUES_EC2,
+    TMP_AWSECSLAUNCHTYPEVALUES_FARGATE,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for HostArchValues enum definition
+ *
+ * The CPU architecture the host system is running on.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_HOSTARCHVALUES_AMD64 = 'amd64';
+const TMP_HOSTARCHVALUES_ARM32 = 'arm32';
+const TMP_HOSTARCHVALUES_ARM64 = 'arm64';
+const TMP_HOSTARCHVALUES_IA64 = 'ia64';
+const TMP_HOSTARCHVALUES_PPC32 = 'ppc32';
+const TMP_HOSTARCHVALUES_PPC64 = 'ppc64';
+const TMP_HOSTARCHVALUES_X86 = 'x86';
+/**
+ * The CPU architecture the host system is running on.
+ */
+exports.HOSTARCHVALUES_AMD64 = TMP_HOSTARCHVALUES_AMD64;
+/**
+ * The CPU architecture the host system is running on.
+ */
+exports.HOSTARCHVALUES_ARM32 = TMP_HOSTARCHVALUES_ARM32;
+/**
+ * The CPU architecture the host system is running on.
+ */
+exports.HOSTARCHVALUES_ARM64 = TMP_HOSTARCHVALUES_ARM64;
+/**
+ * The CPU architecture the host system is running on.
+ */
+exports.HOSTARCHVALUES_IA64 = TMP_HOSTARCHVALUES_IA64;
+/**
+ * The CPU architecture the host system is running on.
+ */
+exports.HOSTARCHVALUES_PPC32 = TMP_HOSTARCHVALUES_PPC32;
+/**
+ * The CPU architecture the host system is running on.
+ */
+exports.HOSTARCHVALUES_PPC64 = TMP_HOSTARCHVALUES_PPC64;
+/**
+ * The CPU architecture the host system is running on.
+ */
+exports.HOSTARCHVALUES_X86 = TMP_HOSTARCHVALUES_X86;
+/**
+ * The constant map of values for HostArchValues.
+ * @deprecated Use the HOSTARCHVALUES_XXXXX constants rather than the HostArchValues.XXXXX for bundle minification.
+ */
+exports.HostArchValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_HOSTARCHVALUES_AMD64,
+    TMP_HOSTARCHVALUES_ARM32,
+    TMP_HOSTARCHVALUES_ARM64,
+    TMP_HOSTARCHVALUES_IA64,
+    TMP_HOSTARCHVALUES_PPC32,
+    TMP_HOSTARCHVALUES_PPC64,
+    TMP_HOSTARCHVALUES_X86,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for OsTypeValues enum definition
+ *
+ * The operating system type.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_OSTYPEVALUES_WINDOWS = 'windows';
+const TMP_OSTYPEVALUES_LINUX = 'linux';
+const TMP_OSTYPEVALUES_DARWIN = 'darwin';
+const TMP_OSTYPEVALUES_FREEBSD = 'freebsd';
+const TMP_OSTYPEVALUES_NETBSD = 'netbsd';
+const TMP_OSTYPEVALUES_OPENBSD = 'openbsd';
+const TMP_OSTYPEVALUES_DRAGONFLYBSD = 'dragonflybsd';
+const TMP_OSTYPEVALUES_HPUX = 'hpux';
+const TMP_OSTYPEVALUES_AIX = 'aix';
+const TMP_OSTYPEVALUES_SOLARIS = 'solaris';
+const TMP_OSTYPEVALUES_Z_OS = 'z_os';
+/**
+ * The operating system type.
+ */
+exports.OSTYPEVALUES_WINDOWS = TMP_OSTYPEVALUES_WINDOWS;
+/**
+ * The operating system type.
+ */
+exports.OSTYPEVALUES_LINUX = TMP_OSTYPEVALUES_LINUX;
+/**
+ * The operating system type.
+ */
+exports.OSTYPEVALUES_DARWIN = TMP_OSTYPEVALUES_DARWIN;
+/**
+ * The operating system type.
+ */
+exports.OSTYPEVALUES_FREEBSD = TMP_OSTYPEVALUES_FREEBSD;
+/**
+ * The operating system type.
+ */
+exports.OSTYPEVALUES_NETBSD = TMP_OSTYPEVALUES_NETBSD;
+/**
+ * The operating system type.
+ */
+exports.OSTYPEVALUES_OPENBSD = TMP_OSTYPEVALUES_OPENBSD;
+/**
+ * The operating system type.
+ */
+exports.OSTYPEVALUES_DRAGONFLYBSD = TMP_OSTYPEVALUES_DRAGONFLYBSD;
+/**
+ * The operating system type.
+ */
+exports.OSTYPEVALUES_HPUX = TMP_OSTYPEVALUES_HPUX;
+/**
+ * The operating system type.
+ */
+exports.OSTYPEVALUES_AIX = TMP_OSTYPEVALUES_AIX;
+/**
+ * The operating system type.
+ */
+exports.OSTYPEVALUES_SOLARIS = TMP_OSTYPEVALUES_SOLARIS;
+/**
+ * The operating system type.
+ */
+exports.OSTYPEVALUES_Z_OS = TMP_OSTYPEVALUES_Z_OS;
+/**
+ * The constant map of values for OsTypeValues.
+ * @deprecated Use the OSTYPEVALUES_XXXXX constants rather than the OsTypeValues.XXXXX for bundle minification.
+ */
+exports.OsTypeValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_OSTYPEVALUES_WINDOWS,
+    TMP_OSTYPEVALUES_LINUX,
+    TMP_OSTYPEVALUES_DARWIN,
+    TMP_OSTYPEVALUES_FREEBSD,
+    TMP_OSTYPEVALUES_NETBSD,
+    TMP_OSTYPEVALUES_OPENBSD,
+    TMP_OSTYPEVALUES_DRAGONFLYBSD,
+    TMP_OSTYPEVALUES_HPUX,
+    TMP_OSTYPEVALUES_AIX,
+    TMP_OSTYPEVALUES_SOLARIS,
+    TMP_OSTYPEVALUES_Z_OS,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for TelemetrySdkLanguageValues enum definition
+ *
+ * The language of the telemetry SDK.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_TELEMETRYSDKLANGUAGEVALUES_CPP = 'cpp';
+const TMP_TELEMETRYSDKLANGUAGEVALUES_DOTNET = 'dotnet';
+const TMP_TELEMETRYSDKLANGUAGEVALUES_ERLANG = 'erlang';
+const TMP_TELEMETRYSDKLANGUAGEVALUES_GO = 'go';
+const TMP_TELEMETRYSDKLANGUAGEVALUES_JAVA = 'java';
+const TMP_TELEMETRYSDKLANGUAGEVALUES_NODEJS = 'nodejs';
+const TMP_TELEMETRYSDKLANGUAGEVALUES_PHP = 'php';
+const TMP_TELEMETRYSDKLANGUAGEVALUES_PYTHON = 'python';
+const TMP_TELEMETRYSDKLANGUAGEVALUES_RUBY = 'ruby';
+const TMP_TELEMETRYSDKLANGUAGEVALUES_WEBJS = 'webjs';
+/**
+ * The language of the telemetry SDK.
+ */
+exports.TELEMETRYSDKLANGUAGEVALUES_CPP = TMP_TELEMETRYSDKLANGUAGEVALUES_CPP;
+/**
+ * The language of the telemetry SDK.
+ */
+exports.TELEMETRYSDKLANGUAGEVALUES_DOTNET = TMP_TELEMETRYSDKLANGUAGEVALUES_DOTNET;
+/**
+ * The language of the telemetry SDK.
+ */
+exports.TELEMETRYSDKLANGUAGEVALUES_ERLANG = TMP_TELEMETRYSDKLANGUAGEVALUES_ERLANG;
+/**
+ * The language of the telemetry SDK.
+ */
+exports.TELEMETRYSDKLANGUAGEVALUES_GO = TMP_TELEMETRYSDKLANGUAGEVALUES_GO;
+/**
+ * The language of the telemetry SDK.
+ */
+exports.TELEMETRYSDKLANGUAGEVALUES_JAVA = TMP_TELEMETRYSDKLANGUAGEVALUES_JAVA;
+/**
+ * The language of the telemetry SDK.
+ */
+exports.TELEMETRYSDKLANGUAGEVALUES_NODEJS = TMP_TELEMETRYSDKLANGUAGEVALUES_NODEJS;
+/**
+ * The language of the telemetry SDK.
+ */
+exports.TELEMETRYSDKLANGUAGEVALUES_PHP = TMP_TELEMETRYSDKLANGUAGEVALUES_PHP;
+/**
+ * The language of the telemetry SDK.
+ */
+exports.TELEMETRYSDKLANGUAGEVALUES_PYTHON = TMP_TELEMETRYSDKLANGUAGEVALUES_PYTHON;
+/**
+ * The language of the telemetry SDK.
+ */
+exports.TELEMETRYSDKLANGUAGEVALUES_RUBY = TMP_TELEMETRYSDKLANGUAGEVALUES_RUBY;
+/**
+ * The language of the telemetry SDK.
+ */
+exports.TELEMETRYSDKLANGUAGEVALUES_WEBJS = TMP_TELEMETRYSDKLANGUAGEVALUES_WEBJS;
+/**
+ * The constant map of values for TelemetrySdkLanguageValues.
+ * @deprecated Use the TELEMETRYSDKLANGUAGEVALUES_XXXXX constants rather than the TelemetrySdkLanguageValues.XXXXX for bundle minification.
+ */
+exports.TelemetrySdkLanguageValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_TELEMETRYSDKLANGUAGEVALUES_CPP,
+    TMP_TELEMETRYSDKLANGUAGEVALUES_DOTNET,
+    TMP_TELEMETRYSDKLANGUAGEVALUES_ERLANG,
+    TMP_TELEMETRYSDKLANGUAGEVALUES_GO,
+    TMP_TELEMETRYSDKLANGUAGEVALUES_JAVA,
+    TMP_TELEMETRYSDKLANGUAGEVALUES_NODEJS,
+    TMP_TELEMETRYSDKLANGUAGEVALUES_PHP,
+    TMP_TELEMETRYSDKLANGUAGEVALUES_PYTHON,
+    TMP_TELEMETRYSDKLANGUAGEVALUES_RUBY,
+    TMP_TELEMETRYSDKLANGUAGEVALUES_WEBJS,
+]);
+
+},{"../internal/utils":106}],108:[function(require,module,exports){
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+__exportStar(require("./SemanticResourceAttributes"), exports);
+
+},{"./SemanticResourceAttributes":107}],109:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SEMATTRS_NET_HOST_CARRIER_ICC = exports.SEMATTRS_NET_HOST_CARRIER_MNC = exports.SEMATTRS_NET_HOST_CARRIER_MCC = exports.SEMATTRS_NET_HOST_CARRIER_NAME = exports.SEMATTRS_NET_HOST_CONNECTION_SUBTYPE = exports.SEMATTRS_NET_HOST_CONNECTION_TYPE = exports.SEMATTRS_NET_HOST_NAME = exports.SEMATTRS_NET_HOST_PORT = exports.SEMATTRS_NET_HOST_IP = exports.SEMATTRS_NET_PEER_NAME = exports.SEMATTRS_NET_PEER_PORT = exports.SEMATTRS_NET_PEER_IP = exports.SEMATTRS_NET_TRANSPORT = exports.SEMATTRS_FAAS_INVOKED_REGION = exports.SEMATTRS_FAAS_INVOKED_PROVIDER = exports.SEMATTRS_FAAS_INVOKED_NAME = exports.SEMATTRS_FAAS_COLDSTART = exports.SEMATTRS_FAAS_CRON = exports.SEMATTRS_FAAS_TIME = exports.SEMATTRS_FAAS_DOCUMENT_NAME = exports.SEMATTRS_FAAS_DOCUMENT_TIME = exports.SEMATTRS_FAAS_DOCUMENT_OPERATION = exports.SEMATTRS_FAAS_DOCUMENT_COLLECTION = exports.SEMATTRS_FAAS_EXECUTION = exports.SEMATTRS_FAAS_TRIGGER = exports.SEMATTRS_EXCEPTION_ESCAPED = exports.SEMATTRS_EXCEPTION_STACKTRACE = exports.SEMATTRS_EXCEPTION_MESSAGE = exports.SEMATTRS_EXCEPTION_TYPE = exports.SEMATTRS_DB_SQL_TABLE = exports.SEMATTRS_DB_MONGODB_COLLECTION = exports.SEMATTRS_DB_REDIS_DATABASE_INDEX = exports.SEMATTRS_DB_HBASE_NAMESPACE = exports.SEMATTRS_DB_CASSANDRA_COORDINATOR_DC = exports.SEMATTRS_DB_CASSANDRA_COORDINATOR_ID = exports.SEMATTRS_DB_CASSANDRA_SPECULATIVE_EXECUTION_COUNT = exports.SEMATTRS_DB_CASSANDRA_IDEMPOTENCE = exports.SEMATTRS_DB_CASSANDRA_TABLE = exports.SEMATTRS_DB_CASSANDRA_CONSISTENCY_LEVEL = exports.SEMATTRS_DB_CASSANDRA_PAGE_SIZE = exports.SEMATTRS_DB_CASSANDRA_KEYSPACE = exports.SEMATTRS_DB_MSSQL_INSTANCE_NAME = exports.SEMATTRS_DB_OPERATION = exports.SEMATTRS_DB_STATEMENT = exports.SEMATTRS_DB_NAME = exports.SEMATTRS_DB_JDBC_DRIVER_CLASSNAME = exports.SEMATTRS_DB_USER = exports.SEMATTRS_DB_CONNECTION_STRING = exports.SEMATTRS_DB_SYSTEM = exports.SEMATTRS_AWS_LAMBDA_INVOKED_ARN = void 0;
+exports.SEMATTRS_MESSAGING_DESTINATION_KIND = exports.SEMATTRS_MESSAGING_DESTINATION = exports.SEMATTRS_MESSAGING_SYSTEM = exports.SEMATTRS_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEX_UPDATES = exports.SEMATTRS_AWS_DYNAMODB_ATTRIBUTE_DEFINITIONS = exports.SEMATTRS_AWS_DYNAMODB_SCANNED_COUNT = exports.SEMATTRS_AWS_DYNAMODB_COUNT = exports.SEMATTRS_AWS_DYNAMODB_TOTAL_SEGMENTS = exports.SEMATTRS_AWS_DYNAMODB_SEGMENT = exports.SEMATTRS_AWS_DYNAMODB_SCAN_FORWARD = exports.SEMATTRS_AWS_DYNAMODB_TABLE_COUNT = exports.SEMATTRS_AWS_DYNAMODB_EXCLUSIVE_START_TABLE = exports.SEMATTRS_AWS_DYNAMODB_LOCAL_SECONDARY_INDEXES = exports.SEMATTRS_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEXES = exports.SEMATTRS_AWS_DYNAMODB_SELECT = exports.SEMATTRS_AWS_DYNAMODB_INDEX_NAME = exports.SEMATTRS_AWS_DYNAMODB_ATTRIBUTES_TO_GET = exports.SEMATTRS_AWS_DYNAMODB_LIMIT = exports.SEMATTRS_AWS_DYNAMODB_PROJECTION = exports.SEMATTRS_AWS_DYNAMODB_CONSISTENT_READ = exports.SEMATTRS_AWS_DYNAMODB_PROVISIONED_WRITE_CAPACITY = exports.SEMATTRS_AWS_DYNAMODB_PROVISIONED_READ_CAPACITY = exports.SEMATTRS_AWS_DYNAMODB_ITEM_COLLECTION_METRICS = exports.SEMATTRS_AWS_DYNAMODB_CONSUMED_CAPACITY = exports.SEMATTRS_AWS_DYNAMODB_TABLE_NAMES = exports.SEMATTRS_HTTP_CLIENT_IP = exports.SEMATTRS_HTTP_ROUTE = exports.SEMATTRS_HTTP_SERVER_NAME = exports.SEMATTRS_HTTP_RESPONSE_CONTENT_LENGTH_UNCOMPRESSED = exports.SEMATTRS_HTTP_RESPONSE_CONTENT_LENGTH = exports.SEMATTRS_HTTP_REQUEST_CONTENT_LENGTH_UNCOMPRESSED = exports.SEMATTRS_HTTP_REQUEST_CONTENT_LENGTH = exports.SEMATTRS_HTTP_USER_AGENT = exports.SEMATTRS_HTTP_FLAVOR = exports.SEMATTRS_HTTP_STATUS_CODE = exports.SEMATTRS_HTTP_SCHEME = exports.SEMATTRS_HTTP_HOST = exports.SEMATTRS_HTTP_TARGET = exports.SEMATTRS_HTTP_URL = exports.SEMATTRS_HTTP_METHOD = exports.SEMATTRS_CODE_LINENO = exports.SEMATTRS_CODE_FILEPATH = exports.SEMATTRS_CODE_NAMESPACE = exports.SEMATTRS_CODE_FUNCTION = exports.SEMATTRS_THREAD_NAME = exports.SEMATTRS_THREAD_ID = exports.SEMATTRS_ENDUSER_SCOPE = exports.SEMATTRS_ENDUSER_ROLE = exports.SEMATTRS_ENDUSER_ID = exports.SEMATTRS_PEER_SERVICE = void 0;
+exports.DBSYSTEMVALUES_FILEMAKER = exports.DBSYSTEMVALUES_DERBY = exports.DBSYSTEMVALUES_FIREBIRD = exports.DBSYSTEMVALUES_ADABAS = exports.DBSYSTEMVALUES_CACHE = exports.DBSYSTEMVALUES_EDB = exports.DBSYSTEMVALUES_FIRSTSQL = exports.DBSYSTEMVALUES_INGRES = exports.DBSYSTEMVALUES_HANADB = exports.DBSYSTEMVALUES_MAXDB = exports.DBSYSTEMVALUES_PROGRESS = exports.DBSYSTEMVALUES_HSQLDB = exports.DBSYSTEMVALUES_CLOUDSCAPE = exports.DBSYSTEMVALUES_HIVE = exports.DBSYSTEMVALUES_REDSHIFT = exports.DBSYSTEMVALUES_POSTGRESQL = exports.DBSYSTEMVALUES_DB2 = exports.DBSYSTEMVALUES_ORACLE = exports.DBSYSTEMVALUES_MYSQL = exports.DBSYSTEMVALUES_MSSQL = exports.DBSYSTEMVALUES_OTHER_SQL = exports.SemanticAttributes = exports.SEMATTRS_MESSAGE_UNCOMPRESSED_SIZE = exports.SEMATTRS_MESSAGE_COMPRESSED_SIZE = exports.SEMATTRS_MESSAGE_ID = exports.SEMATTRS_MESSAGE_TYPE = exports.SEMATTRS_RPC_JSONRPC_ERROR_MESSAGE = exports.SEMATTRS_RPC_JSONRPC_ERROR_CODE = exports.SEMATTRS_RPC_JSONRPC_REQUEST_ID = exports.SEMATTRS_RPC_JSONRPC_VERSION = exports.SEMATTRS_RPC_GRPC_STATUS_CODE = exports.SEMATTRS_RPC_METHOD = exports.SEMATTRS_RPC_SERVICE = exports.SEMATTRS_RPC_SYSTEM = exports.SEMATTRS_MESSAGING_KAFKA_TOMBSTONE = exports.SEMATTRS_MESSAGING_KAFKA_PARTITION = exports.SEMATTRS_MESSAGING_KAFKA_CLIENT_ID = exports.SEMATTRS_MESSAGING_KAFKA_CONSUMER_GROUP = exports.SEMATTRS_MESSAGING_KAFKA_MESSAGE_KEY = exports.SEMATTRS_MESSAGING_RABBITMQ_ROUTING_KEY = exports.SEMATTRS_MESSAGING_CONSUMER_ID = exports.SEMATTRS_MESSAGING_OPERATION = exports.SEMATTRS_MESSAGING_MESSAGE_PAYLOAD_COMPRESSED_SIZE_BYTES = exports.SEMATTRS_MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES = exports.SEMATTRS_MESSAGING_CONVERSATION_ID = exports.SEMATTRS_MESSAGING_MESSAGE_ID = exports.SEMATTRS_MESSAGING_URL = exports.SEMATTRS_MESSAGING_PROTOCOL_VERSION = exports.SEMATTRS_MESSAGING_PROTOCOL = exports.SEMATTRS_MESSAGING_TEMP_DESTINATION = void 0;
+exports.FAASINVOKEDPROVIDERVALUES_ALIBABA_CLOUD = exports.FaasDocumentOperationValues = exports.FAASDOCUMENTOPERATIONVALUES_DELETE = exports.FAASDOCUMENTOPERATIONVALUES_EDIT = exports.FAASDOCUMENTOPERATIONVALUES_INSERT = exports.FaasTriggerValues = exports.FAASTRIGGERVALUES_OTHER = exports.FAASTRIGGERVALUES_TIMER = exports.FAASTRIGGERVALUES_PUBSUB = exports.FAASTRIGGERVALUES_HTTP = exports.FAASTRIGGERVALUES_DATASOURCE = exports.DbCassandraConsistencyLevelValues = exports.DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_SERIAL = exports.DBCASSANDRACONSISTENCYLEVELVALUES_SERIAL = exports.DBCASSANDRACONSISTENCYLEVELVALUES_ANY = exports.DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_ONE = exports.DBCASSANDRACONSISTENCYLEVELVALUES_THREE = exports.DBCASSANDRACONSISTENCYLEVELVALUES_TWO = exports.DBCASSANDRACONSISTENCYLEVELVALUES_ONE = exports.DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_QUORUM = exports.DBCASSANDRACONSISTENCYLEVELVALUES_QUORUM = exports.DBCASSANDRACONSISTENCYLEVELVALUES_EACH_QUORUM = exports.DBCASSANDRACONSISTENCYLEVELVALUES_ALL = exports.DbSystemValues = exports.DBSYSTEMVALUES_COCKROACHDB = exports.DBSYSTEMVALUES_MEMCACHED = exports.DBSYSTEMVALUES_ELASTICSEARCH = exports.DBSYSTEMVALUES_GEODE = exports.DBSYSTEMVALUES_NEO4J = exports.DBSYSTEMVALUES_DYNAMODB = exports.DBSYSTEMVALUES_COSMOSDB = exports.DBSYSTEMVALUES_COUCHDB = exports.DBSYSTEMVALUES_COUCHBASE = exports.DBSYSTEMVALUES_REDIS = exports.DBSYSTEMVALUES_MONGODB = exports.DBSYSTEMVALUES_HBASE = exports.DBSYSTEMVALUES_CASSANDRA = exports.DBSYSTEMVALUES_COLDFUSION = exports.DBSYSTEMVALUES_H2 = exports.DBSYSTEMVALUES_VERTICA = exports.DBSYSTEMVALUES_TERADATA = exports.DBSYSTEMVALUES_SYBASE = exports.DBSYSTEMVALUES_SQLITE = exports.DBSYSTEMVALUES_POINTBASE = exports.DBSYSTEMVALUES_PERVASIVE = exports.DBSYSTEMVALUES_NETEZZA = exports.DBSYSTEMVALUES_MARIADB = exports.DBSYSTEMVALUES_INTERBASE = exports.DBSYSTEMVALUES_INSTANTDB = exports.DBSYSTEMVALUES_INFORMIX = void 0;
+exports.MESSAGINGOPERATIONVALUES_RECEIVE = exports.MessagingDestinationKindValues = exports.MESSAGINGDESTINATIONKINDVALUES_TOPIC = exports.MESSAGINGDESTINATIONKINDVALUES_QUEUE = exports.HttpFlavorValues = exports.HTTPFLAVORVALUES_QUIC = exports.HTTPFLAVORVALUES_SPDY = exports.HTTPFLAVORVALUES_HTTP_2_0 = exports.HTTPFLAVORVALUES_HTTP_1_1 = exports.HTTPFLAVORVALUES_HTTP_1_0 = exports.NetHostConnectionSubtypeValues = exports.NETHOSTCONNECTIONSUBTYPEVALUES_LTE_CA = exports.NETHOSTCONNECTIONSUBTYPEVALUES_NRNSA = exports.NETHOSTCONNECTIONSUBTYPEVALUES_NR = exports.NETHOSTCONNECTIONSUBTYPEVALUES_IWLAN = exports.NETHOSTCONNECTIONSUBTYPEVALUES_TD_SCDMA = exports.NETHOSTCONNECTIONSUBTYPEVALUES_GSM = exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSPAP = exports.NETHOSTCONNECTIONSUBTYPEVALUES_EHRPD = exports.NETHOSTCONNECTIONSUBTYPEVALUES_LTE = exports.NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_B = exports.NETHOSTCONNECTIONSUBTYPEVALUES_IDEN = exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSPA = exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSUPA = exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSDPA = exports.NETHOSTCONNECTIONSUBTYPEVALUES_CDMA2000_1XRTT = exports.NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_A = exports.NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_0 = exports.NETHOSTCONNECTIONSUBTYPEVALUES_CDMA = exports.NETHOSTCONNECTIONSUBTYPEVALUES_UMTS = exports.NETHOSTCONNECTIONSUBTYPEVALUES_EDGE = exports.NETHOSTCONNECTIONSUBTYPEVALUES_GPRS = exports.NetHostConnectionTypeValues = exports.NETHOSTCONNECTIONTYPEVALUES_UNKNOWN = exports.NETHOSTCONNECTIONTYPEVALUES_UNAVAILABLE = exports.NETHOSTCONNECTIONTYPEVALUES_CELL = exports.NETHOSTCONNECTIONTYPEVALUES_WIRED = exports.NETHOSTCONNECTIONTYPEVALUES_WIFI = exports.NetTransportValues = exports.NETTRANSPORTVALUES_OTHER = exports.NETTRANSPORTVALUES_INPROC = exports.NETTRANSPORTVALUES_PIPE = exports.NETTRANSPORTVALUES_UNIX = exports.NETTRANSPORTVALUES_IP = exports.NETTRANSPORTVALUES_IP_UDP = exports.NETTRANSPORTVALUES_IP_TCP = exports.FaasInvokedProviderValues = exports.FAASINVOKEDPROVIDERVALUES_GCP = exports.FAASINVOKEDPROVIDERVALUES_AZURE = exports.FAASINVOKEDPROVIDERVALUES_AWS = void 0;
+exports.MessageTypeValues = exports.MESSAGETYPEVALUES_RECEIVED = exports.MESSAGETYPEVALUES_SENT = exports.RpcGrpcStatusCodeValues = exports.RPCGRPCSTATUSCODEVALUES_UNAUTHENTICATED = exports.RPCGRPCSTATUSCODEVALUES_DATA_LOSS = exports.RPCGRPCSTATUSCODEVALUES_UNAVAILABLE = exports.RPCGRPCSTATUSCODEVALUES_INTERNAL = exports.RPCGRPCSTATUSCODEVALUES_UNIMPLEMENTED = exports.RPCGRPCSTATUSCODEVALUES_OUT_OF_RANGE = exports.RPCGRPCSTATUSCODEVALUES_ABORTED = exports.RPCGRPCSTATUSCODEVALUES_FAILED_PRECONDITION = exports.RPCGRPCSTATUSCODEVALUES_RESOURCE_EXHAUSTED = exports.RPCGRPCSTATUSCODEVALUES_PERMISSION_DENIED = exports.RPCGRPCSTATUSCODEVALUES_ALREADY_EXISTS = exports.RPCGRPCSTATUSCODEVALUES_NOT_FOUND = exports.RPCGRPCSTATUSCODEVALUES_DEADLINE_EXCEEDED = exports.RPCGRPCSTATUSCODEVALUES_INVALID_ARGUMENT = exports.RPCGRPCSTATUSCODEVALUES_UNKNOWN = exports.RPCGRPCSTATUSCODEVALUES_CANCELLED = exports.RPCGRPCSTATUSCODEVALUES_OK = exports.MessagingOperationValues = exports.MESSAGINGOPERATIONVALUES_PROCESS = void 0;
+const utils_1 = require("../internal/utils");
+//----------------------------------------------------------------------------------------------------------
+// DO NOT EDIT, this is an Auto-generated file from scripts/semconv/templates//templates/SemanticAttributes.ts.j2
+//----------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------
+// Constant values for SemanticAttributes
+//----------------------------------------------------------------------------------------------------------
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_AWS_LAMBDA_INVOKED_ARN = 'aws.lambda.invoked_arn';
+const TMP_DB_SYSTEM = 'db.system';
+const TMP_DB_CONNECTION_STRING = 'db.connection_string';
+const TMP_DB_USER = 'db.user';
+const TMP_DB_JDBC_DRIVER_CLASSNAME = 'db.jdbc.driver_classname';
+const TMP_DB_NAME = 'db.name';
+const TMP_DB_STATEMENT = 'db.statement';
+const TMP_DB_OPERATION = 'db.operation';
+const TMP_DB_MSSQL_INSTANCE_NAME = 'db.mssql.instance_name';
+const TMP_DB_CASSANDRA_KEYSPACE = 'db.cassandra.keyspace';
+const TMP_DB_CASSANDRA_PAGE_SIZE = 'db.cassandra.page_size';
+const TMP_DB_CASSANDRA_CONSISTENCY_LEVEL = 'db.cassandra.consistency_level';
+const TMP_DB_CASSANDRA_TABLE = 'db.cassandra.table';
+const TMP_DB_CASSANDRA_IDEMPOTENCE = 'db.cassandra.idempotence';
+const TMP_DB_CASSANDRA_SPECULATIVE_EXECUTION_COUNT = 'db.cassandra.speculative_execution_count';
+const TMP_DB_CASSANDRA_COORDINATOR_ID = 'db.cassandra.coordinator.id';
+const TMP_DB_CASSANDRA_COORDINATOR_DC = 'db.cassandra.coordinator.dc';
+const TMP_DB_HBASE_NAMESPACE = 'db.hbase.namespace';
+const TMP_DB_REDIS_DATABASE_INDEX = 'db.redis.database_index';
+const TMP_DB_MONGODB_COLLECTION = 'db.mongodb.collection';
+const TMP_DB_SQL_TABLE = 'db.sql.table';
+const TMP_EXCEPTION_TYPE = 'exception.type';
+const TMP_EXCEPTION_MESSAGE = 'exception.message';
+const TMP_EXCEPTION_STACKTRACE = 'exception.stacktrace';
+const TMP_EXCEPTION_ESCAPED = 'exception.escaped';
+const TMP_FAAS_TRIGGER = 'faas.trigger';
+const TMP_FAAS_EXECUTION = 'faas.execution';
+const TMP_FAAS_DOCUMENT_COLLECTION = 'faas.document.collection';
+const TMP_FAAS_DOCUMENT_OPERATION = 'faas.document.operation';
+const TMP_FAAS_DOCUMENT_TIME = 'faas.document.time';
+const TMP_FAAS_DOCUMENT_NAME = 'faas.document.name';
+const TMP_FAAS_TIME = 'faas.time';
+const TMP_FAAS_CRON = 'faas.cron';
+const TMP_FAAS_COLDSTART = 'faas.coldstart';
+const TMP_FAAS_INVOKED_NAME = 'faas.invoked_name';
+const TMP_FAAS_INVOKED_PROVIDER = 'faas.invoked_provider';
+const TMP_FAAS_INVOKED_REGION = 'faas.invoked_region';
+const TMP_NET_TRANSPORT = 'net.transport';
+const TMP_NET_PEER_IP = 'net.peer.ip';
+const TMP_NET_PEER_PORT = 'net.peer.port';
+const TMP_NET_PEER_NAME = 'net.peer.name';
+const TMP_NET_HOST_IP = 'net.host.ip';
+const TMP_NET_HOST_PORT = 'net.host.port';
+const TMP_NET_HOST_NAME = 'net.host.name';
+const TMP_NET_HOST_CONNECTION_TYPE = 'net.host.connection.type';
+const TMP_NET_HOST_CONNECTION_SUBTYPE = 'net.host.connection.subtype';
+const TMP_NET_HOST_CARRIER_NAME = 'net.host.carrier.name';
+const TMP_NET_HOST_CARRIER_MCC = 'net.host.carrier.mcc';
+const TMP_NET_HOST_CARRIER_MNC = 'net.host.carrier.mnc';
+const TMP_NET_HOST_CARRIER_ICC = 'net.host.carrier.icc';
+const TMP_PEER_SERVICE = 'peer.service';
+const TMP_ENDUSER_ID = 'enduser.id';
+const TMP_ENDUSER_ROLE = 'enduser.role';
+const TMP_ENDUSER_SCOPE = 'enduser.scope';
+const TMP_THREAD_ID = 'thread.id';
+const TMP_THREAD_NAME = 'thread.name';
+const TMP_CODE_FUNCTION = 'code.function';
+const TMP_CODE_NAMESPACE = 'code.namespace';
+const TMP_CODE_FILEPATH = 'code.filepath';
+const TMP_CODE_LINENO = 'code.lineno';
+const TMP_HTTP_METHOD = 'http.method';
+const TMP_HTTP_URL = 'http.url';
+const TMP_HTTP_TARGET = 'http.target';
+const TMP_HTTP_HOST = 'http.host';
+const TMP_HTTP_SCHEME = 'http.scheme';
+const TMP_HTTP_STATUS_CODE = 'http.status_code';
+const TMP_HTTP_FLAVOR = 'http.flavor';
+const TMP_HTTP_USER_AGENT = 'http.user_agent';
+const TMP_HTTP_REQUEST_CONTENT_LENGTH = 'http.request_content_length';
+const TMP_HTTP_REQUEST_CONTENT_LENGTH_UNCOMPRESSED = 'http.request_content_length_uncompressed';
+const TMP_HTTP_RESPONSE_CONTENT_LENGTH = 'http.response_content_length';
+const TMP_HTTP_RESPONSE_CONTENT_LENGTH_UNCOMPRESSED = 'http.response_content_length_uncompressed';
+const TMP_HTTP_SERVER_NAME = 'http.server_name';
+const TMP_HTTP_ROUTE = 'http.route';
+const TMP_HTTP_CLIENT_IP = 'http.client_ip';
+const TMP_AWS_DYNAMODB_TABLE_NAMES = 'aws.dynamodb.table_names';
+const TMP_AWS_DYNAMODB_CONSUMED_CAPACITY = 'aws.dynamodb.consumed_capacity';
+const TMP_AWS_DYNAMODB_ITEM_COLLECTION_METRICS = 'aws.dynamodb.item_collection_metrics';
+const TMP_AWS_DYNAMODB_PROVISIONED_READ_CAPACITY = 'aws.dynamodb.provisioned_read_capacity';
+const TMP_AWS_DYNAMODB_PROVISIONED_WRITE_CAPACITY = 'aws.dynamodb.provisioned_write_capacity';
+const TMP_AWS_DYNAMODB_CONSISTENT_READ = 'aws.dynamodb.consistent_read';
+const TMP_AWS_DYNAMODB_PROJECTION = 'aws.dynamodb.projection';
+const TMP_AWS_DYNAMODB_LIMIT = 'aws.dynamodb.limit';
+const TMP_AWS_DYNAMODB_ATTRIBUTES_TO_GET = 'aws.dynamodb.attributes_to_get';
+const TMP_AWS_DYNAMODB_INDEX_NAME = 'aws.dynamodb.index_name';
+const TMP_AWS_DYNAMODB_SELECT = 'aws.dynamodb.select';
+const TMP_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEXES = 'aws.dynamodb.global_secondary_indexes';
+const TMP_AWS_DYNAMODB_LOCAL_SECONDARY_INDEXES = 'aws.dynamodb.local_secondary_indexes';
+const TMP_AWS_DYNAMODB_EXCLUSIVE_START_TABLE = 'aws.dynamodb.exclusive_start_table';
+const TMP_AWS_DYNAMODB_TABLE_COUNT = 'aws.dynamodb.table_count';
+const TMP_AWS_DYNAMODB_SCAN_FORWARD = 'aws.dynamodb.scan_forward';
+const TMP_AWS_DYNAMODB_SEGMENT = 'aws.dynamodb.segment';
+const TMP_AWS_DYNAMODB_TOTAL_SEGMENTS = 'aws.dynamodb.total_segments';
+const TMP_AWS_DYNAMODB_COUNT = 'aws.dynamodb.count';
+const TMP_AWS_DYNAMODB_SCANNED_COUNT = 'aws.dynamodb.scanned_count';
+const TMP_AWS_DYNAMODB_ATTRIBUTE_DEFINITIONS = 'aws.dynamodb.attribute_definitions';
+const TMP_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEX_UPDATES = 'aws.dynamodb.global_secondary_index_updates';
+const TMP_MESSAGING_SYSTEM = 'messaging.system';
+const TMP_MESSAGING_DESTINATION = 'messaging.destination';
+const TMP_MESSAGING_DESTINATION_KIND = 'messaging.destination_kind';
+const TMP_MESSAGING_TEMP_DESTINATION = 'messaging.temp_destination';
+const TMP_MESSAGING_PROTOCOL = 'messaging.protocol';
+const TMP_MESSAGING_PROTOCOL_VERSION = 'messaging.protocol_version';
+const TMP_MESSAGING_URL = 'messaging.url';
+const TMP_MESSAGING_MESSAGE_ID = 'messaging.message_id';
+const TMP_MESSAGING_CONVERSATION_ID = 'messaging.conversation_id';
+const TMP_MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES = 'messaging.message_payload_size_bytes';
+const TMP_MESSAGING_MESSAGE_PAYLOAD_COMPRESSED_SIZE_BYTES = 'messaging.message_payload_compressed_size_bytes';
+const TMP_MESSAGING_OPERATION = 'messaging.operation';
+const TMP_MESSAGING_CONSUMER_ID = 'messaging.consumer_id';
+const TMP_MESSAGING_RABBITMQ_ROUTING_KEY = 'messaging.rabbitmq.routing_key';
+const TMP_MESSAGING_KAFKA_MESSAGE_KEY = 'messaging.kafka.message_key';
+const TMP_MESSAGING_KAFKA_CONSUMER_GROUP = 'messaging.kafka.consumer_group';
+const TMP_MESSAGING_KAFKA_CLIENT_ID = 'messaging.kafka.client_id';
+const TMP_MESSAGING_KAFKA_PARTITION = 'messaging.kafka.partition';
+const TMP_MESSAGING_KAFKA_TOMBSTONE = 'messaging.kafka.tombstone';
+const TMP_RPC_SYSTEM = 'rpc.system';
+const TMP_RPC_SERVICE = 'rpc.service';
+const TMP_RPC_METHOD = 'rpc.method';
+const TMP_RPC_GRPC_STATUS_CODE = 'rpc.grpc.status_code';
+const TMP_RPC_JSONRPC_VERSION = 'rpc.jsonrpc.version';
+const TMP_RPC_JSONRPC_REQUEST_ID = 'rpc.jsonrpc.request_id';
+const TMP_RPC_JSONRPC_ERROR_CODE = 'rpc.jsonrpc.error_code';
+const TMP_RPC_JSONRPC_ERROR_MESSAGE = 'rpc.jsonrpc.error_message';
+const TMP_MESSAGE_TYPE = 'message.type';
+const TMP_MESSAGE_ID = 'message.id';
+const TMP_MESSAGE_COMPRESSED_SIZE = 'message.compressed_size';
+const TMP_MESSAGE_UNCOMPRESSED_SIZE = 'message.uncompressed_size';
+/**
+ * The full invoked ARN as provided on the `Context` passed to the function (`Lambda-Runtime-Invoked-Function-Arn` header on the `/runtime/invocation/next` applicable).
+ *
+ * Note: This may be different from `faas.id` if an alias is involved.
+ */
+exports.SEMATTRS_AWS_LAMBDA_INVOKED_ARN = TMP_AWS_LAMBDA_INVOKED_ARN;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.SEMATTRS_DB_SYSTEM = TMP_DB_SYSTEM;
+/**
+ * The connection string used to connect to the database. It is recommended to remove embedded credentials.
+ */
+exports.SEMATTRS_DB_CONNECTION_STRING = TMP_DB_CONNECTION_STRING;
+/**
+ * Username for accessing the database.
+ */
+exports.SEMATTRS_DB_USER = TMP_DB_USER;
+/**
+ * The fully-qualified class name of the [Java Database Connectivity (JDBC)](https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/) driver used to connect.
+ */
+exports.SEMATTRS_DB_JDBC_DRIVER_CLASSNAME = TMP_DB_JDBC_DRIVER_CLASSNAME;
+/**
+ * If no [tech-specific attribute](#call-level-attributes-for-specific-technologies) is defined, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails).
+ *
+ * Note: In some SQL databases, the database name to be used is called &#34;schema name&#34;.
+ */
+exports.SEMATTRS_DB_NAME = TMP_DB_NAME;
+/**
+ * The database statement being executed.
+ *
+ * Note: The value may be sanitized to exclude sensitive information.
+ */
+exports.SEMATTRS_DB_STATEMENT = TMP_DB_STATEMENT;
+/**
+ * The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword.
+ *
+ * Note: When setting this to an SQL keyword, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the SQL statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
+ */
+exports.SEMATTRS_DB_OPERATION = TMP_DB_OPERATION;
+/**
+ * The Microsoft SQL Server [instance name](https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15) connecting to. This name is used to determine the port of a named instance.
+ *
+ * Note: If setting a `db.mssql.instance_name`, `net.peer.port` is no longer required (but still recommended if non-standard).
+ */
+exports.SEMATTRS_DB_MSSQL_INSTANCE_NAME = TMP_DB_MSSQL_INSTANCE_NAME;
+/**
+ * The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute.
+ */
+exports.SEMATTRS_DB_CASSANDRA_KEYSPACE = TMP_DB_CASSANDRA_KEYSPACE;
+/**
+ * The fetch size used for paging, i.e. how many rows will be returned at once.
+ */
+exports.SEMATTRS_DB_CASSANDRA_PAGE_SIZE = TMP_DB_CASSANDRA_PAGE_SIZE;
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.SEMATTRS_DB_CASSANDRA_CONSISTENCY_LEVEL = TMP_DB_CASSANDRA_CONSISTENCY_LEVEL;
+/**
+ * The name of the primary table that the operation is acting upon, including the schema name (if applicable).
+ *
+ * Note: This mirrors the db.sql.table attribute but references cassandra rather than sql. It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
+ */
+exports.SEMATTRS_DB_CASSANDRA_TABLE = TMP_DB_CASSANDRA_TABLE;
+/**
+ * Whether or not the query is idempotent.
+ */
+exports.SEMATTRS_DB_CASSANDRA_IDEMPOTENCE = TMP_DB_CASSANDRA_IDEMPOTENCE;
+/**
+ * The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively.
+ */
+exports.SEMATTRS_DB_CASSANDRA_SPECULATIVE_EXECUTION_COUNT = TMP_DB_CASSANDRA_SPECULATIVE_EXECUTION_COUNT;
+/**
+ * The ID of the coordinating node for a query.
+ */
+exports.SEMATTRS_DB_CASSANDRA_COORDINATOR_ID = TMP_DB_CASSANDRA_COORDINATOR_ID;
+/**
+ * The data center of the coordinating node for a query.
+ */
+exports.SEMATTRS_DB_CASSANDRA_COORDINATOR_DC = TMP_DB_CASSANDRA_COORDINATOR_DC;
+/**
+ * The [HBase namespace](https://hbase.apache.org/book.html#_namespace) being accessed. To be used instead of the generic `db.name` attribute.
+ */
+exports.SEMATTRS_DB_HBASE_NAMESPACE = TMP_DB_HBASE_NAMESPACE;
+/**
+ * The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute.
+ */
+exports.SEMATTRS_DB_REDIS_DATABASE_INDEX = TMP_DB_REDIS_DATABASE_INDEX;
+/**
+ * The collection being accessed within the database stated in `db.name`.
+ */
+exports.SEMATTRS_DB_MONGODB_COLLECTION = TMP_DB_MONGODB_COLLECTION;
+/**
+ * The name of the primary table that the operation is acting upon, including the schema name (if applicable).
+ *
+ * Note: It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
+ */
+exports.SEMATTRS_DB_SQL_TABLE = TMP_DB_SQL_TABLE;
+/**
+ * The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it.
+ */
+exports.SEMATTRS_EXCEPTION_TYPE = TMP_EXCEPTION_TYPE;
+/**
+ * The exception message.
+ */
+exports.SEMATTRS_EXCEPTION_MESSAGE = TMP_EXCEPTION_MESSAGE;
+/**
+ * A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG.
+ */
+exports.SEMATTRS_EXCEPTION_STACKTRACE = TMP_EXCEPTION_STACKTRACE;
+/**
+* SHOULD be set to true if the exception event is recorded at a point where it is known that the exception is escaping the scope of the span.
+*
+* Note: An exception is considered to have escaped (or left) the scope of a span,
+if that span is ended while the exception is still logically &#34;in flight&#34;.
+This may be actually &#34;in flight&#34; in some languages (e.g. if the exception
+is passed to a Context manager&#39;s `__exit__` method in Python) but will
+usually be caught at the point of recording the exception in most languages.
+
+It is usually not possible to determine at the point where an exception is thrown
+whether it will escape the scope of a span.
+However, it is trivial to know that an exception
+will escape, if one checks for an active exception just before ending the span,
+as done in the [example above](#exception-end-example).
+
+It follows that an exception may still escape the scope of the span
+even if the `exception.escaped` attribute was not set or set to false,
+since the event might have been recorded at a time where it was not
+clear whether the exception will escape.
+*/
+exports.SEMATTRS_EXCEPTION_ESCAPED = TMP_EXCEPTION_ESCAPED;
+/**
+ * Type of the trigger on which the function is executed.
+ */
+exports.SEMATTRS_FAAS_TRIGGER = TMP_FAAS_TRIGGER;
+/**
+ * The execution ID of the current function execution.
+ */
+exports.SEMATTRS_FAAS_EXECUTION = TMP_FAAS_EXECUTION;
+/**
+ * The name of the source on which the triggering operation was performed. For example, in Cloud Storage or S3 corresponds to the bucket name, and in Cosmos DB to the database name.
+ */
+exports.SEMATTRS_FAAS_DOCUMENT_COLLECTION = TMP_FAAS_DOCUMENT_COLLECTION;
+/**
+ * Describes the type of the operation that was performed on the data.
+ */
+exports.SEMATTRS_FAAS_DOCUMENT_OPERATION = TMP_FAAS_DOCUMENT_OPERATION;
+/**
+ * A string containing the time when the data was accessed in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format expressed in [UTC](https://www.w3.org/TR/NOTE-datetime).
+ */
+exports.SEMATTRS_FAAS_DOCUMENT_TIME = TMP_FAAS_DOCUMENT_TIME;
+/**
+ * The document name/table subjected to the operation. For example, in Cloud Storage or S3 is the name of the file, and in Cosmos DB the table name.
+ */
+exports.SEMATTRS_FAAS_DOCUMENT_NAME = TMP_FAAS_DOCUMENT_NAME;
+/**
+ * A string containing the function invocation time in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format expressed in [UTC](https://www.w3.org/TR/NOTE-datetime).
+ */
+exports.SEMATTRS_FAAS_TIME = TMP_FAAS_TIME;
+/**
+ * A string containing the schedule period as [Cron Expression](https://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm).
+ */
+exports.SEMATTRS_FAAS_CRON = TMP_FAAS_CRON;
+/**
+ * A boolean that is true if the serverless function is executed for the first time (aka cold-start).
+ */
+exports.SEMATTRS_FAAS_COLDSTART = TMP_FAAS_COLDSTART;
+/**
+ * The name of the invoked function.
+ *
+ * Note: SHOULD be equal to the `faas.name` resource attribute of the invoked function.
+ */
+exports.SEMATTRS_FAAS_INVOKED_NAME = TMP_FAAS_INVOKED_NAME;
+/**
+ * The cloud provider of the invoked function.
+ *
+ * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+ */
+exports.SEMATTRS_FAAS_INVOKED_PROVIDER = TMP_FAAS_INVOKED_PROVIDER;
+/**
+ * The cloud region of the invoked function.
+ *
+ * Note: SHOULD be equal to the `cloud.region` resource attribute of the invoked function.
+ */
+exports.SEMATTRS_FAAS_INVOKED_REGION = TMP_FAAS_INVOKED_REGION;
+/**
+ * Transport protocol used. See note below.
+ */
+exports.SEMATTRS_NET_TRANSPORT = TMP_NET_TRANSPORT;
+/**
+ * Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6).
+ */
+exports.SEMATTRS_NET_PEER_IP = TMP_NET_PEER_IP;
+/**
+ * Remote port number.
+ */
+exports.SEMATTRS_NET_PEER_PORT = TMP_NET_PEER_PORT;
+/**
+ * Remote hostname or similar, see note below.
+ */
+exports.SEMATTRS_NET_PEER_NAME = TMP_NET_PEER_NAME;
+/**
+ * Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host.
+ */
+exports.SEMATTRS_NET_HOST_IP = TMP_NET_HOST_IP;
+/**
+ * Like `net.peer.port` but for the host port.
+ */
+exports.SEMATTRS_NET_HOST_PORT = TMP_NET_HOST_PORT;
+/**
+ * Local hostname or similar, see note below.
+ */
+exports.SEMATTRS_NET_HOST_NAME = TMP_NET_HOST_NAME;
+/**
+ * The internet connection type currently being used by the host.
+ */
+exports.SEMATTRS_NET_HOST_CONNECTION_TYPE = TMP_NET_HOST_CONNECTION_TYPE;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.SEMATTRS_NET_HOST_CONNECTION_SUBTYPE = TMP_NET_HOST_CONNECTION_SUBTYPE;
+/**
+ * The name of the mobile carrier.
+ */
+exports.SEMATTRS_NET_HOST_CARRIER_NAME = TMP_NET_HOST_CARRIER_NAME;
+/**
+ * The mobile carrier country code.
+ */
+exports.SEMATTRS_NET_HOST_CARRIER_MCC = TMP_NET_HOST_CARRIER_MCC;
+/**
+ * The mobile carrier network code.
+ */
+exports.SEMATTRS_NET_HOST_CARRIER_MNC = TMP_NET_HOST_CARRIER_MNC;
+/**
+ * The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network.
+ */
+exports.SEMATTRS_NET_HOST_CARRIER_ICC = TMP_NET_HOST_CARRIER_ICC;
+/**
+ * The [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any.
+ */
+exports.SEMATTRS_PEER_SERVICE = TMP_PEER_SERVICE;
+/**
+ * Username or client_id extracted from the access token or [Authorization](https://tools.ietf.org/html/rfc7235#section-4.2) header in the inbound request from outside the system.
+ */
+exports.SEMATTRS_ENDUSER_ID = TMP_ENDUSER_ID;
+/**
+ * Actual/assumed role the client is making the request under extracted from token or application security context.
+ */
+exports.SEMATTRS_ENDUSER_ROLE = TMP_ENDUSER_ROLE;
+/**
+ * Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token](https://tools.ietf.org/html/rfc6749#section-3.3) or an attribute value in a [SAML 2.0 Assertion](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html).
+ */
+exports.SEMATTRS_ENDUSER_SCOPE = TMP_ENDUSER_SCOPE;
+/**
+ * Current &#34;managed&#34; thread ID (as opposed to OS thread ID).
+ */
+exports.SEMATTRS_THREAD_ID = TMP_THREAD_ID;
+/**
+ * Current thread name.
+ */
+exports.SEMATTRS_THREAD_NAME = TMP_THREAD_NAME;
+/**
+ * The method or function name, or equivalent (usually rightmost part of the code unit&#39;s name).
+ */
+exports.SEMATTRS_CODE_FUNCTION = TMP_CODE_FUNCTION;
+/**
+ * The &#34;namespace&#34; within which `code.function` is defined. Usually the qualified class or module name, such that `code.namespace` + some separator + `code.function` form a unique identifier for the code unit.
+ */
+exports.SEMATTRS_CODE_NAMESPACE = TMP_CODE_NAMESPACE;
+/**
+ * The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path).
+ */
+exports.SEMATTRS_CODE_FILEPATH = TMP_CODE_FILEPATH;
+/**
+ * The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`.
+ */
+exports.SEMATTRS_CODE_LINENO = TMP_CODE_LINENO;
+/**
+ * HTTP request method.
+ */
+exports.SEMATTRS_HTTP_METHOD = TMP_HTTP_METHOD;
+/**
+ * Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
+ *
+ * Note: `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute&#39;s value should be `https://www.example.com/`.
+ */
+exports.SEMATTRS_HTTP_URL = TMP_HTTP_URL;
+/**
+ * The full request target as passed in a HTTP request line or equivalent.
+ */
+exports.SEMATTRS_HTTP_TARGET = TMP_HTTP_TARGET;
+/**
+ * The value of the [HTTP host header](https://tools.ietf.org/html/rfc7230#section-5.4). An empty Host header should also be reported, see note.
+ *
+ * Note: When the header is present but empty the attribute SHOULD be set to the empty string. Note that this is a valid situation that is expected in certain cases, according the aforementioned [section of RFC 7230](https://tools.ietf.org/html/rfc7230#section-5.4). When the header is not set the attribute MUST NOT be set.
+ */
+exports.SEMATTRS_HTTP_HOST = TMP_HTTP_HOST;
+/**
+ * The URI scheme identifying the used protocol.
+ */
+exports.SEMATTRS_HTTP_SCHEME = TMP_HTTP_SCHEME;
+/**
+ * [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).
+ */
+exports.SEMATTRS_HTTP_STATUS_CODE = TMP_HTTP_STATUS_CODE;
+/**
+ * Kind of HTTP protocol used.
+ *
+ * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ */
+exports.SEMATTRS_HTTP_FLAVOR = TMP_HTTP_FLAVOR;
+/**
+ * Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client.
+ */
+exports.SEMATTRS_HTTP_USER_AGENT = TMP_HTTP_USER_AGENT;
+/**
+ * The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size.
+ */
+exports.SEMATTRS_HTTP_REQUEST_CONTENT_LENGTH = TMP_HTTP_REQUEST_CONTENT_LENGTH;
+/**
+ * The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used.
+ */
+exports.SEMATTRS_HTTP_REQUEST_CONTENT_LENGTH_UNCOMPRESSED = TMP_HTTP_REQUEST_CONTENT_LENGTH_UNCOMPRESSED;
+/**
+ * The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size.
+ */
+exports.SEMATTRS_HTTP_RESPONSE_CONTENT_LENGTH = TMP_HTTP_RESPONSE_CONTENT_LENGTH;
+/**
+ * The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used.
+ */
+exports.SEMATTRS_HTTP_RESPONSE_CONTENT_LENGTH_UNCOMPRESSED = TMP_HTTP_RESPONSE_CONTENT_LENGTH_UNCOMPRESSED;
+/**
+ * The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead).
+ *
+ * Note: `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. open-telemetry/opentelemetry-python/pull/148). It is thus preferred to supply the raw data that is available.
+ */
+exports.SEMATTRS_HTTP_SERVER_NAME = TMP_HTTP_SERVER_NAME;
+/**
+ * The matched route (path template).
+ */
+exports.SEMATTRS_HTTP_ROUTE = TMP_HTTP_ROUTE;
+/**
+* The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)).
+*
+* Note: This is not necessarily the same as `net.peer.ip`, which would
+identify the network-level peer, which may be a proxy.
+
+This attribute should be set when a source of information different
+from the one used for `net.peer.ip`, is available even if that other
+source just confirms the same value as `net.peer.ip`.
+Rationale: For `net.peer.ip`, one typically does not know if it
+comes from a proxy, reverse proxy, or the actual client. Setting
+`http.client_ip` when it&#39;s the same as `net.peer.ip` means that
+one is at least somewhat confident that the address is not that of
+the closest proxy.
+*/
+exports.SEMATTRS_HTTP_CLIENT_IP = TMP_HTTP_CLIENT_IP;
+/**
+ * The keys in the `RequestItems` object field.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_TABLE_NAMES = TMP_AWS_DYNAMODB_TABLE_NAMES;
+/**
+ * The JSON-serialized value of each item in the `ConsumedCapacity` response field.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_CONSUMED_CAPACITY = TMP_AWS_DYNAMODB_CONSUMED_CAPACITY;
+/**
+ * The JSON-serialized value of the `ItemCollectionMetrics` response field.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_ITEM_COLLECTION_METRICS = TMP_AWS_DYNAMODB_ITEM_COLLECTION_METRICS;
+/**
+ * The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_PROVISIONED_READ_CAPACITY = TMP_AWS_DYNAMODB_PROVISIONED_READ_CAPACITY;
+/**
+ * The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_PROVISIONED_WRITE_CAPACITY = TMP_AWS_DYNAMODB_PROVISIONED_WRITE_CAPACITY;
+/**
+ * The value of the `ConsistentRead` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_CONSISTENT_READ = TMP_AWS_DYNAMODB_CONSISTENT_READ;
+/**
+ * The value of the `ProjectionExpression` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_PROJECTION = TMP_AWS_DYNAMODB_PROJECTION;
+/**
+ * The value of the `Limit` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_LIMIT = TMP_AWS_DYNAMODB_LIMIT;
+/**
+ * The value of the `AttributesToGet` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_ATTRIBUTES_TO_GET = TMP_AWS_DYNAMODB_ATTRIBUTES_TO_GET;
+/**
+ * The value of the `IndexName` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_INDEX_NAME = TMP_AWS_DYNAMODB_INDEX_NAME;
+/**
+ * The value of the `Select` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_SELECT = TMP_AWS_DYNAMODB_SELECT;
+/**
+ * The JSON-serialized value of each item of the `GlobalSecondaryIndexes` request field.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEXES = TMP_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEXES;
+/**
+ * The JSON-serialized value of each item of the `LocalSecondaryIndexes` request field.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_LOCAL_SECONDARY_INDEXES = TMP_AWS_DYNAMODB_LOCAL_SECONDARY_INDEXES;
+/**
+ * The value of the `ExclusiveStartTableName` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_EXCLUSIVE_START_TABLE = TMP_AWS_DYNAMODB_EXCLUSIVE_START_TABLE;
+/**
+ * The the number of items in the `TableNames` response parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_TABLE_COUNT = TMP_AWS_DYNAMODB_TABLE_COUNT;
+/**
+ * The value of the `ScanIndexForward` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_SCAN_FORWARD = TMP_AWS_DYNAMODB_SCAN_FORWARD;
+/**
+ * The value of the `Segment` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_SEGMENT = TMP_AWS_DYNAMODB_SEGMENT;
+/**
+ * The value of the `TotalSegments` request parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_TOTAL_SEGMENTS = TMP_AWS_DYNAMODB_TOTAL_SEGMENTS;
+/**
+ * The value of the `Count` response parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_COUNT = TMP_AWS_DYNAMODB_COUNT;
+/**
+ * The value of the `ScannedCount` response parameter.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_SCANNED_COUNT = TMP_AWS_DYNAMODB_SCANNED_COUNT;
+/**
+ * The JSON-serialized value of each item in the `AttributeDefinitions` request field.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_ATTRIBUTE_DEFINITIONS = TMP_AWS_DYNAMODB_ATTRIBUTE_DEFINITIONS;
+/**
+ * The JSON-serialized value of each item in the the `GlobalSecondaryIndexUpdates` request field.
+ */
+exports.SEMATTRS_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEX_UPDATES = TMP_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEX_UPDATES;
+/**
+ * A string identifying the messaging system.
+ */
+exports.SEMATTRS_MESSAGING_SYSTEM = TMP_MESSAGING_SYSTEM;
+/**
+ * The message destination name. This might be equal to the span name but is required nevertheless.
+ */
+exports.SEMATTRS_MESSAGING_DESTINATION = TMP_MESSAGING_DESTINATION;
+/**
+ * The kind of message destination.
+ */
+exports.SEMATTRS_MESSAGING_DESTINATION_KIND = TMP_MESSAGING_DESTINATION_KIND;
+/**
+ * A boolean that is true if the message destination is temporary.
+ */
+exports.SEMATTRS_MESSAGING_TEMP_DESTINATION = TMP_MESSAGING_TEMP_DESTINATION;
+/**
+ * The name of the transport protocol.
+ */
+exports.SEMATTRS_MESSAGING_PROTOCOL = TMP_MESSAGING_PROTOCOL;
+/**
+ * The version of the transport protocol.
+ */
+exports.SEMATTRS_MESSAGING_PROTOCOL_VERSION = TMP_MESSAGING_PROTOCOL_VERSION;
+/**
+ * Connection string.
+ */
+exports.SEMATTRS_MESSAGING_URL = TMP_MESSAGING_URL;
+/**
+ * A value used by the messaging system as an identifier for the message, represented as a string.
+ */
+exports.SEMATTRS_MESSAGING_MESSAGE_ID = TMP_MESSAGING_MESSAGE_ID;
+/**
+ * The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called &#34;Correlation ID&#34;.
+ */
+exports.SEMATTRS_MESSAGING_CONVERSATION_ID = TMP_MESSAGING_CONVERSATION_ID;
+/**
+ * The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported.
+ */
+exports.SEMATTRS_MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES = TMP_MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES;
+/**
+ * The compressed size of the message payload in bytes.
+ */
+exports.SEMATTRS_MESSAGING_MESSAGE_PAYLOAD_COMPRESSED_SIZE_BYTES = TMP_MESSAGING_MESSAGE_PAYLOAD_COMPRESSED_SIZE_BYTES;
+/**
+ * A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is &#34;send&#34;, this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case.
+ */
+exports.SEMATTRS_MESSAGING_OPERATION = TMP_MESSAGING_OPERATION;
+/**
+ * The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer_group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message.
+ */
+exports.SEMATTRS_MESSAGING_CONSUMER_ID = TMP_MESSAGING_CONSUMER_ID;
+/**
+ * RabbitMQ message routing key.
+ */
+exports.SEMATTRS_MESSAGING_RABBITMQ_ROUTING_KEY = TMP_MESSAGING_RABBITMQ_ROUTING_KEY;
+/**
+ * Message keys in Kafka are used for grouping alike messages to ensure they&#39;re processed on the same partition. They differ from `messaging.message_id` in that they&#39;re not unique. If the key is `null`, the attribute MUST NOT be set.
+ *
+ * Note: If the key type is not string, it&#39;s string representation has to be supplied for the attribute. If the key has no unambiguous, canonical string form, don&#39;t include its value.
+ */
+exports.SEMATTRS_MESSAGING_KAFKA_MESSAGE_KEY = TMP_MESSAGING_KAFKA_MESSAGE_KEY;
+/**
+ * Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers.
+ */
+exports.SEMATTRS_MESSAGING_KAFKA_CONSUMER_GROUP = TMP_MESSAGING_KAFKA_CONSUMER_GROUP;
+/**
+ * Client Id for the Consumer or Producer that is handling the message.
+ */
+exports.SEMATTRS_MESSAGING_KAFKA_CLIENT_ID = TMP_MESSAGING_KAFKA_CLIENT_ID;
+/**
+ * Partition the message is sent to.
+ */
+exports.SEMATTRS_MESSAGING_KAFKA_PARTITION = TMP_MESSAGING_KAFKA_PARTITION;
+/**
+ * A boolean that is true if the message is a tombstone.
+ */
+exports.SEMATTRS_MESSAGING_KAFKA_TOMBSTONE = TMP_MESSAGING_KAFKA_TOMBSTONE;
+/**
+ * A string identifying the remoting system.
+ */
+exports.SEMATTRS_RPC_SYSTEM = TMP_RPC_SYSTEM;
+/**
+ * The full (logical) name of the service being called, including its package name, if applicable.
+ *
+ * Note: This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
+ */
+exports.SEMATTRS_RPC_SERVICE = TMP_RPC_SERVICE;
+/**
+ * The name of the (logical) method being called, must be equal to the $method part in the span name.
+ *
+ * Note: This is the logical name of the method from the RPC interface perspective, which can be different from the name of any implementing method/function. The `code.function` attribute may be used to store the latter (e.g., method actually executing the call on the server side, RPC client stub method on the client side).
+ */
+exports.SEMATTRS_RPC_METHOD = TMP_RPC_METHOD;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.SEMATTRS_RPC_GRPC_STATUS_CODE = TMP_RPC_GRPC_STATUS_CODE;
+/**
+ * Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted.
+ */
+exports.SEMATTRS_RPC_JSONRPC_VERSION = TMP_RPC_JSONRPC_VERSION;
+/**
+ * `id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Use empty string in case of `null` value. Omit entirely if this is a notification.
+ */
+exports.SEMATTRS_RPC_JSONRPC_REQUEST_ID = TMP_RPC_JSONRPC_REQUEST_ID;
+/**
+ * `error.code` property of response if it is an error response.
+ */
+exports.SEMATTRS_RPC_JSONRPC_ERROR_CODE = TMP_RPC_JSONRPC_ERROR_CODE;
+/**
+ * `error.message` property of response if it is an error response.
+ */
+exports.SEMATTRS_RPC_JSONRPC_ERROR_MESSAGE = TMP_RPC_JSONRPC_ERROR_MESSAGE;
+/**
+ * Whether this is a received or sent message.
+ */
+exports.SEMATTRS_MESSAGE_TYPE = TMP_MESSAGE_TYPE;
+/**
+ * MUST be calculated as two different counters starting from `1` one for sent messages and one for received message.
+ *
+ * Note: This way we guarantee that the values will be consistent between different implementations.
+ */
+exports.SEMATTRS_MESSAGE_ID = TMP_MESSAGE_ID;
+/**
+ * Compressed size of the message in bytes.
+ */
+exports.SEMATTRS_MESSAGE_COMPRESSED_SIZE = TMP_MESSAGE_COMPRESSED_SIZE;
+/**
+ * Uncompressed size of the message in bytes.
+ */
+exports.SEMATTRS_MESSAGE_UNCOMPRESSED_SIZE = TMP_MESSAGE_UNCOMPRESSED_SIZE;
+/**
+ * Create exported Value Map for SemanticAttributes values
+ * @deprecated Use the SEMATTRS_XXXXX constants rather than the SemanticAttributes.XXXXX for bundle minification
+ */
+exports.SemanticAttributes = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_AWS_LAMBDA_INVOKED_ARN,
+    TMP_DB_SYSTEM,
+    TMP_DB_CONNECTION_STRING,
+    TMP_DB_USER,
+    TMP_DB_JDBC_DRIVER_CLASSNAME,
+    TMP_DB_NAME,
+    TMP_DB_STATEMENT,
+    TMP_DB_OPERATION,
+    TMP_DB_MSSQL_INSTANCE_NAME,
+    TMP_DB_CASSANDRA_KEYSPACE,
+    TMP_DB_CASSANDRA_PAGE_SIZE,
+    TMP_DB_CASSANDRA_CONSISTENCY_LEVEL,
+    TMP_DB_CASSANDRA_TABLE,
+    TMP_DB_CASSANDRA_IDEMPOTENCE,
+    TMP_DB_CASSANDRA_SPECULATIVE_EXECUTION_COUNT,
+    TMP_DB_CASSANDRA_COORDINATOR_ID,
+    TMP_DB_CASSANDRA_COORDINATOR_DC,
+    TMP_DB_HBASE_NAMESPACE,
+    TMP_DB_REDIS_DATABASE_INDEX,
+    TMP_DB_MONGODB_COLLECTION,
+    TMP_DB_SQL_TABLE,
+    TMP_EXCEPTION_TYPE,
+    TMP_EXCEPTION_MESSAGE,
+    TMP_EXCEPTION_STACKTRACE,
+    TMP_EXCEPTION_ESCAPED,
+    TMP_FAAS_TRIGGER,
+    TMP_FAAS_EXECUTION,
+    TMP_FAAS_DOCUMENT_COLLECTION,
+    TMP_FAAS_DOCUMENT_OPERATION,
+    TMP_FAAS_DOCUMENT_TIME,
+    TMP_FAAS_DOCUMENT_NAME,
+    TMP_FAAS_TIME,
+    TMP_FAAS_CRON,
+    TMP_FAAS_COLDSTART,
+    TMP_FAAS_INVOKED_NAME,
+    TMP_FAAS_INVOKED_PROVIDER,
+    TMP_FAAS_INVOKED_REGION,
+    TMP_NET_TRANSPORT,
+    TMP_NET_PEER_IP,
+    TMP_NET_PEER_PORT,
+    TMP_NET_PEER_NAME,
+    TMP_NET_HOST_IP,
+    TMP_NET_HOST_PORT,
+    TMP_NET_HOST_NAME,
+    TMP_NET_HOST_CONNECTION_TYPE,
+    TMP_NET_HOST_CONNECTION_SUBTYPE,
+    TMP_NET_HOST_CARRIER_NAME,
+    TMP_NET_HOST_CARRIER_MCC,
+    TMP_NET_HOST_CARRIER_MNC,
+    TMP_NET_HOST_CARRIER_ICC,
+    TMP_PEER_SERVICE,
+    TMP_ENDUSER_ID,
+    TMP_ENDUSER_ROLE,
+    TMP_ENDUSER_SCOPE,
+    TMP_THREAD_ID,
+    TMP_THREAD_NAME,
+    TMP_CODE_FUNCTION,
+    TMP_CODE_NAMESPACE,
+    TMP_CODE_FILEPATH,
+    TMP_CODE_LINENO,
+    TMP_HTTP_METHOD,
+    TMP_HTTP_URL,
+    TMP_HTTP_TARGET,
+    TMP_HTTP_HOST,
+    TMP_HTTP_SCHEME,
+    TMP_HTTP_STATUS_CODE,
+    TMP_HTTP_FLAVOR,
+    TMP_HTTP_USER_AGENT,
+    TMP_HTTP_REQUEST_CONTENT_LENGTH,
+    TMP_HTTP_REQUEST_CONTENT_LENGTH_UNCOMPRESSED,
+    TMP_HTTP_RESPONSE_CONTENT_LENGTH,
+    TMP_HTTP_RESPONSE_CONTENT_LENGTH_UNCOMPRESSED,
+    TMP_HTTP_SERVER_NAME,
+    TMP_HTTP_ROUTE,
+    TMP_HTTP_CLIENT_IP,
+    TMP_AWS_DYNAMODB_TABLE_NAMES,
+    TMP_AWS_DYNAMODB_CONSUMED_CAPACITY,
+    TMP_AWS_DYNAMODB_ITEM_COLLECTION_METRICS,
+    TMP_AWS_DYNAMODB_PROVISIONED_READ_CAPACITY,
+    TMP_AWS_DYNAMODB_PROVISIONED_WRITE_CAPACITY,
+    TMP_AWS_DYNAMODB_CONSISTENT_READ,
+    TMP_AWS_DYNAMODB_PROJECTION,
+    TMP_AWS_DYNAMODB_LIMIT,
+    TMP_AWS_DYNAMODB_ATTRIBUTES_TO_GET,
+    TMP_AWS_DYNAMODB_INDEX_NAME,
+    TMP_AWS_DYNAMODB_SELECT,
+    TMP_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEXES,
+    TMP_AWS_DYNAMODB_LOCAL_SECONDARY_INDEXES,
+    TMP_AWS_DYNAMODB_EXCLUSIVE_START_TABLE,
+    TMP_AWS_DYNAMODB_TABLE_COUNT,
+    TMP_AWS_DYNAMODB_SCAN_FORWARD,
+    TMP_AWS_DYNAMODB_SEGMENT,
+    TMP_AWS_DYNAMODB_TOTAL_SEGMENTS,
+    TMP_AWS_DYNAMODB_COUNT,
+    TMP_AWS_DYNAMODB_SCANNED_COUNT,
+    TMP_AWS_DYNAMODB_ATTRIBUTE_DEFINITIONS,
+    TMP_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEX_UPDATES,
+    TMP_MESSAGING_SYSTEM,
+    TMP_MESSAGING_DESTINATION,
+    TMP_MESSAGING_DESTINATION_KIND,
+    TMP_MESSAGING_TEMP_DESTINATION,
+    TMP_MESSAGING_PROTOCOL,
+    TMP_MESSAGING_PROTOCOL_VERSION,
+    TMP_MESSAGING_URL,
+    TMP_MESSAGING_MESSAGE_ID,
+    TMP_MESSAGING_CONVERSATION_ID,
+    TMP_MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES,
+    TMP_MESSAGING_MESSAGE_PAYLOAD_COMPRESSED_SIZE_BYTES,
+    TMP_MESSAGING_OPERATION,
+    TMP_MESSAGING_CONSUMER_ID,
+    TMP_MESSAGING_RABBITMQ_ROUTING_KEY,
+    TMP_MESSAGING_KAFKA_MESSAGE_KEY,
+    TMP_MESSAGING_KAFKA_CONSUMER_GROUP,
+    TMP_MESSAGING_KAFKA_CLIENT_ID,
+    TMP_MESSAGING_KAFKA_PARTITION,
+    TMP_MESSAGING_KAFKA_TOMBSTONE,
+    TMP_RPC_SYSTEM,
+    TMP_RPC_SERVICE,
+    TMP_RPC_METHOD,
+    TMP_RPC_GRPC_STATUS_CODE,
+    TMP_RPC_JSONRPC_VERSION,
+    TMP_RPC_JSONRPC_REQUEST_ID,
+    TMP_RPC_JSONRPC_ERROR_CODE,
+    TMP_RPC_JSONRPC_ERROR_MESSAGE,
+    TMP_MESSAGE_TYPE,
+    TMP_MESSAGE_ID,
+    TMP_MESSAGE_COMPRESSED_SIZE,
+    TMP_MESSAGE_UNCOMPRESSED_SIZE,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for DbSystemValues enum definition
+ *
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_DBSYSTEMVALUES_OTHER_SQL = 'other_sql';
+const TMP_DBSYSTEMVALUES_MSSQL = 'mssql';
+const TMP_DBSYSTEMVALUES_MYSQL = 'mysql';
+const TMP_DBSYSTEMVALUES_ORACLE = 'oracle';
+const TMP_DBSYSTEMVALUES_DB2 = 'db2';
+const TMP_DBSYSTEMVALUES_POSTGRESQL = 'postgresql';
+const TMP_DBSYSTEMVALUES_REDSHIFT = 'redshift';
+const TMP_DBSYSTEMVALUES_HIVE = 'hive';
+const TMP_DBSYSTEMVALUES_CLOUDSCAPE = 'cloudscape';
+const TMP_DBSYSTEMVALUES_HSQLDB = 'hsqldb';
+const TMP_DBSYSTEMVALUES_PROGRESS = 'progress';
+const TMP_DBSYSTEMVALUES_MAXDB = 'maxdb';
+const TMP_DBSYSTEMVALUES_HANADB = 'hanadb';
+const TMP_DBSYSTEMVALUES_INGRES = 'ingres';
+const TMP_DBSYSTEMVALUES_FIRSTSQL = 'firstsql';
+const TMP_DBSYSTEMVALUES_EDB = 'edb';
+const TMP_DBSYSTEMVALUES_CACHE = 'cache';
+const TMP_DBSYSTEMVALUES_ADABAS = 'adabas';
+const TMP_DBSYSTEMVALUES_FIREBIRD = 'firebird';
+const TMP_DBSYSTEMVALUES_DERBY = 'derby';
+const TMP_DBSYSTEMVALUES_FILEMAKER = 'filemaker';
+const TMP_DBSYSTEMVALUES_INFORMIX = 'informix';
+const TMP_DBSYSTEMVALUES_INSTANTDB = 'instantdb';
+const TMP_DBSYSTEMVALUES_INTERBASE = 'interbase';
+const TMP_DBSYSTEMVALUES_MARIADB = 'mariadb';
+const TMP_DBSYSTEMVALUES_NETEZZA = 'netezza';
+const TMP_DBSYSTEMVALUES_PERVASIVE = 'pervasive';
+const TMP_DBSYSTEMVALUES_POINTBASE = 'pointbase';
+const TMP_DBSYSTEMVALUES_SQLITE = 'sqlite';
+const TMP_DBSYSTEMVALUES_SYBASE = 'sybase';
+const TMP_DBSYSTEMVALUES_TERADATA = 'teradata';
+const TMP_DBSYSTEMVALUES_VERTICA = 'vertica';
+const TMP_DBSYSTEMVALUES_H2 = 'h2';
+const TMP_DBSYSTEMVALUES_COLDFUSION = 'coldfusion';
+const TMP_DBSYSTEMVALUES_CASSANDRA = 'cassandra';
+const TMP_DBSYSTEMVALUES_HBASE = 'hbase';
+const TMP_DBSYSTEMVALUES_MONGODB = 'mongodb';
+const TMP_DBSYSTEMVALUES_REDIS = 'redis';
+const TMP_DBSYSTEMVALUES_COUCHBASE = 'couchbase';
+const TMP_DBSYSTEMVALUES_COUCHDB = 'couchdb';
+const TMP_DBSYSTEMVALUES_COSMOSDB = 'cosmosdb';
+const TMP_DBSYSTEMVALUES_DYNAMODB = 'dynamodb';
+const TMP_DBSYSTEMVALUES_NEO4J = 'neo4j';
+const TMP_DBSYSTEMVALUES_GEODE = 'geode';
+const TMP_DBSYSTEMVALUES_ELASTICSEARCH = 'elasticsearch';
+const TMP_DBSYSTEMVALUES_MEMCACHED = 'memcached';
+const TMP_DBSYSTEMVALUES_COCKROACHDB = 'cockroachdb';
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_OTHER_SQL = TMP_DBSYSTEMVALUES_OTHER_SQL;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_MSSQL = TMP_DBSYSTEMVALUES_MSSQL;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_MYSQL = TMP_DBSYSTEMVALUES_MYSQL;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_ORACLE = TMP_DBSYSTEMVALUES_ORACLE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_DB2 = TMP_DBSYSTEMVALUES_DB2;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_POSTGRESQL = TMP_DBSYSTEMVALUES_POSTGRESQL;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_REDSHIFT = TMP_DBSYSTEMVALUES_REDSHIFT;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_HIVE = TMP_DBSYSTEMVALUES_HIVE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_CLOUDSCAPE = TMP_DBSYSTEMVALUES_CLOUDSCAPE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_HSQLDB = TMP_DBSYSTEMVALUES_HSQLDB;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_PROGRESS = TMP_DBSYSTEMVALUES_PROGRESS;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_MAXDB = TMP_DBSYSTEMVALUES_MAXDB;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_HANADB = TMP_DBSYSTEMVALUES_HANADB;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_INGRES = TMP_DBSYSTEMVALUES_INGRES;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_FIRSTSQL = TMP_DBSYSTEMVALUES_FIRSTSQL;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_EDB = TMP_DBSYSTEMVALUES_EDB;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_CACHE = TMP_DBSYSTEMVALUES_CACHE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_ADABAS = TMP_DBSYSTEMVALUES_ADABAS;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_FIREBIRD = TMP_DBSYSTEMVALUES_FIREBIRD;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_DERBY = TMP_DBSYSTEMVALUES_DERBY;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_FILEMAKER = TMP_DBSYSTEMVALUES_FILEMAKER;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_INFORMIX = TMP_DBSYSTEMVALUES_INFORMIX;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_INSTANTDB = TMP_DBSYSTEMVALUES_INSTANTDB;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_INTERBASE = TMP_DBSYSTEMVALUES_INTERBASE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_MARIADB = TMP_DBSYSTEMVALUES_MARIADB;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_NETEZZA = TMP_DBSYSTEMVALUES_NETEZZA;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_PERVASIVE = TMP_DBSYSTEMVALUES_PERVASIVE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_POINTBASE = TMP_DBSYSTEMVALUES_POINTBASE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_SQLITE = TMP_DBSYSTEMVALUES_SQLITE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_SYBASE = TMP_DBSYSTEMVALUES_SYBASE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_TERADATA = TMP_DBSYSTEMVALUES_TERADATA;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_VERTICA = TMP_DBSYSTEMVALUES_VERTICA;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_H2 = TMP_DBSYSTEMVALUES_H2;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_COLDFUSION = TMP_DBSYSTEMVALUES_COLDFUSION;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_CASSANDRA = TMP_DBSYSTEMVALUES_CASSANDRA;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_HBASE = TMP_DBSYSTEMVALUES_HBASE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_MONGODB = TMP_DBSYSTEMVALUES_MONGODB;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_REDIS = TMP_DBSYSTEMVALUES_REDIS;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_COUCHBASE = TMP_DBSYSTEMVALUES_COUCHBASE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_COUCHDB = TMP_DBSYSTEMVALUES_COUCHDB;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_COSMOSDB = TMP_DBSYSTEMVALUES_COSMOSDB;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_DYNAMODB = TMP_DBSYSTEMVALUES_DYNAMODB;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_NEO4J = TMP_DBSYSTEMVALUES_NEO4J;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_GEODE = TMP_DBSYSTEMVALUES_GEODE;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_ELASTICSEARCH = TMP_DBSYSTEMVALUES_ELASTICSEARCH;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_MEMCACHED = TMP_DBSYSTEMVALUES_MEMCACHED;
+/**
+ * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ */
+exports.DBSYSTEMVALUES_COCKROACHDB = TMP_DBSYSTEMVALUES_COCKROACHDB;
+/**
+ * The constant map of values for DbSystemValues.
+ * @deprecated Use the DBSYSTEMVALUES_XXXXX constants rather than the DbSystemValues.XXXXX for bundle minification.
+ */
+exports.DbSystemValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_DBSYSTEMVALUES_OTHER_SQL,
+    TMP_DBSYSTEMVALUES_MSSQL,
+    TMP_DBSYSTEMVALUES_MYSQL,
+    TMP_DBSYSTEMVALUES_ORACLE,
+    TMP_DBSYSTEMVALUES_DB2,
+    TMP_DBSYSTEMVALUES_POSTGRESQL,
+    TMP_DBSYSTEMVALUES_REDSHIFT,
+    TMP_DBSYSTEMVALUES_HIVE,
+    TMP_DBSYSTEMVALUES_CLOUDSCAPE,
+    TMP_DBSYSTEMVALUES_HSQLDB,
+    TMP_DBSYSTEMVALUES_PROGRESS,
+    TMP_DBSYSTEMVALUES_MAXDB,
+    TMP_DBSYSTEMVALUES_HANADB,
+    TMP_DBSYSTEMVALUES_INGRES,
+    TMP_DBSYSTEMVALUES_FIRSTSQL,
+    TMP_DBSYSTEMVALUES_EDB,
+    TMP_DBSYSTEMVALUES_CACHE,
+    TMP_DBSYSTEMVALUES_ADABAS,
+    TMP_DBSYSTEMVALUES_FIREBIRD,
+    TMP_DBSYSTEMVALUES_DERBY,
+    TMP_DBSYSTEMVALUES_FILEMAKER,
+    TMP_DBSYSTEMVALUES_INFORMIX,
+    TMP_DBSYSTEMVALUES_INSTANTDB,
+    TMP_DBSYSTEMVALUES_INTERBASE,
+    TMP_DBSYSTEMVALUES_MARIADB,
+    TMP_DBSYSTEMVALUES_NETEZZA,
+    TMP_DBSYSTEMVALUES_PERVASIVE,
+    TMP_DBSYSTEMVALUES_POINTBASE,
+    TMP_DBSYSTEMVALUES_SQLITE,
+    TMP_DBSYSTEMVALUES_SYBASE,
+    TMP_DBSYSTEMVALUES_TERADATA,
+    TMP_DBSYSTEMVALUES_VERTICA,
+    TMP_DBSYSTEMVALUES_H2,
+    TMP_DBSYSTEMVALUES_COLDFUSION,
+    TMP_DBSYSTEMVALUES_CASSANDRA,
+    TMP_DBSYSTEMVALUES_HBASE,
+    TMP_DBSYSTEMVALUES_MONGODB,
+    TMP_DBSYSTEMVALUES_REDIS,
+    TMP_DBSYSTEMVALUES_COUCHBASE,
+    TMP_DBSYSTEMVALUES_COUCHDB,
+    TMP_DBSYSTEMVALUES_COSMOSDB,
+    TMP_DBSYSTEMVALUES_DYNAMODB,
+    TMP_DBSYSTEMVALUES_NEO4J,
+    TMP_DBSYSTEMVALUES_GEODE,
+    TMP_DBSYSTEMVALUES_ELASTICSEARCH,
+    TMP_DBSYSTEMVALUES_MEMCACHED,
+    TMP_DBSYSTEMVALUES_COCKROACHDB,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for DbCassandraConsistencyLevelValues enum definition
+ *
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ALL = 'all';
+const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_EACH_QUORUM = 'each_quorum';
+const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_QUORUM = 'quorum';
+const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_QUORUM = 'local_quorum';
+const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ONE = 'one';
+const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_TWO = 'two';
+const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_THREE = 'three';
+const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_ONE = 'local_one';
+const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ANY = 'any';
+const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_SERIAL = 'serial';
+const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_SERIAL = 'local_serial';
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.DBCASSANDRACONSISTENCYLEVELVALUES_ALL = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ALL;
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.DBCASSANDRACONSISTENCYLEVELVALUES_EACH_QUORUM = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_EACH_QUORUM;
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.DBCASSANDRACONSISTENCYLEVELVALUES_QUORUM = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_QUORUM;
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_QUORUM = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_QUORUM;
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.DBCASSANDRACONSISTENCYLEVELVALUES_ONE = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ONE;
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.DBCASSANDRACONSISTENCYLEVELVALUES_TWO = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_TWO;
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.DBCASSANDRACONSISTENCYLEVELVALUES_THREE = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_THREE;
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_ONE = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_ONE;
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.DBCASSANDRACONSISTENCYLEVELVALUES_ANY = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ANY;
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.DBCASSANDRACONSISTENCYLEVELVALUES_SERIAL = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_SERIAL;
+/**
+ * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ */
+exports.DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_SERIAL = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_SERIAL;
+/**
+ * The constant map of values for DbCassandraConsistencyLevelValues.
+ * @deprecated Use the DBCASSANDRACONSISTENCYLEVELVALUES_XXXXX constants rather than the DbCassandraConsistencyLevelValues.XXXXX for bundle minification.
+ */
+exports.DbCassandraConsistencyLevelValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ALL,
+    TMP_DBCASSANDRACONSISTENCYLEVELVALUES_EACH_QUORUM,
+    TMP_DBCASSANDRACONSISTENCYLEVELVALUES_QUORUM,
+    TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_QUORUM,
+    TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ONE,
+    TMP_DBCASSANDRACONSISTENCYLEVELVALUES_TWO,
+    TMP_DBCASSANDRACONSISTENCYLEVELVALUES_THREE,
+    TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_ONE,
+    TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ANY,
+    TMP_DBCASSANDRACONSISTENCYLEVELVALUES_SERIAL,
+    TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_SERIAL,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for FaasTriggerValues enum definition
+ *
+ * Type of the trigger on which the function is executed.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_FAASTRIGGERVALUES_DATASOURCE = 'datasource';
+const TMP_FAASTRIGGERVALUES_HTTP = 'http';
+const TMP_FAASTRIGGERVALUES_PUBSUB = 'pubsub';
+const TMP_FAASTRIGGERVALUES_TIMER = 'timer';
+const TMP_FAASTRIGGERVALUES_OTHER = 'other';
+/**
+ * Type of the trigger on which the function is executed.
+ */
+exports.FAASTRIGGERVALUES_DATASOURCE = TMP_FAASTRIGGERVALUES_DATASOURCE;
+/**
+ * Type of the trigger on which the function is executed.
+ */
+exports.FAASTRIGGERVALUES_HTTP = TMP_FAASTRIGGERVALUES_HTTP;
+/**
+ * Type of the trigger on which the function is executed.
+ */
+exports.FAASTRIGGERVALUES_PUBSUB = TMP_FAASTRIGGERVALUES_PUBSUB;
+/**
+ * Type of the trigger on which the function is executed.
+ */
+exports.FAASTRIGGERVALUES_TIMER = TMP_FAASTRIGGERVALUES_TIMER;
+/**
+ * Type of the trigger on which the function is executed.
+ */
+exports.FAASTRIGGERVALUES_OTHER = TMP_FAASTRIGGERVALUES_OTHER;
+/**
+ * The constant map of values for FaasTriggerValues.
+ * @deprecated Use the FAASTRIGGERVALUES_XXXXX constants rather than the FaasTriggerValues.XXXXX for bundle minification.
+ */
+exports.FaasTriggerValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_FAASTRIGGERVALUES_DATASOURCE,
+    TMP_FAASTRIGGERVALUES_HTTP,
+    TMP_FAASTRIGGERVALUES_PUBSUB,
+    TMP_FAASTRIGGERVALUES_TIMER,
+    TMP_FAASTRIGGERVALUES_OTHER,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for FaasDocumentOperationValues enum definition
+ *
+ * Describes the type of the operation that was performed on the data.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_FAASDOCUMENTOPERATIONVALUES_INSERT = 'insert';
+const TMP_FAASDOCUMENTOPERATIONVALUES_EDIT = 'edit';
+const TMP_FAASDOCUMENTOPERATIONVALUES_DELETE = 'delete';
+/**
+ * Describes the type of the operation that was performed on the data.
+ */
+exports.FAASDOCUMENTOPERATIONVALUES_INSERT = TMP_FAASDOCUMENTOPERATIONVALUES_INSERT;
+/**
+ * Describes the type of the operation that was performed on the data.
+ */
+exports.FAASDOCUMENTOPERATIONVALUES_EDIT = TMP_FAASDOCUMENTOPERATIONVALUES_EDIT;
+/**
+ * Describes the type of the operation that was performed on the data.
+ */
+exports.FAASDOCUMENTOPERATIONVALUES_DELETE = TMP_FAASDOCUMENTOPERATIONVALUES_DELETE;
+/**
+ * The constant map of values for FaasDocumentOperationValues.
+ * @deprecated Use the FAASDOCUMENTOPERATIONVALUES_XXXXX constants rather than the FaasDocumentOperationValues.XXXXX for bundle minification.
+ */
+exports.FaasDocumentOperationValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_FAASDOCUMENTOPERATIONVALUES_INSERT,
+    TMP_FAASDOCUMENTOPERATIONVALUES_EDIT,
+    TMP_FAASDOCUMENTOPERATIONVALUES_DELETE,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for FaasInvokedProviderValues enum definition
+ *
+ * The cloud provider of the invoked function.
+ *
+ * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_FAASINVOKEDPROVIDERVALUES_ALIBABA_CLOUD = 'alibaba_cloud';
+const TMP_FAASINVOKEDPROVIDERVALUES_AWS = 'aws';
+const TMP_FAASINVOKEDPROVIDERVALUES_AZURE = 'azure';
+const TMP_FAASINVOKEDPROVIDERVALUES_GCP = 'gcp';
+/**
+ * The cloud provider of the invoked function.
+ *
+ * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+ */
+exports.FAASINVOKEDPROVIDERVALUES_ALIBABA_CLOUD = TMP_FAASINVOKEDPROVIDERVALUES_ALIBABA_CLOUD;
+/**
+ * The cloud provider of the invoked function.
+ *
+ * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+ */
+exports.FAASINVOKEDPROVIDERVALUES_AWS = TMP_FAASINVOKEDPROVIDERVALUES_AWS;
+/**
+ * The cloud provider of the invoked function.
+ *
+ * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+ */
+exports.FAASINVOKEDPROVIDERVALUES_AZURE = TMP_FAASINVOKEDPROVIDERVALUES_AZURE;
+/**
+ * The cloud provider of the invoked function.
+ *
+ * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+ */
+exports.FAASINVOKEDPROVIDERVALUES_GCP = TMP_FAASINVOKEDPROVIDERVALUES_GCP;
+/**
+ * The constant map of values for FaasInvokedProviderValues.
+ * @deprecated Use the FAASINVOKEDPROVIDERVALUES_XXXXX constants rather than the FaasInvokedProviderValues.XXXXX for bundle minification.
+ */
+exports.FaasInvokedProviderValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_FAASINVOKEDPROVIDERVALUES_ALIBABA_CLOUD,
+    TMP_FAASINVOKEDPROVIDERVALUES_AWS,
+    TMP_FAASINVOKEDPROVIDERVALUES_AZURE,
+    TMP_FAASINVOKEDPROVIDERVALUES_GCP,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for NetTransportValues enum definition
+ *
+ * Transport protocol used. See note below.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_NETTRANSPORTVALUES_IP_TCP = 'ip_tcp';
+const TMP_NETTRANSPORTVALUES_IP_UDP = 'ip_udp';
+const TMP_NETTRANSPORTVALUES_IP = 'ip';
+const TMP_NETTRANSPORTVALUES_UNIX = 'unix';
+const TMP_NETTRANSPORTVALUES_PIPE = 'pipe';
+const TMP_NETTRANSPORTVALUES_INPROC = 'inproc';
+const TMP_NETTRANSPORTVALUES_OTHER = 'other';
+/**
+ * Transport protocol used. See note below.
+ */
+exports.NETTRANSPORTVALUES_IP_TCP = TMP_NETTRANSPORTVALUES_IP_TCP;
+/**
+ * Transport protocol used. See note below.
+ */
+exports.NETTRANSPORTVALUES_IP_UDP = TMP_NETTRANSPORTVALUES_IP_UDP;
+/**
+ * Transport protocol used. See note below.
+ */
+exports.NETTRANSPORTVALUES_IP = TMP_NETTRANSPORTVALUES_IP;
+/**
+ * Transport protocol used. See note below.
+ */
+exports.NETTRANSPORTVALUES_UNIX = TMP_NETTRANSPORTVALUES_UNIX;
+/**
+ * Transport protocol used. See note below.
+ */
+exports.NETTRANSPORTVALUES_PIPE = TMP_NETTRANSPORTVALUES_PIPE;
+/**
+ * Transport protocol used. See note below.
+ */
+exports.NETTRANSPORTVALUES_INPROC = TMP_NETTRANSPORTVALUES_INPROC;
+/**
+ * Transport protocol used. See note below.
+ */
+exports.NETTRANSPORTVALUES_OTHER = TMP_NETTRANSPORTVALUES_OTHER;
+/**
+ * The constant map of values for NetTransportValues.
+ * @deprecated Use the NETTRANSPORTVALUES_XXXXX constants rather than the NetTransportValues.XXXXX for bundle minification.
+ */
+exports.NetTransportValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_NETTRANSPORTVALUES_IP_TCP,
+    TMP_NETTRANSPORTVALUES_IP_UDP,
+    TMP_NETTRANSPORTVALUES_IP,
+    TMP_NETTRANSPORTVALUES_UNIX,
+    TMP_NETTRANSPORTVALUES_PIPE,
+    TMP_NETTRANSPORTVALUES_INPROC,
+    TMP_NETTRANSPORTVALUES_OTHER,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for NetHostConnectionTypeValues enum definition
+ *
+ * The internet connection type currently being used by the host.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_NETHOSTCONNECTIONTYPEVALUES_WIFI = 'wifi';
+const TMP_NETHOSTCONNECTIONTYPEVALUES_WIRED = 'wired';
+const TMP_NETHOSTCONNECTIONTYPEVALUES_CELL = 'cell';
+const TMP_NETHOSTCONNECTIONTYPEVALUES_UNAVAILABLE = 'unavailable';
+const TMP_NETHOSTCONNECTIONTYPEVALUES_UNKNOWN = 'unknown';
+/**
+ * The internet connection type currently being used by the host.
+ */
+exports.NETHOSTCONNECTIONTYPEVALUES_WIFI = TMP_NETHOSTCONNECTIONTYPEVALUES_WIFI;
+/**
+ * The internet connection type currently being used by the host.
+ */
+exports.NETHOSTCONNECTIONTYPEVALUES_WIRED = TMP_NETHOSTCONNECTIONTYPEVALUES_WIRED;
+/**
+ * The internet connection type currently being used by the host.
+ */
+exports.NETHOSTCONNECTIONTYPEVALUES_CELL = TMP_NETHOSTCONNECTIONTYPEVALUES_CELL;
+/**
+ * The internet connection type currently being used by the host.
+ */
+exports.NETHOSTCONNECTIONTYPEVALUES_UNAVAILABLE = TMP_NETHOSTCONNECTIONTYPEVALUES_UNAVAILABLE;
+/**
+ * The internet connection type currently being used by the host.
+ */
+exports.NETHOSTCONNECTIONTYPEVALUES_UNKNOWN = TMP_NETHOSTCONNECTIONTYPEVALUES_UNKNOWN;
+/**
+ * The constant map of values for NetHostConnectionTypeValues.
+ * @deprecated Use the NETHOSTCONNECTIONTYPEVALUES_XXXXX constants rather than the NetHostConnectionTypeValues.XXXXX for bundle minification.
+ */
+exports.NetHostConnectionTypeValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_NETHOSTCONNECTIONTYPEVALUES_WIFI,
+    TMP_NETHOSTCONNECTIONTYPEVALUES_WIRED,
+    TMP_NETHOSTCONNECTIONTYPEVALUES_CELL,
+    TMP_NETHOSTCONNECTIONTYPEVALUES_UNAVAILABLE,
+    TMP_NETHOSTCONNECTIONTYPEVALUES_UNKNOWN,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for NetHostConnectionSubtypeValues enum definition
+ *
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_GPRS = 'gprs';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EDGE = 'edge';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_UMTS = 'umts';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_CDMA = 'cdma';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_0 = 'evdo_0';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_A = 'evdo_a';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_CDMA2000_1XRTT = 'cdma2000_1xrtt';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSDPA = 'hsdpa';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSUPA = 'hsupa';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSPA = 'hspa';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_IDEN = 'iden';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_B = 'evdo_b';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_LTE = 'lte';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EHRPD = 'ehrpd';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSPAP = 'hspap';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_GSM = 'gsm';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_TD_SCDMA = 'td_scdma';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_IWLAN = 'iwlan';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_NR = 'nr';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_NRNSA = 'nrnsa';
+const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_LTE_CA = 'lte_ca';
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_GPRS = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_GPRS;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_EDGE = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EDGE;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_UMTS = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_UMTS;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_CDMA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_CDMA;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_0 = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_0;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_A = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_A;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_CDMA2000_1XRTT = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_CDMA2000_1XRTT;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSDPA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSDPA;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSUPA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSUPA;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSPA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSPA;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_IDEN = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_IDEN;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_B = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_B;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_LTE = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_LTE;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_EHRPD = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EHRPD;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSPAP = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSPAP;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_GSM = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_GSM;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_TD_SCDMA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_TD_SCDMA;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_IWLAN = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_IWLAN;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_NR = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_NR;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_NRNSA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_NRNSA;
+/**
+ * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ */
+exports.NETHOSTCONNECTIONSUBTYPEVALUES_LTE_CA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_LTE_CA;
+/**
+ * The constant map of values for NetHostConnectionSubtypeValues.
+ * @deprecated Use the NETHOSTCONNECTIONSUBTYPEVALUES_XXXXX constants rather than the NetHostConnectionSubtypeValues.XXXXX for bundle minification.
+ */
+exports.NetHostConnectionSubtypeValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_GPRS,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EDGE,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_UMTS,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_CDMA,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_0,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_A,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_CDMA2000_1XRTT,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSDPA,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSUPA,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSPA,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_IDEN,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_B,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_LTE,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EHRPD,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSPAP,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_GSM,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_TD_SCDMA,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_IWLAN,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_NR,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_NRNSA,
+    TMP_NETHOSTCONNECTIONSUBTYPEVALUES_LTE_CA,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for HttpFlavorValues enum definition
+ *
+ * Kind of HTTP protocol used.
+ *
+ * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_HTTPFLAVORVALUES_HTTP_1_0 = '1.0';
+const TMP_HTTPFLAVORVALUES_HTTP_1_1 = '1.1';
+const TMP_HTTPFLAVORVALUES_HTTP_2_0 = '2.0';
+const TMP_HTTPFLAVORVALUES_SPDY = 'SPDY';
+const TMP_HTTPFLAVORVALUES_QUIC = 'QUIC';
+/**
+ * Kind of HTTP protocol used.
+ *
+ * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ */
+exports.HTTPFLAVORVALUES_HTTP_1_0 = TMP_HTTPFLAVORVALUES_HTTP_1_0;
+/**
+ * Kind of HTTP protocol used.
+ *
+ * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ */
+exports.HTTPFLAVORVALUES_HTTP_1_1 = TMP_HTTPFLAVORVALUES_HTTP_1_1;
+/**
+ * Kind of HTTP protocol used.
+ *
+ * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ */
+exports.HTTPFLAVORVALUES_HTTP_2_0 = TMP_HTTPFLAVORVALUES_HTTP_2_0;
+/**
+ * Kind of HTTP protocol used.
+ *
+ * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ */
+exports.HTTPFLAVORVALUES_SPDY = TMP_HTTPFLAVORVALUES_SPDY;
+/**
+ * Kind of HTTP protocol used.
+ *
+ * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ */
+exports.HTTPFLAVORVALUES_QUIC = TMP_HTTPFLAVORVALUES_QUIC;
+/**
+ * The constant map of values for HttpFlavorValues.
+ * @deprecated Use the HTTPFLAVORVALUES_XXXXX constants rather than the HttpFlavorValues.XXXXX for bundle minification.
+ */
+exports.HttpFlavorValues = {
+    HTTP_1_0: TMP_HTTPFLAVORVALUES_HTTP_1_0,
+    HTTP_1_1: TMP_HTTPFLAVORVALUES_HTTP_1_1,
+    HTTP_2_0: TMP_HTTPFLAVORVALUES_HTTP_2_0,
+    SPDY: TMP_HTTPFLAVORVALUES_SPDY,
+    QUIC: TMP_HTTPFLAVORVALUES_QUIC,
+};
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for MessagingDestinationKindValues enum definition
+ *
+ * The kind of message destination.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_MESSAGINGDESTINATIONKINDVALUES_QUEUE = 'queue';
+const TMP_MESSAGINGDESTINATIONKINDVALUES_TOPIC = 'topic';
+/**
+ * The kind of message destination.
+ */
+exports.MESSAGINGDESTINATIONKINDVALUES_QUEUE = TMP_MESSAGINGDESTINATIONKINDVALUES_QUEUE;
+/**
+ * The kind of message destination.
+ */
+exports.MESSAGINGDESTINATIONKINDVALUES_TOPIC = TMP_MESSAGINGDESTINATIONKINDVALUES_TOPIC;
+/**
+ * The constant map of values for MessagingDestinationKindValues.
+ * @deprecated Use the MESSAGINGDESTINATIONKINDVALUES_XXXXX constants rather than the MessagingDestinationKindValues.XXXXX for bundle minification.
+ */
+exports.MessagingDestinationKindValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_MESSAGINGDESTINATIONKINDVALUES_QUEUE,
+    TMP_MESSAGINGDESTINATIONKINDVALUES_TOPIC,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for MessagingOperationValues enum definition
+ *
+ * A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is &#34;send&#34;, this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_MESSAGINGOPERATIONVALUES_RECEIVE = 'receive';
+const TMP_MESSAGINGOPERATIONVALUES_PROCESS = 'process';
+/**
+ * A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is &#34;send&#34;, this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case.
+ */
+exports.MESSAGINGOPERATIONVALUES_RECEIVE = TMP_MESSAGINGOPERATIONVALUES_RECEIVE;
+/**
+ * A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is &#34;send&#34;, this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case.
+ */
+exports.MESSAGINGOPERATIONVALUES_PROCESS = TMP_MESSAGINGOPERATIONVALUES_PROCESS;
+/**
+ * The constant map of values for MessagingOperationValues.
+ * @deprecated Use the MESSAGINGOPERATIONVALUES_XXXXX constants rather than the MessagingOperationValues.XXXXX for bundle minification.
+ */
+exports.MessagingOperationValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_MESSAGINGOPERATIONVALUES_RECEIVE,
+    TMP_MESSAGINGOPERATIONVALUES_PROCESS,
+]);
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for RpcGrpcStatusCodeValues enum definition
+ *
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_RPCGRPCSTATUSCODEVALUES_OK = 0;
+const TMP_RPCGRPCSTATUSCODEVALUES_CANCELLED = 1;
+const TMP_RPCGRPCSTATUSCODEVALUES_UNKNOWN = 2;
+const TMP_RPCGRPCSTATUSCODEVALUES_INVALID_ARGUMENT = 3;
+const TMP_RPCGRPCSTATUSCODEVALUES_DEADLINE_EXCEEDED = 4;
+const TMP_RPCGRPCSTATUSCODEVALUES_NOT_FOUND = 5;
+const TMP_RPCGRPCSTATUSCODEVALUES_ALREADY_EXISTS = 6;
+const TMP_RPCGRPCSTATUSCODEVALUES_PERMISSION_DENIED = 7;
+const TMP_RPCGRPCSTATUSCODEVALUES_RESOURCE_EXHAUSTED = 8;
+const TMP_RPCGRPCSTATUSCODEVALUES_FAILED_PRECONDITION = 9;
+const TMP_RPCGRPCSTATUSCODEVALUES_ABORTED = 10;
+const TMP_RPCGRPCSTATUSCODEVALUES_OUT_OF_RANGE = 11;
+const TMP_RPCGRPCSTATUSCODEVALUES_UNIMPLEMENTED = 12;
+const TMP_RPCGRPCSTATUSCODEVALUES_INTERNAL = 13;
+const TMP_RPCGRPCSTATUSCODEVALUES_UNAVAILABLE = 14;
+const TMP_RPCGRPCSTATUSCODEVALUES_DATA_LOSS = 15;
+const TMP_RPCGRPCSTATUSCODEVALUES_UNAUTHENTICATED = 16;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_OK = TMP_RPCGRPCSTATUSCODEVALUES_OK;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_CANCELLED = TMP_RPCGRPCSTATUSCODEVALUES_CANCELLED;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_UNKNOWN = TMP_RPCGRPCSTATUSCODEVALUES_UNKNOWN;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_INVALID_ARGUMENT = TMP_RPCGRPCSTATUSCODEVALUES_INVALID_ARGUMENT;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_DEADLINE_EXCEEDED = TMP_RPCGRPCSTATUSCODEVALUES_DEADLINE_EXCEEDED;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_NOT_FOUND = TMP_RPCGRPCSTATUSCODEVALUES_NOT_FOUND;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_ALREADY_EXISTS = TMP_RPCGRPCSTATUSCODEVALUES_ALREADY_EXISTS;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_PERMISSION_DENIED = TMP_RPCGRPCSTATUSCODEVALUES_PERMISSION_DENIED;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_RESOURCE_EXHAUSTED = TMP_RPCGRPCSTATUSCODEVALUES_RESOURCE_EXHAUSTED;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_FAILED_PRECONDITION = TMP_RPCGRPCSTATUSCODEVALUES_FAILED_PRECONDITION;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_ABORTED = TMP_RPCGRPCSTATUSCODEVALUES_ABORTED;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_OUT_OF_RANGE = TMP_RPCGRPCSTATUSCODEVALUES_OUT_OF_RANGE;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_UNIMPLEMENTED = TMP_RPCGRPCSTATUSCODEVALUES_UNIMPLEMENTED;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_INTERNAL = TMP_RPCGRPCSTATUSCODEVALUES_INTERNAL;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_UNAVAILABLE = TMP_RPCGRPCSTATUSCODEVALUES_UNAVAILABLE;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_DATA_LOSS = TMP_RPCGRPCSTATUSCODEVALUES_DATA_LOSS;
+/**
+ * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ */
+exports.RPCGRPCSTATUSCODEVALUES_UNAUTHENTICATED = TMP_RPCGRPCSTATUSCODEVALUES_UNAUTHENTICATED;
+/**
+ * The constant map of values for RpcGrpcStatusCodeValues.
+ * @deprecated Use the RPCGRPCSTATUSCODEVALUES_XXXXX constants rather than the RpcGrpcStatusCodeValues.XXXXX for bundle minification.
+ */
+exports.RpcGrpcStatusCodeValues = {
+    OK: TMP_RPCGRPCSTATUSCODEVALUES_OK,
+    CANCELLED: TMP_RPCGRPCSTATUSCODEVALUES_CANCELLED,
+    UNKNOWN: TMP_RPCGRPCSTATUSCODEVALUES_UNKNOWN,
+    INVALID_ARGUMENT: TMP_RPCGRPCSTATUSCODEVALUES_INVALID_ARGUMENT,
+    DEADLINE_EXCEEDED: TMP_RPCGRPCSTATUSCODEVALUES_DEADLINE_EXCEEDED,
+    NOT_FOUND: TMP_RPCGRPCSTATUSCODEVALUES_NOT_FOUND,
+    ALREADY_EXISTS: TMP_RPCGRPCSTATUSCODEVALUES_ALREADY_EXISTS,
+    PERMISSION_DENIED: TMP_RPCGRPCSTATUSCODEVALUES_PERMISSION_DENIED,
+    RESOURCE_EXHAUSTED: TMP_RPCGRPCSTATUSCODEVALUES_RESOURCE_EXHAUSTED,
+    FAILED_PRECONDITION: TMP_RPCGRPCSTATUSCODEVALUES_FAILED_PRECONDITION,
+    ABORTED: TMP_RPCGRPCSTATUSCODEVALUES_ABORTED,
+    OUT_OF_RANGE: TMP_RPCGRPCSTATUSCODEVALUES_OUT_OF_RANGE,
+    UNIMPLEMENTED: TMP_RPCGRPCSTATUSCODEVALUES_UNIMPLEMENTED,
+    INTERNAL: TMP_RPCGRPCSTATUSCODEVALUES_INTERNAL,
+    UNAVAILABLE: TMP_RPCGRPCSTATUSCODEVALUES_UNAVAILABLE,
+    DATA_LOSS: TMP_RPCGRPCSTATUSCODEVALUES_DATA_LOSS,
+    UNAUTHENTICATED: TMP_RPCGRPCSTATUSCODEVALUES_UNAUTHENTICATED,
+};
+/* ----------------------------------------------------------------------------------------------------------
+ * Constant values for MessageTypeValues enum definition
+ *
+ * Whether this is a received or sent message.
+ * ---------------------------------------------------------------------------------------------------------- */
+// Temporary local constants to assign to the individual exports and the namespaced version
+// Required to avoid the namespace exports using the unminifable export names for some package types
+const TMP_MESSAGETYPEVALUES_SENT = 'SENT';
+const TMP_MESSAGETYPEVALUES_RECEIVED = 'RECEIVED';
+/**
+ * Whether this is a received or sent message.
+ */
+exports.MESSAGETYPEVALUES_SENT = TMP_MESSAGETYPEVALUES_SENT;
+/**
+ * Whether this is a received or sent message.
+ */
+exports.MESSAGETYPEVALUES_RECEIVED = TMP_MESSAGETYPEVALUES_RECEIVED;
+/**
+ * The constant map of values for MessageTypeValues.
+ * @deprecated Use the MESSAGETYPEVALUES_XXXXX constants rather than the MessageTypeValues.XXXXX for bundle minification.
+ */
+exports.MessageTypeValues = 
+/*#__PURE__*/ (0, utils_1.createConstMap)([
+    TMP_MESSAGETYPEVALUES_SENT,
+    TMP_MESSAGETYPEVALUES_RECEIVED,
+]);
+
+},{"../internal/utils":106}],110:[function(require,module,exports){
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+__exportStar(require("./SemanticAttributes"), exports);
+
+},{"./SemanticAttributes":109}],111:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OTLPLogExporter = void 0;
 var platform_1 = require("./platform");
 Object.defineProperty(exports, "OTLPLogExporter", { enumerable: true, get: function () { return platform_1.OTLPLogExporter; } });
 
-},{"./platform":107}],106:[function(require,module,exports){
+},{"./platform":113}],112:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -5722,7 +8718,7 @@ class OTLPLogExporter extends otlp_exporter_base_1.OTLPExporterBrowserBase {
 }
 exports.OTLPLogExporter = OTLPLogExporter;
 
-},{"../config":108,"@opentelemetry/core":74,"@opentelemetry/otlp-exporter-base":110,"@opentelemetry/otlp-transformer":119}],107:[function(require,module,exports){
+},{"../config":114,"@opentelemetry/core":74,"@opentelemetry/otlp-exporter-base":194,"@opentelemetry/otlp-transformer":203}],113:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -5744,7 +8740,7 @@ exports.OTLPLogExporter = void 0;
 var OTLPLogExporter_1 = require("./OTLPLogExporter");
 Object.defineProperty(exports, "OTLPLogExporter", { enumerable: true, get: function () { return OTLPLogExporter_1.OTLPLogExporter; } });
 
-},{"./OTLPLogExporter":106}],108:[function(require,module,exports){
+},{"./OTLPLogExporter":112}],114:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -5783,7 +8779,3526 @@ function getDefaultUrl(config) {
 }
 exports.getDefaultUrl = getDefaultUrl;
 
-},{"@opentelemetry/core":74,"@opentelemetry/otlp-exporter-base":110}],109:[function(require,module,exports){
+},{"@opentelemetry/core":74,"@opentelemetry/otlp-exporter-base":194}],115:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./platform"), exports);
+
+},{"./platform":117}],116:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OTLPTraceExporter = void 0;
+const core_1 = require("@opentelemetry/core");
+const otlp_exporter_base_1 = require("@opentelemetry/otlp-exporter-base");
+const otlp_transformer_1 = require("@opentelemetry/otlp-transformer");
+const DEFAULT_COLLECTOR_RESOURCE_PATH = 'v1/traces';
+const DEFAULT_COLLECTOR_URL = `http://localhost:4318/${DEFAULT_COLLECTOR_RESOURCE_PATH}`;
+/**
+ * Collector Trace Exporter for Web
+ */
+class OTLPTraceExporter extends otlp_exporter_base_1.OTLPExporterBrowserBase {
+    constructor(config = {}) {
+        super(config, otlp_transformer_1.JsonTraceSerializer, 'application/json');
+        this._headers = Object.assign(this._headers, core_1.baggageUtils.parseKeyPairsIntoRecord((0, core_1.getEnv)().OTEL_EXPORTER_OTLP_TRACES_HEADERS));
+    }
+    getDefaultUrl(config) {
+        return typeof config.url === 'string'
+            ? config.url
+            : (0, core_1.getEnv)().OTEL_EXPORTER_OTLP_TRACES_ENDPOINT.length > 0
+                ? (0, otlp_exporter_base_1.appendRootPathToUrlIfNeeded)((0, core_1.getEnv)().OTEL_EXPORTER_OTLP_TRACES_ENDPOINT)
+                : (0, core_1.getEnv)().OTEL_EXPORTER_OTLP_ENDPOINT.length > 0
+                    ? (0, otlp_exporter_base_1.appendResourcePathToUrl)((0, core_1.getEnv)().OTEL_EXPORTER_OTLP_ENDPOINT, DEFAULT_COLLECTOR_RESOURCE_PATH)
+                    : DEFAULT_COLLECTOR_URL;
+    }
+}
+exports.OTLPTraceExporter = OTLPTraceExporter;
+
+},{"@opentelemetry/core":74,"@opentelemetry/otlp-exporter-base":194,"@opentelemetry/otlp-transformer":203}],117:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./OTLPTraceExporter"), exports);
+
+},{"./OTLPTraceExporter":116}],118:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AttributeNames = void 0;
+var AttributeNames;
+(function (AttributeNames) {
+    AttributeNames["DOCUMENT_LOAD"] = "documentLoad";
+    AttributeNames["DOCUMENT_FETCH"] = "documentFetch";
+    AttributeNames["RESOURCE_FETCH"] = "resourceFetch";
+})(AttributeNames = exports.AttributeNames || (exports.AttributeNames = {}));
+
+},{}],119:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EventNames = void 0;
+var EventNames;
+(function (EventNames) {
+    EventNames["FIRST_PAINT"] = "firstPaint";
+    EventNames["FIRST_CONTENTFUL_PAINT"] = "firstContentfulPaint";
+})(EventNames = exports.EventNames || (exports.EventNames = {}));
+
+},{}],120:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./instrumentation"), exports);
+__exportStar(require("./enums/AttributeNames"), exports);
+__exportStar(require("./types"), exports);
+
+},{"./enums/AttributeNames":118,"./instrumentation":121,"./types":122}],121:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DocumentLoadInstrumentation = void 0;
+const api_1 = require("@opentelemetry/api");
+const core_1 = require("@opentelemetry/core");
+const sdk_trace_web_1 = require("@opentelemetry/sdk-trace-web");
+const instrumentation_1 = require("@opentelemetry/instrumentation");
+const AttributeNames_1 = require("./enums/AttributeNames");
+const version_1 = require("./version");
+const semantic_conventions_1 = require("@opentelemetry/semantic-conventions");
+const utils_1 = require("./utils");
+/**
+ * This class represents a document load plugin
+ */
+class DocumentLoadInstrumentation extends instrumentation_1.InstrumentationBase {
+    /**
+     *
+     * @param config
+     */
+    constructor(config = {}) {
+        super(version_1.PACKAGE_NAME, version_1.PACKAGE_VERSION, config);
+        this.component = 'document-load';
+        this.version = '1';
+        this.moduleName = this.component;
+    }
+    init() { }
+    /**
+     * callback to be executed when page is loaded
+     */
+    _onDocumentLoaded() {
+        // Timeout is needed as load event doesn't have yet the performance metrics for loadEnd.
+        // Support for event "loadend" is very limited and cannot be used
+        window.setTimeout(() => {
+            this._collectPerformance();
+        });
+    }
+    /**
+     * Adds spans for all resources
+     * @param rootSpan
+     */
+    _addResourcesSpans(rootSpan) {
+        var _a, _b;
+        const resources = (_b = (_a = core_1.otperformance).getEntriesByType) === null || _b === void 0 ? void 0 : _b.call(_a, 'resource');
+        if (resources) {
+            resources.forEach(resource => {
+                this._initResourceSpan(resource, rootSpan);
+            });
+        }
+    }
+    /**
+     * Collects information about performance and creates appropriate spans
+     */
+    _collectPerformance() {
+        const metaElement = Array.from(document.getElementsByTagName('meta')).find(e => e.getAttribute('name') === core_1.TRACE_PARENT_HEADER);
+        const entries = (0, utils_1.getPerformanceNavigationEntries)();
+        const traceparent = (metaElement && metaElement.content) || '';
+        api_1.context.with(api_1.propagation.extract(api_1.ROOT_CONTEXT, { traceparent }), () => {
+            var _a;
+            const rootSpan = this._startSpan(AttributeNames_1.AttributeNames.DOCUMENT_LOAD, sdk_trace_web_1.PerformanceTimingNames.FETCH_START, entries);
+            if (!rootSpan) {
+                return;
+            }
+            api_1.context.with(api_1.trace.setSpan(api_1.context.active(), rootSpan), () => {
+                const fetchSpan = this._startSpan(AttributeNames_1.AttributeNames.DOCUMENT_FETCH, sdk_trace_web_1.PerformanceTimingNames.FETCH_START, entries);
+                if (fetchSpan) {
+                    fetchSpan.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_URL, location.href);
+                    api_1.context.with(api_1.trace.setSpan(api_1.context.active(), fetchSpan), () => {
+                        var _a;
+                        if (!this._getConfig().ignoreNetworkEvents) {
+                            (0, sdk_trace_web_1.addSpanNetworkEvents)(fetchSpan, entries);
+                        }
+                        this._addCustomAttributesOnSpan(fetchSpan, (_a = this._getConfig().applyCustomAttributesOnSpan) === null || _a === void 0 ? void 0 : _a.documentFetch);
+                        this._endSpan(fetchSpan, sdk_trace_web_1.PerformanceTimingNames.RESPONSE_END, entries);
+                    });
+                }
+            });
+            rootSpan.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_URL, location.href);
+            rootSpan.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_USER_AGENT, navigator.userAgent);
+            this._addResourcesSpans(rootSpan);
+            if (!this._getConfig().ignoreNetworkEvents) {
+                (0, sdk_trace_web_1.addSpanNetworkEvent)(rootSpan, sdk_trace_web_1.PerformanceTimingNames.FETCH_START, entries);
+                (0, sdk_trace_web_1.addSpanNetworkEvent)(rootSpan, sdk_trace_web_1.PerformanceTimingNames.UNLOAD_EVENT_START, entries);
+                (0, sdk_trace_web_1.addSpanNetworkEvent)(rootSpan, sdk_trace_web_1.PerformanceTimingNames.UNLOAD_EVENT_END, entries);
+                (0, sdk_trace_web_1.addSpanNetworkEvent)(rootSpan, sdk_trace_web_1.PerformanceTimingNames.DOM_INTERACTIVE, entries);
+                (0, sdk_trace_web_1.addSpanNetworkEvent)(rootSpan, sdk_trace_web_1.PerformanceTimingNames.DOM_CONTENT_LOADED_EVENT_START, entries);
+                (0, sdk_trace_web_1.addSpanNetworkEvent)(rootSpan, sdk_trace_web_1.PerformanceTimingNames.DOM_CONTENT_LOADED_EVENT_END, entries);
+                (0, sdk_trace_web_1.addSpanNetworkEvent)(rootSpan, sdk_trace_web_1.PerformanceTimingNames.DOM_COMPLETE, entries);
+                (0, sdk_trace_web_1.addSpanNetworkEvent)(rootSpan, sdk_trace_web_1.PerformanceTimingNames.LOAD_EVENT_START, entries);
+                (0, sdk_trace_web_1.addSpanNetworkEvent)(rootSpan, sdk_trace_web_1.PerformanceTimingNames.LOAD_EVENT_END, entries);
+            }
+            if (!this._getConfig().ignorePerformancePaintEvents) {
+                (0, utils_1.addSpanPerformancePaintEvents)(rootSpan);
+            }
+            this._addCustomAttributesOnSpan(rootSpan, (_a = this._getConfig().applyCustomAttributesOnSpan) === null || _a === void 0 ? void 0 : _a.documentLoad);
+            this._endSpan(rootSpan, sdk_trace_web_1.PerformanceTimingNames.LOAD_EVENT_END, entries);
+        });
+    }
+    /**
+     * Helper function for ending span
+     * @param span
+     * @param performanceName name of performance entry for time end
+     * @param entries
+     */
+    _endSpan(span, performanceName, entries) {
+        // span can be undefined when entries are missing the certain performance - the span will not be created
+        if (span) {
+            if ((0, sdk_trace_web_1.hasKey)(entries, performanceName)) {
+                span.end(entries[performanceName]);
+            }
+            else {
+                // just end span
+                span.end();
+            }
+        }
+    }
+    /**
+     * Creates and ends a span with network information about resource added as timed events
+     * @param resource
+     * @param parentSpan
+     */
+    _initResourceSpan(resource, parentSpan) {
+        var _a;
+        const span = this._startSpan(AttributeNames_1.AttributeNames.RESOURCE_FETCH, sdk_trace_web_1.PerformanceTimingNames.FETCH_START, resource, parentSpan);
+        if (span) {
+            span.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_URL, resource.name);
+            if (!this._getConfig().ignoreNetworkEvents) {
+                (0, sdk_trace_web_1.addSpanNetworkEvents)(span, resource);
+            }
+            this._addCustomAttributesOnResourceSpan(span, resource, (_a = this._getConfig().applyCustomAttributesOnSpan) === null || _a === void 0 ? void 0 : _a.resourceFetch);
+            this._endSpan(span, sdk_trace_web_1.PerformanceTimingNames.RESPONSE_END, resource);
+        }
+    }
+    /**
+     * Helper function for starting a span
+     * @param spanName name of span
+     * @param performanceName name of performance entry for time start
+     * @param entries
+     * @param parentSpan
+     */
+    _startSpan(spanName, performanceName, entries, parentSpan) {
+        if ((0, sdk_trace_web_1.hasKey)(entries, performanceName) &&
+            typeof entries[performanceName] === 'number') {
+            const span = this.tracer.startSpan(spanName, {
+                startTime: entries[performanceName],
+            }, parentSpan ? api_1.trace.setSpan(api_1.context.active(), parentSpan) : undefined);
+            return span;
+        }
+        return undefined;
+    }
+    /**
+     * executes callback {_onDocumentLoaded} when the page is loaded
+     */
+    _waitForPageLoad() {
+        if (window.document.readyState === 'complete') {
+            this._onDocumentLoaded();
+        }
+        else {
+            this._onDocumentLoaded = this._onDocumentLoaded.bind(this);
+            window.addEventListener('load', this._onDocumentLoaded);
+        }
+    }
+    _getConfig() {
+        return this._config;
+    }
+    /**
+     * adds custom attributes to root span if configured
+     */
+    _addCustomAttributesOnSpan(span, applyCustomAttributesOnSpan) {
+        if (applyCustomAttributesOnSpan) {
+            (0, instrumentation_1.safeExecuteInTheMiddle)(() => applyCustomAttributesOnSpan(span), error => {
+                if (!error) {
+                    return;
+                }
+                this._diag.error('addCustomAttributesOnSpan', error);
+            }, true);
+        }
+    }
+    /**
+     * adds custom attributes to span if configured
+     */
+    _addCustomAttributesOnResourceSpan(span, resource, applyCustomAttributesOnSpan) {
+        if (applyCustomAttributesOnSpan) {
+            (0, instrumentation_1.safeExecuteInTheMiddle)(() => applyCustomAttributesOnSpan(span, resource), error => {
+                if (!error) {
+                    return;
+                }
+                this._diag.error('addCustomAttributesOnResourceSpan', error);
+            }, true);
+        }
+    }
+    /**
+     * implements enable function
+     */
+    enable() {
+        // remove previously attached load to avoid adding the same event twice
+        // in case of multiple enable calling.
+        window.removeEventListener('load', this._onDocumentLoaded);
+        this._waitForPageLoad();
+    }
+    /**
+     * implements disable function
+     */
+    disable() {
+        window.removeEventListener('load', this._onDocumentLoaded);
+    }
+}
+exports.DocumentLoadInstrumentation = DocumentLoadInstrumentation;
+
+},{"./enums/AttributeNames":118,"./utils":123,"./version":124,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/instrumentation":183,"@opentelemetry/sdk-trace-web":447,"@opentelemetry/semantic-conventions":510}],122:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+},{}],123:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.addSpanPerformancePaintEvents = exports.getPerformanceNavigationEntries = void 0;
+const core_1 = require("@opentelemetry/core");
+const sdk_trace_web_1 = require("@opentelemetry/sdk-trace-web");
+const EventNames_1 = require("./enums/EventNames");
+const getPerformanceNavigationEntries = () => {
+    var _a, _b;
+    const entries = {};
+    const performanceNavigationTiming = (_b = (_a = core_1.otperformance).getEntriesByType) === null || _b === void 0 ? void 0 : _b.call(_a, 'navigation')[0];
+    if (performanceNavigationTiming) {
+        const keys = Object.values(sdk_trace_web_1.PerformanceTimingNames);
+        keys.forEach((key) => {
+            if ((0, sdk_trace_web_1.hasKey)(performanceNavigationTiming, key)) {
+                const value = performanceNavigationTiming[key];
+                if (typeof value === 'number') {
+                    entries[key] = value;
+                }
+            }
+        });
+    }
+    else {
+        // // fallback to previous version
+        const perf = core_1.otperformance;
+        const performanceTiming = perf.timing;
+        if (performanceTiming) {
+            const keys = Object.values(sdk_trace_web_1.PerformanceTimingNames);
+            keys.forEach((key) => {
+                if ((0, sdk_trace_web_1.hasKey)(performanceTiming, key)) {
+                    const value = performanceTiming[key];
+                    if (typeof value === 'number') {
+                        entries[key] = value;
+                    }
+                }
+            });
+        }
+    }
+    return entries;
+};
+exports.getPerformanceNavigationEntries = getPerformanceNavigationEntries;
+const performancePaintNames = {
+    'first-paint': EventNames_1.EventNames.FIRST_PAINT,
+    'first-contentful-paint': EventNames_1.EventNames.FIRST_CONTENTFUL_PAINT,
+};
+const addSpanPerformancePaintEvents = (span) => {
+    var _a, _b;
+    const performancePaintTiming = (_b = (_a = core_1.otperformance).getEntriesByType) === null || _b === void 0 ? void 0 : _b.call(_a, 'paint');
+    if (performancePaintTiming) {
+        performancePaintTiming.forEach(({ name, startTime }) => {
+            if ((0, sdk_trace_web_1.hasKey)(performancePaintNames, name)) {
+                span.addEvent(performancePaintNames[name], startTime);
+            }
+        });
+    }
+};
+exports.addSpanPerformancePaintEvents = addSpanPerformancePaintEvents;
+
+},{"./enums/EventNames":119,"@opentelemetry/core":74,"@opentelemetry/sdk-trace-web":447}],124:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PACKAGE_NAME = exports.PACKAGE_VERSION = void 0;
+// this is autogenerated file, see scripts/version-update.js
+exports.PACKAGE_VERSION = '0.39.0';
+exports.PACKAGE_NAME = '@opentelemetry/instrumentation-document-load';
+
+},{}],125:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AttributeNames = void 0;
+/**
+ * https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/http.md
+ */
+var AttributeNames;
+(function (AttributeNames) {
+    AttributeNames["COMPONENT"] = "component";
+    AttributeNames["HTTP_ERROR_NAME"] = "http.error_name";
+    AttributeNames["HTTP_STATUS_TEXT"] = "http.status_text";
+})(AttributeNames = exports.AttributeNames || (exports.AttributeNames = {}));
+
+},{}],126:[function(require,module,exports){
+(function (process){(function (){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var _a;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FetchInstrumentation = void 0;
+const api = require("@opentelemetry/api");
+const instrumentation_1 = require("@opentelemetry/instrumentation");
+const core = require("@opentelemetry/core");
+const web = require("@opentelemetry/sdk-trace-web");
+const AttributeNames_1 = require("./enums/AttributeNames");
+const semantic_conventions_1 = require("@opentelemetry/semantic-conventions");
+const version_1 = require("./version");
+const core_1 = require("@opentelemetry/core");
+// how long to wait for observer to collect information about resources
+// this is needed as event "load" is called before observer
+// hard to say how long it should really wait, seems like 300ms is
+// safe enough
+const OBSERVER_WAIT_TIME_MS = 300;
+const isNode = typeof process === 'object' && ((_a = process.release) === null || _a === void 0 ? void 0 : _a.name) === 'node';
+/**
+ * This class represents a fetch plugin for auto instrumentation
+ */
+class FetchInstrumentation extends instrumentation_1.InstrumentationBase {
+    constructor(config = {}) {
+        super('@opentelemetry/instrumentation-fetch', version_1.VERSION, config);
+        this.component = 'fetch';
+        this.version = version_1.VERSION;
+        this.moduleName = this.component;
+        this._usedResources = new WeakSet();
+        this._tasksCount = 0;
+    }
+    init() { }
+    /**
+     * Add cors pre flight child span
+     * @param span
+     * @param corsPreFlightRequest
+     */
+    _addChildSpan(span, corsPreFlightRequest) {
+        const childSpan = this.tracer.startSpan('CORS Preflight', {
+            startTime: corsPreFlightRequest[web.PerformanceTimingNames.FETCH_START],
+        }, api.trace.setSpan(api.context.active(), span));
+        if (!this.getConfig().ignoreNetworkEvents) {
+            web.addSpanNetworkEvents(childSpan, corsPreFlightRequest);
+        }
+        childSpan.end(corsPreFlightRequest[web.PerformanceTimingNames.RESPONSE_END]);
+    }
+    /**
+     * Adds more attributes to span just before ending it
+     * @param span
+     * @param response
+     */
+    _addFinalSpanAttributes(span, response) {
+        const parsedUrl = web.parseUrl(response.url);
+        span.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_STATUS_CODE, response.status);
+        if (response.statusText != null) {
+            span.setAttribute(AttributeNames_1.AttributeNames.HTTP_STATUS_TEXT, response.statusText);
+        }
+        span.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_HOST, parsedUrl.host);
+        span.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_SCHEME, parsedUrl.protocol.replace(':', ''));
+        if (typeof navigator !== 'undefined') {
+            span.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_USER_AGENT, navigator.userAgent);
+        }
+    }
+    /**
+     * Add headers
+     * @param options
+     * @param spanUrl
+     */
+    _addHeaders(options, spanUrl) {
+        if (!web.shouldPropagateTraceHeaders(spanUrl, this.getConfig().propagateTraceHeaderCorsUrls)) {
+            const headers = {};
+            api.propagation.inject(api.context.active(), headers);
+            if (Object.keys(headers).length > 0) {
+                this._diag.debug('headers inject skipped due to CORS policy');
+            }
+            return;
+        }
+        if (options instanceof Request) {
+            api.propagation.inject(api.context.active(), options.headers, {
+                set: (h, k, v) => h.set(k, typeof v === 'string' ? v : String(v)),
+            });
+        }
+        else if (options.headers instanceof Headers) {
+            api.propagation.inject(api.context.active(), options.headers, {
+                set: (h, k, v) => h.set(k, typeof v === 'string' ? v : String(v)),
+            });
+        }
+        else if (options.headers instanceof Map) {
+            api.propagation.inject(api.context.active(), options.headers, {
+                set: (h, k, v) => h.set(k, typeof v === 'string' ? v : String(v)),
+            });
+        }
+        else {
+            const headers = {};
+            api.propagation.inject(api.context.active(), headers);
+            options.headers = Object.assign({}, headers, options.headers || {});
+        }
+    }
+    /**
+     * Clears the resource timings and all resources assigned with spans
+     *     when {@link FetchPluginConfig.clearTimingResources} is
+     *     set to true (default false)
+     * @private
+     */
+    _clearResources() {
+        if (this._tasksCount === 0 && this.getConfig().clearTimingResources) {
+            performance.clearResourceTimings();
+            this._usedResources = new WeakSet();
+        }
+    }
+    /**
+     * Creates a new span
+     * @param url
+     * @param options
+     */
+    _createSpan(url, options = {}) {
+        if (core.isUrlIgnored(url, this.getConfig().ignoreUrls)) {
+            this._diag.debug('ignoring span as url matches ignored url');
+            return;
+        }
+        const method = (options.method || 'GET').toUpperCase();
+        const spanName = `HTTP ${method}`;
+        return this.tracer.startSpan(spanName, {
+            kind: api.SpanKind.CLIENT,
+            attributes: {
+                [AttributeNames_1.AttributeNames.COMPONENT]: this.moduleName,
+                [semantic_conventions_1.SEMATTRS_HTTP_METHOD]: method,
+                [semantic_conventions_1.SEMATTRS_HTTP_URL]: url,
+            },
+        });
+    }
+    /**
+     * Finds appropriate resource and add network events to the span
+     * @param span
+     * @param resourcesObserver
+     * @param endTime
+     */
+    _findResourceAndAddNetworkEvents(span, resourcesObserver, endTime) {
+        let resources = resourcesObserver.entries;
+        if (!resources.length) {
+            if (!performance.getEntriesByType) {
+                return;
+            }
+            // fallback - either Observer is not available or it took longer
+            // then OBSERVER_WAIT_TIME_MS and observer didn't collect enough
+            // information
+            resources = performance.getEntriesByType('resource');
+        }
+        const resource = web.getResource(resourcesObserver.spanUrl, resourcesObserver.startTime, endTime, resources, this._usedResources, 'fetch');
+        if (resource.mainRequest) {
+            const mainRequest = resource.mainRequest;
+            this._markResourceAsUsed(mainRequest);
+            const corsPreFlightRequest = resource.corsPreFlightRequest;
+            if (corsPreFlightRequest) {
+                this._addChildSpan(span, corsPreFlightRequest);
+                this._markResourceAsUsed(corsPreFlightRequest);
+            }
+            if (!this.getConfig().ignoreNetworkEvents) {
+                web.addSpanNetworkEvents(span, mainRequest);
+            }
+        }
+    }
+    /**
+     * Marks certain [resource]{@link PerformanceResourceTiming} when information
+     * from this is used to add events to span.
+     * This is done to avoid reusing the same resource again for next span
+     * @param resource
+     */
+    _markResourceAsUsed(resource) {
+        this._usedResources.add(resource);
+    }
+    /**
+     * Finish span, add attributes, network events etc.
+     * @param span
+     * @param spanData
+     * @param response
+     */
+    _endSpan(span, spanData, response) {
+        const endTime = core.millisToHrTime(Date.now());
+        const performanceEndTime = core.hrTime();
+        this._addFinalSpanAttributes(span, response);
+        setTimeout(() => {
+            var _a;
+            (_a = spanData.observer) === null || _a === void 0 ? void 0 : _a.disconnect();
+            this._findResourceAndAddNetworkEvents(span, spanData, performanceEndTime);
+            this._tasksCount--;
+            this._clearResources();
+            span.end(endTime);
+        }, OBSERVER_WAIT_TIME_MS);
+    }
+    /**
+     * Patches the constructor of fetch
+     */
+    _patchConstructor() {
+        return original => {
+            const plugin = this;
+            return function patchConstructor(...args) {
+                const self = this;
+                const url = web.parseUrl(args[0] instanceof Request ? args[0].url : String(args[0])).href;
+                const options = args[0] instanceof Request ? args[0] : args[1] || {};
+                const createdSpan = plugin._createSpan(url, options);
+                if (!createdSpan) {
+                    return original.apply(this, args);
+                }
+                const spanData = plugin._prepareSpanData(url);
+                function endSpanOnError(span, error) {
+                    plugin._applyAttributesAfterFetch(span, options, error);
+                    plugin._endSpan(span, spanData, {
+                        status: error.status || 0,
+                        statusText: error.message,
+                        url,
+                    });
+                }
+                function endSpanOnSuccess(span, response) {
+                    plugin._applyAttributesAfterFetch(span, options, response);
+                    if (response.status >= 200 && response.status < 400) {
+                        plugin._endSpan(span, spanData, response);
+                    }
+                    else {
+                        plugin._endSpan(span, spanData, {
+                            status: response.status,
+                            statusText: response.statusText,
+                            url,
+                        });
+                    }
+                }
+                function onSuccess(span, resolve, response) {
+                    try {
+                        const resClone = response.clone();
+                        const resClone4Hook = response.clone();
+                        const body = resClone.body;
+                        if (body) {
+                            const reader = body.getReader();
+                            const read = () => {
+                                reader.read().then(({ done }) => {
+                                    if (done) {
+                                        endSpanOnSuccess(span, resClone4Hook);
+                                    }
+                                    else {
+                                        read();
+                                    }
+                                }, error => {
+                                    endSpanOnError(span, error);
+                                });
+                            };
+                            read();
+                        }
+                        else {
+                            // some older browsers don't have .body implemented
+                            endSpanOnSuccess(span, response);
+                        }
+                    }
+                    finally {
+                        resolve(response);
+                    }
+                }
+                function onError(span, reject, error) {
+                    try {
+                        endSpanOnError(span, error);
+                    }
+                    finally {
+                        reject(error);
+                    }
+                }
+                return new Promise((resolve, reject) => {
+                    return api.context.with(api.trace.setSpan(api.context.active(), createdSpan), () => {
+                        plugin._addHeaders(options, url);
+                        plugin._tasksCount++;
+                        // TypeScript complains about arrow function captured a this typed as globalThis
+                        // ts(7041)
+                        return original
+                            .apply(self, options instanceof Request ? [options] : [url, options])
+                            .then(onSuccess.bind(self, createdSpan, resolve), onError.bind(self, createdSpan, reject));
+                    });
+                });
+            };
+        };
+    }
+    _applyAttributesAfterFetch(span, request, result) {
+        const applyCustomAttributesOnSpan = this.getConfig().applyCustomAttributesOnSpan;
+        if (applyCustomAttributesOnSpan) {
+            (0, instrumentation_1.safeExecuteInTheMiddle)(() => applyCustomAttributesOnSpan(span, request, result), error => {
+                if (!error) {
+                    return;
+                }
+                this._diag.error('applyCustomAttributesOnSpan', error);
+            }, true);
+        }
+    }
+    /**
+     * Prepares a span data - needed later for matching appropriate network
+     *     resources
+     * @param spanUrl
+     */
+    _prepareSpanData(spanUrl) {
+        const startTime = core.hrTime();
+        const entries = [];
+        if (typeof PerformanceObserver !== 'function') {
+            return { entries, startTime, spanUrl };
+        }
+        const observer = new PerformanceObserver(list => {
+            const perfObsEntries = list.getEntries();
+            perfObsEntries.forEach(entry => {
+                if (entry.initiatorType === 'fetch' && entry.name === spanUrl) {
+                    entries.push(entry);
+                }
+            });
+        });
+        observer.observe({
+            entryTypes: ['resource'],
+        });
+        return { entries, observer, startTime, spanUrl };
+    }
+    /**
+     * implements enable function
+     */
+    enable() {
+        if (isNode) {
+            // Node.js v18+ *does* have a global `fetch()`, but this package does not
+            // support instrumenting it.
+            this._diag.warn("this instrumentation is intended for web usage only, it does not instrument Node.js's fetch()");
+            return;
+        }
+        if ((0, instrumentation_1.isWrapped)(fetch)) {
+            this._unwrap(core_1._globalThis, 'fetch');
+            this._diag.debug('removing previous patch for constructor');
+        }
+        this._wrap(core_1._globalThis, 'fetch', this._patchConstructor());
+    }
+    /**
+     * implements unpatch function
+     */
+    disable() {
+        if (isNode) {
+            return;
+        }
+        this._unwrap(core_1._globalThis, 'fetch');
+        this._usedResources = new WeakSet();
+    }
+}
+exports.FetchInstrumentation = FetchInstrumentation;
+
+}).call(this)}).call(this,require('_process'))
+},{"./enums/AttributeNames":125,"./version":128,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/instrumentation":183,"@opentelemetry/sdk-trace-web":132,"@opentelemetry/semantic-conventions":135,"_process":1}],127:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./fetch"), exports);
+
+},{"./fetch":126}],128:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.VERSION = void 0;
+// this is autogenerated file, see scripts/version-update.js
+exports.VERSION = '0.52.1';
+
+},{}],129:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StackContextManager = void 0;
+const api_1 = require("@opentelemetry/api");
+/**
+ * Stack Context Manager for managing the state in web
+ * it doesn't fully support the async calls though
+ */
+class StackContextManager {
+    constructor() {
+        /**
+         * whether the context manager is enabled or not
+         */
+        this._enabled = false;
+        /**
+         * Keeps the reference to current context
+         */
+        this._currentContext = api_1.ROOT_CONTEXT;
+    }
+    /**
+     *
+     * @param context
+     * @param target Function to be executed within the context
+     */
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    _bindFunction(context = api_1.ROOT_CONTEXT, target) {
+        const manager = this;
+        const contextWrapper = function (...args) {
+            return manager.with(context, () => target.apply(this, args));
+        };
+        Object.defineProperty(contextWrapper, 'length', {
+            enumerable: false,
+            configurable: true,
+            writable: false,
+            value: target.length,
+        });
+        return contextWrapper;
+    }
+    /**
+     * Returns the active context
+     */
+    active() {
+        return this._currentContext;
+    }
+    /**
+     * Binds a the certain context or the active one to the target function and then returns the target
+     * @param context A context (span) to be bind to target
+     * @param target a function or event emitter. When target or one of its callbacks is called,
+     *  the provided context will be used as the active context for the duration of the call.
+     */
+    bind(context, target) {
+        // if no specific context to propagate is given, we use the current one
+        if (context === undefined) {
+            context = this.active();
+        }
+        if (typeof target === 'function') {
+            return this._bindFunction(context, target);
+        }
+        return target;
+    }
+    /**
+     * Disable the context manager (clears the current context)
+     */
+    disable() {
+        this._currentContext = api_1.ROOT_CONTEXT;
+        this._enabled = false;
+        return this;
+    }
+    /**
+     * Enables the context manager and creates a default(root) context
+     */
+    enable() {
+        if (this._enabled) {
+            return this;
+        }
+        this._enabled = true;
+        this._currentContext = api_1.ROOT_CONTEXT;
+        return this;
+    }
+    /**
+     * Calls the callback function [fn] with the provided [context]. If [context] is undefined then it will use the window.
+     * The context will be set as active
+     * @param context
+     * @param fn Callback function
+     * @param thisArg optional receiver to be used for calling fn
+     * @param args optional arguments forwarded to fn
+     */
+    with(context, fn, thisArg, ...args) {
+        const previousContext = this._currentContext;
+        this._currentContext = context || api_1.ROOT_CONTEXT;
+        try {
+            return fn.call(thisArg, ...args);
+        }
+        finally {
+            this._currentContext = previousContext;
+        }
+    }
+}
+exports.StackContextManager = StackContextManager;
+
+},{"@opentelemetry/api":34}],130:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.WebTracerProvider = void 0;
+const sdk_trace_base_1 = require("@opentelemetry/sdk-trace-base");
+const StackContextManager_1 = require("./StackContextManager");
+/**
+ * This class represents a web tracer with {@link StackContextManager}
+ */
+class WebTracerProvider extends sdk_trace_base_1.BasicTracerProvider {
+    /**
+     * Constructs a new Tracer instance.
+     * @param config Web Tracer config
+     */
+    constructor(config = {}) {
+        super(config);
+        if (config.contextManager) {
+            throw ('contextManager should be defined in register method not in' +
+                ' constructor');
+        }
+        if (config.propagator) {
+            throw 'propagator should be defined in register method not in constructor';
+        }
+    }
+    /**
+     * Register this TracerProvider for use with the OpenTelemetry API.
+     * Undefined values may be replaced with defaults, and
+     * null values will be skipped.
+     *
+     * @param config Configuration object for SDK registration
+     */
+    register(config = {}) {
+        if (config.contextManager === undefined) {
+            config.contextManager = new StackContextManager_1.StackContextManager();
+        }
+        if (config.contextManager) {
+            config.contextManager.enable();
+        }
+        super.register(config);
+    }
+}
+exports.WebTracerProvider = WebTracerProvider;
+
+},{"./StackContextManager":129,"@opentelemetry/sdk-trace-base":407}],131:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PerformanceTimingNames = void 0;
+var PerformanceTimingNames;
+(function (PerformanceTimingNames) {
+    PerformanceTimingNames["CONNECT_END"] = "connectEnd";
+    PerformanceTimingNames["CONNECT_START"] = "connectStart";
+    PerformanceTimingNames["DECODED_BODY_SIZE"] = "decodedBodySize";
+    PerformanceTimingNames["DOM_COMPLETE"] = "domComplete";
+    PerformanceTimingNames["DOM_CONTENT_LOADED_EVENT_END"] = "domContentLoadedEventEnd";
+    PerformanceTimingNames["DOM_CONTENT_LOADED_EVENT_START"] = "domContentLoadedEventStart";
+    PerformanceTimingNames["DOM_INTERACTIVE"] = "domInteractive";
+    PerformanceTimingNames["DOMAIN_LOOKUP_END"] = "domainLookupEnd";
+    PerformanceTimingNames["DOMAIN_LOOKUP_START"] = "domainLookupStart";
+    PerformanceTimingNames["ENCODED_BODY_SIZE"] = "encodedBodySize";
+    PerformanceTimingNames["FETCH_START"] = "fetchStart";
+    PerformanceTimingNames["LOAD_EVENT_END"] = "loadEventEnd";
+    PerformanceTimingNames["LOAD_EVENT_START"] = "loadEventStart";
+    PerformanceTimingNames["NAVIGATION_START"] = "navigationStart";
+    PerformanceTimingNames["REDIRECT_END"] = "redirectEnd";
+    PerformanceTimingNames["REDIRECT_START"] = "redirectStart";
+    PerformanceTimingNames["REQUEST_START"] = "requestStart";
+    PerformanceTimingNames["RESPONSE_END"] = "responseEnd";
+    PerformanceTimingNames["RESPONSE_START"] = "responseStart";
+    PerformanceTimingNames["SECURE_CONNECTION_START"] = "secureConnectionStart";
+    PerformanceTimingNames["UNLOAD_EVENT_END"] = "unloadEventEnd";
+    PerformanceTimingNames["UNLOAD_EVENT_START"] = "unloadEventStart";
+})(PerformanceTimingNames = exports.PerformanceTimingNames || (exports.PerformanceTimingNames = {}));
+
+},{}],132:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./WebTracerProvider"), exports);
+__exportStar(require("./StackContextManager"), exports);
+__exportStar(require("./enums/PerformanceTimingNames"), exports);
+__exportStar(require("./types"), exports);
+__exportStar(require("./utils"), exports);
+__exportStar(require("@opentelemetry/sdk-trace-base"), exports);
+
+},{"./StackContextManager":129,"./WebTracerProvider":130,"./enums/PerformanceTimingNames":131,"./types":133,"./utils":134,"@opentelemetry/sdk-trace-base":407}],133:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+const PerformanceTimingNames_1 = require("./enums/PerformanceTimingNames");
+
+},{"./enums/PerformanceTimingNames":131}],134:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.shouldPropagateTraceHeaders = exports.getElementXPath = exports.normalizeUrl = exports.parseUrl = exports.getResource = exports.sortResources = exports.addSpanNetworkEvents = exports.addSpanNetworkEvent = exports.hasKey = void 0;
+const PerformanceTimingNames_1 = require("./enums/PerformanceTimingNames");
+const core_1 = require("@opentelemetry/core");
+const semantic_conventions_1 = require("@opentelemetry/semantic-conventions");
+// Used to normalize relative URLs
+let urlNormalizingAnchor;
+function getUrlNormalizingAnchor() {
+    if (!urlNormalizingAnchor) {
+        urlNormalizingAnchor = document.createElement('a');
+    }
+    return urlNormalizingAnchor;
+}
+/**
+ * Helper function to be able to use enum as typed key in type and in interface when using forEach
+ * @param obj
+ * @param key
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function hasKey(obj, key) {
+    return key in obj;
+}
+exports.hasKey = hasKey;
+/**
+ * Helper function for starting an event on span based on {@link PerformanceEntries}
+ * @param span
+ * @param performanceName name of performance entry for time start
+ * @param entries
+ * @param refPerfName name of performance entry to use for reference
+ */
+function addSpanNetworkEvent(span, performanceName, entries, refPerfName) {
+    let perfTime = undefined;
+    let refTime = undefined;
+    if (hasKey(entries, performanceName) &&
+        typeof entries[performanceName] === 'number') {
+        perfTime = entries[performanceName];
+    }
+    const refName = refPerfName || PerformanceTimingNames_1.PerformanceTimingNames.FETCH_START;
+    // Use a reference time which is the earliest possible value so that the performance timings that are earlier should not be added
+    // using FETCH START time in case no reference is provided
+    if (hasKey(entries, refName) && typeof entries[refName] === 'number') {
+        refTime = entries[refName];
+    }
+    if (perfTime !== undefined && refTime !== undefined && perfTime >= refTime) {
+        span.addEvent(performanceName, perfTime);
+        return span;
+    }
+    return undefined;
+}
+exports.addSpanNetworkEvent = addSpanNetworkEvent;
+/**
+ * Helper function for adding network events
+ * @param span
+ * @param resource
+ */
+function addSpanNetworkEvents(span, resource) {
+    addSpanNetworkEvent(span, PerformanceTimingNames_1.PerformanceTimingNames.FETCH_START, resource);
+    addSpanNetworkEvent(span, PerformanceTimingNames_1.PerformanceTimingNames.DOMAIN_LOOKUP_START, resource);
+    addSpanNetworkEvent(span, PerformanceTimingNames_1.PerformanceTimingNames.DOMAIN_LOOKUP_END, resource);
+    addSpanNetworkEvent(span, PerformanceTimingNames_1.PerformanceTimingNames.CONNECT_START, resource);
+    if (hasKey(resource, 'name') &&
+        resource['name'].startsWith('https:')) {
+        addSpanNetworkEvent(span, PerformanceTimingNames_1.PerformanceTimingNames.SECURE_CONNECTION_START, resource);
+    }
+    addSpanNetworkEvent(span, PerformanceTimingNames_1.PerformanceTimingNames.CONNECT_END, resource);
+    addSpanNetworkEvent(span, PerformanceTimingNames_1.PerformanceTimingNames.REQUEST_START, resource);
+    addSpanNetworkEvent(span, PerformanceTimingNames_1.PerformanceTimingNames.RESPONSE_START, resource);
+    addSpanNetworkEvent(span, PerformanceTimingNames_1.PerformanceTimingNames.RESPONSE_END, resource);
+    const encodedLength = resource[PerformanceTimingNames_1.PerformanceTimingNames.ENCODED_BODY_SIZE];
+    if (encodedLength !== undefined) {
+        span.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_RESPONSE_CONTENT_LENGTH, encodedLength);
+    }
+    const decodedLength = resource[PerformanceTimingNames_1.PerformanceTimingNames.DECODED_BODY_SIZE];
+    // Spec: Not set if transport encoding not used (in which case encoded and decoded sizes match)
+    if (decodedLength !== undefined && encodedLength !== decodedLength) {
+        span.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_RESPONSE_CONTENT_LENGTH_UNCOMPRESSED, decodedLength);
+    }
+}
+exports.addSpanNetworkEvents = addSpanNetworkEvents;
+/**
+ * sort resources by startTime
+ * @param filteredResources
+ */
+function sortResources(filteredResources) {
+    return filteredResources.slice().sort((a, b) => {
+        const valueA = a[PerformanceTimingNames_1.PerformanceTimingNames.FETCH_START];
+        const valueB = b[PerformanceTimingNames_1.PerformanceTimingNames.FETCH_START];
+        if (valueA > valueB) {
+            return 1;
+        }
+        else if (valueA < valueB) {
+            return -1;
+        }
+        return 0;
+    });
+}
+exports.sortResources = sortResources;
+/** Returns the origin if present (if in browser context). */
+function getOrigin() {
+    return typeof location !== 'undefined' ? location.origin : undefined;
+}
+/**
+ * Get closest performance resource ignoring the resources that have been
+ * already used.
+ * @param spanUrl
+ * @param startTimeHR
+ * @param endTimeHR
+ * @param resources
+ * @param ignoredResources
+ * @param initiatorType
+ */
+function getResource(spanUrl, startTimeHR, endTimeHR, resources, ignoredResources = new WeakSet(), initiatorType) {
+    // de-relativize the URL before usage (does no harm to absolute URLs)
+    const parsedSpanUrl = parseUrl(spanUrl);
+    spanUrl = parsedSpanUrl.toString();
+    const filteredResources = filterResourcesForSpan(spanUrl, startTimeHR, endTimeHR, resources, ignoredResources, initiatorType);
+    if (filteredResources.length === 0) {
+        return {
+            mainRequest: undefined,
+        };
+    }
+    if (filteredResources.length === 1) {
+        return {
+            mainRequest: filteredResources[0],
+        };
+    }
+    const sorted = sortResources(filteredResources);
+    if (parsedSpanUrl.origin !== getOrigin() && sorted.length > 1) {
+        let corsPreFlightRequest = sorted[0];
+        let mainRequest = findMainRequest(sorted, corsPreFlightRequest[PerformanceTimingNames_1.PerformanceTimingNames.RESPONSE_END], endTimeHR);
+        const responseEnd = corsPreFlightRequest[PerformanceTimingNames_1.PerformanceTimingNames.RESPONSE_END];
+        const fetchStart = mainRequest[PerformanceTimingNames_1.PerformanceTimingNames.FETCH_START];
+        // no corsPreFlightRequest
+        if (fetchStart < responseEnd) {
+            mainRequest = corsPreFlightRequest;
+            corsPreFlightRequest = undefined;
+        }
+        return {
+            corsPreFlightRequest,
+            mainRequest,
+        };
+    }
+    else {
+        return {
+            mainRequest: filteredResources[0],
+        };
+    }
+}
+exports.getResource = getResource;
+/**
+ * Will find the main request skipping the cors pre flight requests
+ * @param resources
+ * @param corsPreFlightRequestEndTime
+ * @param spanEndTimeHR
+ */
+function findMainRequest(resources, corsPreFlightRequestEndTime, spanEndTimeHR) {
+    const spanEndTime = (0, core_1.hrTimeToNanoseconds)(spanEndTimeHR);
+    const minTime = (0, core_1.hrTimeToNanoseconds)((0, core_1.timeInputToHrTime)(corsPreFlightRequestEndTime));
+    let mainRequest = resources[1];
+    let bestGap;
+    const length = resources.length;
+    for (let i = 1; i < length; i++) {
+        const resource = resources[i];
+        const resourceStartTime = (0, core_1.hrTimeToNanoseconds)((0, core_1.timeInputToHrTime)(resource[PerformanceTimingNames_1.PerformanceTimingNames.FETCH_START]));
+        const resourceEndTime = (0, core_1.hrTimeToNanoseconds)((0, core_1.timeInputToHrTime)(resource[PerformanceTimingNames_1.PerformanceTimingNames.RESPONSE_END]));
+        const currentGap = spanEndTime - resourceEndTime;
+        if (resourceStartTime >= minTime && (!bestGap || currentGap < bestGap)) {
+            bestGap = currentGap;
+            mainRequest = resource;
+        }
+    }
+    return mainRequest;
+}
+/**
+ * Filter all resources that has started and finished according to span start time and end time.
+ *     It will return the closest resource to a start time
+ * @param spanUrl
+ * @param startTimeHR
+ * @param endTimeHR
+ * @param resources
+ * @param ignoredResources
+ */
+function filterResourcesForSpan(spanUrl, startTimeHR, endTimeHR, resources, ignoredResources, initiatorType) {
+    const startTime = (0, core_1.hrTimeToNanoseconds)(startTimeHR);
+    const endTime = (0, core_1.hrTimeToNanoseconds)(endTimeHR);
+    let filteredResources = resources.filter(resource => {
+        const resourceStartTime = (0, core_1.hrTimeToNanoseconds)((0, core_1.timeInputToHrTime)(resource[PerformanceTimingNames_1.PerformanceTimingNames.FETCH_START]));
+        const resourceEndTime = (0, core_1.hrTimeToNanoseconds)((0, core_1.timeInputToHrTime)(resource[PerformanceTimingNames_1.PerformanceTimingNames.RESPONSE_END]));
+        return (resource.initiatorType.toLowerCase() ===
+            (initiatorType || 'xmlhttprequest') &&
+            resource.name === spanUrl &&
+            resourceStartTime >= startTime &&
+            resourceEndTime <= endTime);
+    });
+    if (filteredResources.length > 0) {
+        filteredResources = filteredResources.filter(resource => {
+            return !ignoredResources.has(resource);
+        });
+    }
+    return filteredResources;
+}
+/**
+ * Parses url using URL constructor or fallback to anchor element.
+ * @param url
+ */
+function parseUrl(url) {
+    if (typeof URL === 'function') {
+        return new URL(url, typeof document !== 'undefined'
+            ? document.baseURI
+            : typeof location !== 'undefined' // Some JS runtimes (e.g. Deno) don't define this
+                ? location.href
+                : undefined);
+    }
+    const element = getUrlNormalizingAnchor();
+    element.href = url;
+    return element;
+}
+exports.parseUrl = parseUrl;
+/**
+ * Parses url using URL constructor or fallback to anchor element and serialize
+ * it to a string.
+ *
+ * Performs the steps described in https://html.spec.whatwg.org/multipage/urls-and-fetching.html#parse-a-url
+ *
+ * @param url
+ */
+function normalizeUrl(url) {
+    const urlLike = parseUrl(url);
+    return urlLike.href;
+}
+exports.normalizeUrl = normalizeUrl;
+/**
+ * Get element XPath
+ * @param target - target element
+ * @param optimised - when id attribute of element is present the xpath can be
+ * simplified to contain id
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+function getElementXPath(target, optimised) {
+    if (target.nodeType === Node.DOCUMENT_NODE) {
+        return '/';
+    }
+    const targetValue = getNodeValue(target, optimised);
+    if (optimised && targetValue.indexOf('@id') > 0) {
+        return targetValue;
+    }
+    let xpath = '';
+    if (target.parentNode) {
+        xpath += getElementXPath(target.parentNode, false);
+    }
+    xpath += targetValue;
+    return xpath;
+}
+exports.getElementXPath = getElementXPath;
+/**
+ * get node index within the siblings
+ * @param target
+ */
+function getNodeIndex(target) {
+    if (!target.parentNode) {
+        return 0;
+    }
+    const allowedTypes = [target.nodeType];
+    if (target.nodeType === Node.CDATA_SECTION_NODE) {
+        allowedTypes.push(Node.TEXT_NODE);
+    }
+    let elements = Array.from(target.parentNode.childNodes);
+    elements = elements.filter((element) => {
+        const localName = element.localName;
+        return (allowedTypes.indexOf(element.nodeType) >= 0 &&
+            localName === target.localName);
+    });
+    if (elements.length >= 1) {
+        return elements.indexOf(target) + 1; // xpath starts from 1
+    }
+    // if there are no other similar child xpath doesn't need index
+    return 0;
+}
+/**
+ * get node value for xpath
+ * @param target
+ * @param optimised
+ */
+function getNodeValue(target, optimised) {
+    const nodeType = target.nodeType;
+    const index = getNodeIndex(target);
+    let nodeValue = '';
+    if (nodeType === Node.ELEMENT_NODE) {
+        const id = target.getAttribute('id');
+        if (optimised && id) {
+            return `//*[@id="${id}"]`;
+        }
+        nodeValue = target.localName;
+    }
+    else if (nodeType === Node.TEXT_NODE ||
+        nodeType === Node.CDATA_SECTION_NODE) {
+        nodeValue = 'text()';
+    }
+    else if (nodeType === Node.COMMENT_NODE) {
+        nodeValue = 'comment()';
+    }
+    else {
+        return '';
+    }
+    // if index is 1 it can be omitted in xpath
+    if (nodeValue && index > 1) {
+        return `/${nodeValue}[${index}]`;
+    }
+    return `/${nodeValue}`;
+}
+/**
+ * Checks if trace headers should be propagated
+ * @param spanUrl
+ * @private
+ */
+function shouldPropagateTraceHeaders(spanUrl, propagateTraceHeaderCorsUrls) {
+    let propagateTraceHeaderUrls = propagateTraceHeaderCorsUrls || [];
+    if (typeof propagateTraceHeaderUrls === 'string' ||
+        propagateTraceHeaderUrls instanceof RegExp) {
+        propagateTraceHeaderUrls = [propagateTraceHeaderUrls];
+    }
+    const parsedSpanUrl = parseUrl(spanUrl);
+    if (parsedSpanUrl.origin === getOrigin()) {
+        return true;
+    }
+    else {
+        return propagateTraceHeaderUrls.some(propagateTraceHeaderUrl => (0, core_1.urlMatches)(spanUrl, propagateTraceHeaderUrl));
+    }
+}
+exports.shouldPropagateTraceHeaders = shouldPropagateTraceHeaders;
+
+},{"./enums/PerformanceTimingNames":131,"@opentelemetry/core":74,"@opentelemetry/semantic-conventions":135}],135:[function(require,module,exports){
+arguments[4][105][0].apply(exports,arguments)
+},{"./resource":138,"./trace":140,"dup":105}],136:[function(require,module,exports){
+arguments[4][106][0].apply(exports,arguments)
+},{"dup":106}],137:[function(require,module,exports){
+arguments[4][107][0].apply(exports,arguments)
+},{"../internal/utils":136,"dup":107}],138:[function(require,module,exports){
+arguments[4][108][0].apply(exports,arguments)
+},{"./SemanticResourceAttributes":137,"dup":108}],139:[function(require,module,exports){
+arguments[4][109][0].apply(exports,arguments)
+},{"../internal/utils":136,"dup":109}],140:[function(require,module,exports){
+arguments[4][110][0].apply(exports,arguments)
+},{"./SemanticAttributes":139,"dup":110}],141:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AttributeNames = void 0;
+var AttributeNames;
+(function (AttributeNames) {
+    AttributeNames["EVENT_TYPE"] = "event_type";
+    AttributeNames["TARGET_ELEMENT"] = "target_element";
+    AttributeNames["TARGET_XPATH"] = "target_xpath";
+    AttributeNames["HTTP_URL"] = "http.url";
+})(AttributeNames = exports.AttributeNames || (exports.AttributeNames = {}));
+
+},{}],142:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./instrumentation"), exports);
+__exportStar(require("./types"), exports);
+__exportStar(require("./enums/AttributeNames"), exports);
+
+},{"./enums/AttributeNames":141,"./instrumentation":143,"./types":144}],143:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserInteractionInstrumentation = void 0;
+/// <reference types="zone.js" />
+const instrumentation_1 = require("@opentelemetry/instrumentation");
+const api = require("@opentelemetry/api");
+const core_1 = require("@opentelemetry/core");
+const sdk_trace_web_1 = require("@opentelemetry/sdk-trace-web");
+const AttributeNames_1 = require("./enums/AttributeNames");
+const version_1 = require("./version");
+const ZONE_CONTEXT_KEY = 'OT_ZONE_CONTEXT';
+const EVENT_NAVIGATION_NAME = 'Navigation:';
+const DEFAULT_EVENT_NAMES = ['click'];
+function defaultShouldPreventSpanCreation() {
+    return false;
+}
+/**
+ * This class represents a UserInteraction plugin for auto instrumentation.
+ * If zone.js is available then it patches the zone otherwise it patches
+ * addEventListener of HTMLElement
+ */
+class UserInteractionInstrumentation extends instrumentation_1.InstrumentationBase {
+    constructor(config = {}) {
+        var _a;
+        super(version_1.PACKAGE_NAME, version_1.PACKAGE_VERSION, config);
+        this.version = version_1.PACKAGE_VERSION;
+        this.moduleName = 'user-interaction';
+        this._spansData = new WeakMap();
+        // for addEventListener/removeEventListener state
+        this._wrappedListeners = new WeakMap();
+        // for event bubbling
+        this._eventsSpanMap = new WeakMap();
+        this._eventNames = new Set((_a = config === null || config === void 0 ? void 0 : config.eventNames) !== null && _a !== void 0 ? _a : DEFAULT_EVENT_NAMES);
+        this._shouldPreventSpanCreation =
+            typeof (config === null || config === void 0 ? void 0 : config.shouldPreventSpanCreation) === 'function'
+                ? config.shouldPreventSpanCreation
+                : defaultShouldPreventSpanCreation;
+    }
+    init() { }
+    /**
+     * This will check if last task was timeout and will save the time to
+     * fix the user interaction when nothing happens
+     * This timeout comes from xhr plugin which is needed to collect information
+     * about last xhr main request from observer
+     * @param task
+     * @param span
+     */
+    _checkForTimeout(task, span) {
+        const spanData = this._spansData.get(span);
+        if (spanData) {
+            if (task.source === 'setTimeout') {
+                spanData.hrTimeLastTimeout = (0, core_1.hrTime)();
+            }
+            else if (task.source !== 'Promise.then' &&
+                task.source !== 'setTimeout') {
+                spanData.hrTimeLastTimeout = undefined;
+            }
+        }
+    }
+    /**
+     * Controls whether or not to create a span, based on the event type.
+     */
+    _allowEventName(eventName) {
+        return this._eventNames.has(eventName);
+    }
+    /**
+     * Creates a new span
+     * @param element
+     * @param eventName
+     * @param parentSpan
+     */
+    _createSpan(element, eventName, parentSpan) {
+        if (!(element instanceof HTMLElement)) {
+            return undefined;
+        }
+        if (!element.getAttribute) {
+            return undefined;
+        }
+        if (element.hasAttribute('disabled')) {
+            return undefined;
+        }
+        if (!this._allowEventName(eventName)) {
+            return undefined;
+        }
+        const xpath = (0, sdk_trace_web_1.getElementXPath)(element, true);
+        try {
+            const span = this.tracer.startSpan(eventName, {
+                attributes: {
+                    [AttributeNames_1.AttributeNames.EVENT_TYPE]: eventName,
+                    [AttributeNames_1.AttributeNames.TARGET_ELEMENT]: element.tagName,
+                    [AttributeNames_1.AttributeNames.TARGET_XPATH]: xpath,
+                    [AttributeNames_1.AttributeNames.HTTP_URL]: window.location.href,
+                },
+            }, parentSpan
+                ? api.trace.setSpan(api.context.active(), parentSpan)
+                : undefined);
+            if (this._shouldPreventSpanCreation(eventName, element, span) === true) {
+                return undefined;
+            }
+            this._spansData.set(span, {
+                taskCount: 0,
+            });
+            return span;
+        }
+        catch (e) {
+            this._diag.error('failed to start create new user interaction span', e);
+        }
+        return undefined;
+    }
+    /**
+     * Decrement number of tasks that left in zone,
+     * This is needed to be able to end span when no more tasks left
+     * @param span
+     */
+    _decrementTask(span) {
+        const spanData = this._spansData.get(span);
+        if (spanData) {
+            spanData.taskCount--;
+            if (spanData.taskCount === 0) {
+                this._tryToEndSpan(span, spanData.hrTimeLastTimeout);
+            }
+        }
+    }
+    /**
+     * Return the current span
+     * @param zone
+     * @private
+     */
+    _getCurrentSpan(zone) {
+        const context = zone.get(ZONE_CONTEXT_KEY);
+        if (context) {
+            return api.trace.getSpan(context);
+        }
+        return context;
+    }
+    /**
+     * Increment number of tasks that are run within the same zone.
+     *     This is needed to be able to end span when no more tasks left
+     * @param span
+     */
+    _incrementTask(span) {
+        const spanData = this._spansData.get(span);
+        if (spanData) {
+            spanData.taskCount++;
+        }
+    }
+    /**
+     * Returns true iff we should use the patched callback; false if it's already been patched
+     */
+    addPatchedListener(on, type, listener, wrappedListener) {
+        let listener2Type = this._wrappedListeners.get(listener);
+        if (!listener2Type) {
+            listener2Type = new Map();
+            this._wrappedListeners.set(listener, listener2Type);
+        }
+        let element2patched = listener2Type.get(type);
+        if (!element2patched) {
+            element2patched = new Map();
+            listener2Type.set(type, element2patched);
+        }
+        if (element2patched.has(on)) {
+            return false;
+        }
+        element2patched.set(on, wrappedListener);
+        return true;
+    }
+    /**
+     * Returns the patched version of the callback (or undefined)
+     */
+    removePatchedListener(on, type, listener) {
+        const listener2Type = this._wrappedListeners.get(listener);
+        if (!listener2Type) {
+            return undefined;
+        }
+        const element2patched = listener2Type.get(type);
+        if (!element2patched) {
+            return undefined;
+        }
+        const patched = element2patched.get(on);
+        if (patched) {
+            element2patched.delete(on);
+            if (element2patched.size === 0) {
+                listener2Type.delete(type);
+                if (listener2Type.size === 0) {
+                    this._wrappedListeners.delete(listener);
+                }
+            }
+        }
+        return patched;
+    }
+    // utility method to deal with the Function|EventListener nature of addEventListener
+    _invokeListener(listener, target, args) {
+        if (typeof listener === 'function') {
+            return listener.apply(target, args);
+        }
+        else {
+            return listener.handleEvent(args[0]);
+        }
+    }
+    /**
+     * This patches the addEventListener of HTMLElement to be able to
+     * auto instrument the click events
+     * This is done when zone is not available
+     */
+    _patchAddEventListener() {
+        const plugin = this;
+        return (original) => {
+            return function addEventListenerPatched(type, listener, useCapture) {
+                // Forward calls with listener = null
+                if (!listener) {
+                    return original.call(this, type, listener, useCapture);
+                }
+                // filter out null (typeof null === 'object')
+                const once = useCapture && typeof useCapture === 'object' && useCapture.once;
+                const patchedListener = function (...args) {
+                    let parentSpan;
+                    const event = args[0];
+                    const target = event === null || event === void 0 ? void 0 : event.target;
+                    if (event) {
+                        parentSpan = plugin._eventsSpanMap.get(event);
+                    }
+                    if (once) {
+                        plugin.removePatchedListener(this, type, listener);
+                    }
+                    const span = plugin._createSpan(target, type, parentSpan);
+                    if (span) {
+                        if (event) {
+                            plugin._eventsSpanMap.set(event, span);
+                        }
+                        return api.context.with(api.trace.setSpan(api.context.active(), span), () => {
+                            const result = plugin._invokeListener(listener, this, args);
+                            // no zone so end span immediately
+                            span.end();
+                            return result;
+                        });
+                    }
+                    else {
+                        return plugin._invokeListener(listener, this, args);
+                    }
+                };
+                if (plugin.addPatchedListener(this, type, listener, patchedListener)) {
+                    return original.call(this, type, patchedListener, useCapture);
+                }
+            };
+        };
+    }
+    /**
+     * This patches the removeEventListener of HTMLElement to handle the fact that
+     * we patched the original callbacks
+     * This is done when zone is not available
+     */
+    _patchRemoveEventListener() {
+        const plugin = this;
+        return (original) => {
+            return function removeEventListenerPatched(type, listener, useCapture) {
+                const wrappedListener = plugin.removePatchedListener(this, type, listener);
+                if (wrappedListener) {
+                    return original.call(this, type, wrappedListener, useCapture);
+                }
+                else {
+                    return original.call(this, type, listener, useCapture);
+                }
+            };
+        };
+    }
+    /**
+     * Most browser provide event listener api via EventTarget in prototype chain.
+     * Exception to this is IE 11 which has it on the prototypes closest to EventTarget:
+     *
+     * * - has addEventListener in IE
+     * ** - has addEventListener in all other browsers
+     * ! - missing in IE
+     *
+     * HTMLElement -> Element -> Node * -> EventTarget **! -> Object
+     * Document -> Node * -> EventTarget **! -> Object
+     * Window * -> WindowProperties ! -> EventTarget **! -> Object
+     */
+    _getPatchableEventTargets() {
+        return window.EventTarget
+            ? [EventTarget.prototype]
+            : [Node.prototype, Window.prototype];
+    }
+    /**
+     * Patches the history api
+     */
+    _patchHistoryApi() {
+        this._unpatchHistoryApi();
+        this._wrap(history, 'replaceState', this._patchHistoryMethod());
+        this._wrap(history, 'pushState', this._patchHistoryMethod());
+        this._wrap(history, 'back', this._patchHistoryMethod());
+        this._wrap(history, 'forward', this._patchHistoryMethod());
+        this._wrap(history, 'go', this._patchHistoryMethod());
+    }
+    /**
+     * Patches the certain history api method
+     */
+    _patchHistoryMethod() {
+        const plugin = this;
+        return (original) => {
+            return function patchHistoryMethod(...args) {
+                const url = `${location.pathname}${location.hash}${location.search}`;
+                const result = original.apply(this, args);
+                const urlAfter = `${location.pathname}${location.hash}${location.search}`;
+                if (url !== urlAfter) {
+                    plugin._updateInteractionName(urlAfter);
+                }
+                return result;
+            };
+        };
+    }
+    /**
+     * unpatch the history api methods
+     */
+    _unpatchHistoryApi() {
+        if ((0, instrumentation_1.isWrapped)(history.replaceState))
+            this._unwrap(history, 'replaceState');
+        if ((0, instrumentation_1.isWrapped)(history.pushState))
+            this._unwrap(history, 'pushState');
+        if ((0, instrumentation_1.isWrapped)(history.back))
+            this._unwrap(history, 'back');
+        if ((0, instrumentation_1.isWrapped)(history.forward))
+            this._unwrap(history, 'forward');
+        if ((0, instrumentation_1.isWrapped)(history.go))
+            this._unwrap(history, 'go');
+    }
+    /**
+     * Updates interaction span name
+     * @param url
+     */
+    _updateInteractionName(url) {
+        const span = api.trace.getSpan(api.context.active());
+        if (span && typeof span.updateName === 'function') {
+            span.updateName(`${EVENT_NAVIGATION_NAME} ${url}`);
+        }
+    }
+    /**
+     * Patches zone cancel task - this is done to be able to correctly
+     * decrement the number of remaining tasks
+     */
+    _patchZoneCancelTask() {
+        const plugin = this;
+        return (original) => {
+            return function patchCancelTask(task) {
+                const currentZone = Zone.current;
+                const currentSpan = plugin._getCurrentSpan(currentZone);
+                if (currentSpan && plugin._shouldCountTask(task, currentZone)) {
+                    plugin._decrementTask(currentSpan);
+                }
+                return original.call(this, task);
+            };
+        };
+    }
+    /**
+     * Patches zone schedule task - this is done to be able to correctly
+     * increment the number of tasks running within current zone but also to
+     * save time in case of timeout running from xhr plugin when waiting for
+     * main request from PerformanceResourceTiming
+     */
+    _patchZoneScheduleTask() {
+        const plugin = this;
+        return (original) => {
+            return function patchScheduleTask(task) {
+                const currentZone = Zone.current;
+                const currentSpan = plugin._getCurrentSpan(currentZone);
+                if (currentSpan && plugin._shouldCountTask(task, currentZone)) {
+                    plugin._incrementTask(currentSpan);
+                    plugin._checkForTimeout(task, currentSpan);
+                }
+                return original.call(this, task);
+            };
+        };
+    }
+    /**
+     * Patches zone run task - this is done to be able to create a span when
+     * user interaction starts
+     * @private
+     */
+    _patchZoneRunTask() {
+        const plugin = this;
+        return (original) => {
+            return function patchRunTask(task, applyThis, applyArgs) {
+                const event = Array.isArray(applyArgs) && applyArgs[0] instanceof Event
+                    ? applyArgs[0]
+                    : undefined;
+                const target = event === null || event === void 0 ? void 0 : event.target;
+                let span;
+                const activeZone = this;
+                if (target) {
+                    span = plugin._createSpan(target, task.eventName);
+                    if (span) {
+                        plugin._incrementTask(span);
+                        return activeZone.run(() => {
+                            try {
+                                return api.context.with(api.trace.setSpan(api.context.active(), span), () => {
+                                    const currentZone = Zone.current;
+                                    task._zone = currentZone;
+                                    return original.call(currentZone, task, applyThis, applyArgs);
+                                });
+                            }
+                            finally {
+                                plugin._decrementTask(span);
+                            }
+                        });
+                    }
+                }
+                else {
+                    span = plugin._getCurrentSpan(activeZone);
+                }
+                try {
+                    return original.call(activeZone, task, applyThis, applyArgs);
+                }
+                finally {
+                    if (span && plugin._shouldCountTask(task, activeZone)) {
+                        plugin._decrementTask(span);
+                    }
+                }
+            };
+        };
+    }
+    /**
+     * Decides if task should be counted.
+     * @param task
+     * @param currentZone
+     * @private
+     */
+    _shouldCountTask(task, currentZone) {
+        if (task._zone) {
+            currentZone = task._zone;
+        }
+        if (!currentZone || !task.data || task.data.isPeriodic) {
+            return false;
+        }
+        const currentSpan = this._getCurrentSpan(currentZone);
+        if (!currentSpan) {
+            return false;
+        }
+        if (!this._spansData.get(currentSpan)) {
+            return false;
+        }
+        return task.type === 'macroTask' || task.type === 'microTask';
+    }
+    /**
+     * Will try to end span when such span still exists.
+     * @param span
+     * @param endTime
+     * @private
+     */
+    _tryToEndSpan(span, endTime) {
+        if (span) {
+            const spanData = this._spansData.get(span);
+            if (spanData) {
+                span.end(endTime);
+                this._spansData.delete(span);
+            }
+        }
+    }
+    /**
+     * implements enable function
+     */
+    enable() {
+        const ZoneWithPrototype = this.getZoneWithPrototype();
+        this._diag.debug('applying patch to', this.moduleName, this.version, 'zone:', !!ZoneWithPrototype);
+        if (ZoneWithPrototype) {
+            if ((0, instrumentation_1.isWrapped)(ZoneWithPrototype.prototype.runTask)) {
+                this._unwrap(ZoneWithPrototype.prototype, 'runTask');
+                this._diag.debug('removing previous patch from method runTask');
+            }
+            if ((0, instrumentation_1.isWrapped)(ZoneWithPrototype.prototype.scheduleTask)) {
+                this._unwrap(ZoneWithPrototype.prototype, 'scheduleTask');
+                this._diag.debug('removing previous patch from method scheduleTask');
+            }
+            if ((0, instrumentation_1.isWrapped)(ZoneWithPrototype.prototype.cancelTask)) {
+                this._unwrap(ZoneWithPrototype.prototype, 'cancelTask');
+                this._diag.debug('removing previous patch from method cancelTask');
+            }
+            this._zonePatched = true;
+            this._wrap(ZoneWithPrototype.prototype, 'runTask', this._patchZoneRunTask());
+            this._wrap(ZoneWithPrototype.prototype, 'scheduleTask', this._patchZoneScheduleTask());
+            this._wrap(ZoneWithPrototype.prototype, 'cancelTask', this._patchZoneCancelTask());
+        }
+        else {
+            this._zonePatched = false;
+            const targets = this._getPatchableEventTargets();
+            targets.forEach(target => {
+                if ((0, instrumentation_1.isWrapped)(target.addEventListener)) {
+                    this._unwrap(target, 'addEventListener');
+                    this._diag.debug('removing previous patch from method addEventListener');
+                }
+                if ((0, instrumentation_1.isWrapped)(target.removeEventListener)) {
+                    this._unwrap(target, 'removeEventListener');
+                    this._diag.debug('removing previous patch from method removeEventListener');
+                }
+                this._wrap(target, 'addEventListener', this._patchAddEventListener());
+                this._wrap(target, 'removeEventListener', this._patchRemoveEventListener());
+            });
+        }
+        this._patchHistoryApi();
+    }
+    /**
+     * implements unpatch function
+     */
+    disable() {
+        const ZoneWithPrototype = this.getZoneWithPrototype();
+        this._diag.debug('removing patch from', this.moduleName, this.version, 'zone:', !!ZoneWithPrototype);
+        if (ZoneWithPrototype && this._zonePatched) {
+            if ((0, instrumentation_1.isWrapped)(ZoneWithPrototype.prototype.runTask)) {
+                this._unwrap(ZoneWithPrototype.prototype, 'runTask');
+            }
+            if ((0, instrumentation_1.isWrapped)(ZoneWithPrototype.prototype.scheduleTask)) {
+                this._unwrap(ZoneWithPrototype.prototype, 'scheduleTask');
+            }
+            if ((0, instrumentation_1.isWrapped)(ZoneWithPrototype.prototype.cancelTask)) {
+                this._unwrap(ZoneWithPrototype.prototype, 'cancelTask');
+            }
+        }
+        else {
+            const targets = this._getPatchableEventTargets();
+            targets.forEach(target => {
+                if ((0, instrumentation_1.isWrapped)(target.addEventListener)) {
+                    this._unwrap(target, 'addEventListener');
+                }
+                if ((0, instrumentation_1.isWrapped)(target.removeEventListener)) {
+                    this._unwrap(target, 'removeEventListener');
+                }
+            });
+        }
+        this._unpatchHistoryApi();
+    }
+    /**
+     * returns Zone
+     */
+    getZoneWithPrototype() {
+        const _window = window;
+        return _window.Zone;
+    }
+}
+exports.UserInteractionInstrumentation = UserInteractionInstrumentation;
+
+},{"./enums/AttributeNames":141,"./version":145,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/instrumentation":156,"@opentelemetry/sdk-trace-web":447}],144:[function(require,module,exports){
+arguments[4][73][0].apply(exports,arguments)
+},{"dup":73}],145:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PACKAGE_NAME = exports.PACKAGE_VERSION = void 0;
+// this is autogenerated file, see scripts/version-update.js
+exports.PACKAGE_VERSION = '0.40.0';
+exports.PACKAGE_NAME = '@opentelemetry/instrumentation-user-interaction';
+
+},{}],146:[function(require,module,exports){
+arguments[4][5][0].apply(exports,arguments)
+},{"dup":5}],147:[function(require,module,exports){
+arguments[4][6][0].apply(exports,arguments)
+},{"./NoopLogger":146,"dup":6}],148:[function(require,module,exports){
+arguments[4][7][0].apply(exports,arguments)
+},{"../NoopLoggerProvider":147,"../internal/global-utils":150,"dup":7}],149:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.logs = exports.NoopLoggerProvider = exports.NOOP_LOGGER_PROVIDER = exports.NoopLogger = exports.NOOP_LOGGER = exports.SeverityNumber = void 0;
+var LogRecord_1 = require("./types/LogRecord");
+Object.defineProperty(exports, "SeverityNumber", { enumerable: true, get: function () { return LogRecord_1.SeverityNumber; } });
+var NoopLogger_1 = require("./NoopLogger");
+Object.defineProperty(exports, "NOOP_LOGGER", { enumerable: true, get: function () { return NoopLogger_1.NOOP_LOGGER; } });
+Object.defineProperty(exports, "NoopLogger", { enumerable: true, get: function () { return NoopLogger_1.NoopLogger; } });
+var NoopLoggerProvider_1 = require("./NoopLoggerProvider");
+Object.defineProperty(exports, "NOOP_LOGGER_PROVIDER", { enumerable: true, get: function () { return NoopLoggerProvider_1.NOOP_LOGGER_PROVIDER; } });
+Object.defineProperty(exports, "NoopLoggerProvider", { enumerable: true, get: function () { return NoopLoggerProvider_1.NoopLoggerProvider; } });
+const logs_1 = require("./api/logs");
+exports.logs = logs_1.LogsAPI.getInstance();
+
+},{"./NoopLogger":146,"./NoopLoggerProvider":147,"./api/logs":148,"./types/LogRecord":153}],150:[function(require,module,exports){
+arguments[4][9][0].apply(exports,arguments)
+},{"../platform":152,"dup":9}],151:[function(require,module,exports){
+arguments[4][10][0].apply(exports,arguments)
+},{"dup":10}],152:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports._globalThis = void 0;
+var globalThis_1 = require("./globalThis");
+Object.defineProperty(exports, "_globalThis", { enumerable: true, get: function () { return globalThis_1._globalThis; } });
+
+},{"./globalThis":151}],153:[function(require,module,exports){
+arguments[4][13][0].apply(exports,arguments)
+},{"dup":13}],154:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.registerInstrumentations = void 0;
+const api_1 = require("@opentelemetry/api");
+const api_logs_1 = require("@opentelemetry/api-logs");
+const autoLoaderUtils_1 = require("./autoLoaderUtils");
+/**
+ * It will register instrumentations and plugins
+ * @param options
+ * @return returns function to unload instrumentation and plugins that were
+ *   registered
+ */
+function registerInstrumentations(options) {
+    var _a, _b;
+    const tracerProvider = options.tracerProvider || api_1.trace.getTracerProvider();
+    const meterProvider = options.meterProvider || api_1.metrics.getMeterProvider();
+    const loggerProvider = options.loggerProvider || api_logs_1.logs.getLoggerProvider();
+    const instrumentations = (_b = (_a = options.instrumentations) === null || _a === void 0 ? void 0 : _a.flat()) !== null && _b !== void 0 ? _b : [];
+    (0, autoLoaderUtils_1.enableInstrumentations)(instrumentations, tracerProvider, meterProvider, loggerProvider);
+    return () => {
+        (0, autoLoaderUtils_1.disableInstrumentations)(instrumentations);
+    };
+}
+exports.registerInstrumentations = registerInstrumentations;
+
+},{"./autoLoaderUtils":155,"@opentelemetry/api":34,"@opentelemetry/api-logs":149}],155:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.disableInstrumentations = exports.enableInstrumentations = void 0;
+/**
+ * Enable instrumentations
+ * @param instrumentations
+ * @param tracerProvider
+ * @param meterProvider
+ */
+function enableInstrumentations(instrumentations, tracerProvider, meterProvider, loggerProvider) {
+    for (let i = 0, j = instrumentations.length; i < j; i++) {
+        const instrumentation = instrumentations[i];
+        if (tracerProvider) {
+            instrumentation.setTracerProvider(tracerProvider);
+        }
+        if (meterProvider) {
+            instrumentation.setMeterProvider(meterProvider);
+        }
+        if (loggerProvider && instrumentation.setLoggerProvider) {
+            instrumentation.setLoggerProvider(loggerProvider);
+        }
+        // instrumentations have been already enabled during creation
+        // so enable only if user prevented that by setting enabled to false
+        // this is to prevent double enabling but when calling register all
+        // instrumentations should be now enabled
+        if (!instrumentation.getConfig().enabled) {
+            instrumentation.enable();
+        }
+    }
+}
+exports.enableInstrumentations = enableInstrumentations;
+/**
+ * Disable instrumentations
+ * @param instrumentations
+ */
+function disableInstrumentations(instrumentations) {
+    instrumentations.forEach(instrumentation => instrumentation.disable());
+}
+exports.disableInstrumentations = disableInstrumentations;
+
+},{}],156:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.safeExecuteInTheMiddleAsync = exports.safeExecuteInTheMiddle = exports.isWrapped = exports.InstrumentationNodeModuleFile = exports.InstrumentationNodeModuleDefinition = exports.InstrumentationBase = exports.registerInstrumentations = void 0;
+var autoLoader_1 = require("./autoLoader");
+Object.defineProperty(exports, "registerInstrumentations", { enumerable: true, get: function () { return autoLoader_1.registerInstrumentations; } });
+var index_1 = require("./platform/index");
+Object.defineProperty(exports, "InstrumentationBase", { enumerable: true, get: function () { return index_1.InstrumentationBase; } });
+var instrumentationNodeModuleDefinition_1 = require("./instrumentationNodeModuleDefinition");
+Object.defineProperty(exports, "InstrumentationNodeModuleDefinition", { enumerable: true, get: function () { return instrumentationNodeModuleDefinition_1.InstrumentationNodeModuleDefinition; } });
+var instrumentationNodeModuleFile_1 = require("./instrumentationNodeModuleFile");
+Object.defineProperty(exports, "InstrumentationNodeModuleFile", { enumerable: true, get: function () { return instrumentationNodeModuleFile_1.InstrumentationNodeModuleFile; } });
+var utils_1 = require("./utils");
+Object.defineProperty(exports, "isWrapped", { enumerable: true, get: function () { return utils_1.isWrapped; } });
+Object.defineProperty(exports, "safeExecuteInTheMiddle", { enumerable: true, get: function () { return utils_1.safeExecuteInTheMiddle; } });
+Object.defineProperty(exports, "safeExecuteInTheMiddleAsync", { enumerable: true, get: function () { return utils_1.safeExecuteInTheMiddleAsync; } });
+
+},{"./autoLoader":154,"./instrumentationNodeModuleDefinition":158,"./instrumentationNodeModuleFile":159,"./platform/index":160,"./utils":163}],157:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.InstrumentationAbstract = void 0;
+const api_1 = require("@opentelemetry/api");
+const api_logs_1 = require("@opentelemetry/api-logs");
+const shimmer = require("shimmer");
+/**
+ * Base abstract internal class for instrumenting node and web plugins
+ */
+class InstrumentationAbstract {
+    constructor(instrumentationName, instrumentationVersion, config) {
+        this.instrumentationName = instrumentationName;
+        this.instrumentationVersion = instrumentationVersion;
+        this._config = {};
+        /* Api to wrap instrumented method */
+        this._wrap = shimmer.wrap;
+        /* Api to unwrap instrumented methods */
+        this._unwrap = shimmer.unwrap;
+        /* Api to mass wrap instrumented method */
+        this._massWrap = shimmer.massWrap;
+        /* Api to mass unwrap instrumented methods */
+        this._massUnwrap = shimmer.massUnwrap;
+        this.setConfig(config);
+        this._diag = api_1.diag.createComponentLogger({
+            namespace: instrumentationName,
+        });
+        this._tracer = api_1.trace.getTracer(instrumentationName, instrumentationVersion);
+        this._meter = api_1.metrics.getMeter(instrumentationName, instrumentationVersion);
+        this._logger = api_logs_1.logs.getLogger(instrumentationName, instrumentationVersion);
+        this._updateMetricInstruments();
+    }
+    /* Returns meter */
+    get meter() {
+        return this._meter;
+    }
+    /**
+     * Sets MeterProvider to this plugin
+     * @param meterProvider
+     */
+    setMeterProvider(meterProvider) {
+        this._meter = meterProvider.getMeter(this.instrumentationName, this.instrumentationVersion);
+        this._updateMetricInstruments();
+    }
+    /* Returns logger */
+    get logger() {
+        return this._logger;
+    }
+    /**
+     * Sets LoggerProvider to this plugin
+     * @param loggerProvider
+     */
+    setLoggerProvider(loggerProvider) {
+        this._logger = loggerProvider.getLogger(this.instrumentationName, this.instrumentationVersion);
+    }
+    /**
+     * @experimental
+     *
+     * Get module definitions defined by {@link init}.
+     * This can be used for experimental compile-time instrumentation.
+     *
+     * @returns an array of {@link InstrumentationModuleDefinition}
+     */
+    getModuleDefinitions() {
+        var _a;
+        const initResult = (_a = this.init()) !== null && _a !== void 0 ? _a : [];
+        if (!Array.isArray(initResult)) {
+            return [initResult];
+        }
+        return initResult;
+    }
+    /**
+     * Sets the new metric instruments with the current Meter.
+     */
+    _updateMetricInstruments() {
+        return;
+    }
+    /* Returns InstrumentationConfig */
+    getConfig() {
+        return this._config;
+    }
+    /**
+     * Sets InstrumentationConfig to this plugin
+     * @param config
+     */
+    setConfig(config) {
+        // copy config first level properties to ensure they are immutable.
+        // nested properties are not copied, thus are mutable from the outside.
+        this._config = Object.assign({ enabled: true }, config);
+    }
+    /**
+     * Sets TraceProvider to this plugin
+     * @param tracerProvider
+     */
+    setTracerProvider(tracerProvider) {
+        this._tracer = tracerProvider.getTracer(this.instrumentationName, this.instrumentationVersion);
+    }
+    /* Returns tracer */
+    get tracer() {
+        return this._tracer;
+    }
+    /**
+     * Execute span customization hook, if configured, and log any errors.
+     * Any semantics of the trigger and info are defined by the specific instrumentation.
+     * @param hookHandler The optional hook handler which the user has configured via instrumentation config
+     * @param triggerName The name of the trigger for executing the hook for logging purposes
+     * @param span The span to which the hook should be applied
+     * @param info The info object to be passed to the hook, with useful data the hook may use
+     */
+    _runSpanCustomizationHook(hookHandler, triggerName, span, info) {
+        if (!hookHandler) {
+            return;
+        }
+        try {
+            hookHandler(span, info);
+        }
+        catch (e) {
+            this._diag.error(`Error running span customization hook due to exception in handler`, { triggerName }, e);
+        }
+    }
+}
+exports.InstrumentationAbstract = InstrumentationAbstract;
+
+},{"@opentelemetry/api":34,"@opentelemetry/api-logs":149,"shimmer":536}],158:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.InstrumentationNodeModuleDefinition = void 0;
+class InstrumentationNodeModuleDefinition {
+    constructor(name, supportedVersions, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    patch, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    unpatch, files) {
+        this.name = name;
+        this.supportedVersions = supportedVersions;
+        this.patch = patch;
+        this.unpatch = unpatch;
+        this.files = files || [];
+    }
+}
+exports.InstrumentationNodeModuleDefinition = InstrumentationNodeModuleDefinition;
+
+},{}],159:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.InstrumentationNodeModuleFile = void 0;
+const index_1 = require("./platform/index");
+class InstrumentationNodeModuleFile {
+    constructor(name, supportedVersions, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    patch, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    unpatch) {
+        this.supportedVersions = supportedVersions;
+        this.patch = patch;
+        this.unpatch = unpatch;
+        this.name = (0, index_1.normalize)(name);
+    }
+}
+exports.InstrumentationNodeModuleFile = InstrumentationNodeModuleFile;
+
+},{"./platform/index":160}],160:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.normalize = exports.InstrumentationBase = void 0;
+var instrumentation_1 = require("./instrumentation");
+Object.defineProperty(exports, "InstrumentationBase", { enumerable: true, get: function () { return instrumentation_1.InstrumentationBase; } });
+var noop_normalize_1 = require("./noop-normalize");
+Object.defineProperty(exports, "normalize", { enumerable: true, get: function () { return noop_normalize_1.normalize; } });
+
+},{"./instrumentation":161,"./noop-normalize":162}],161:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.InstrumentationBase = void 0;
+const instrumentation_1 = require("../../instrumentation");
+/**
+ * Base abstract class for instrumenting web plugins
+ */
+class InstrumentationBase extends instrumentation_1.InstrumentationAbstract {
+    constructor(instrumentationName, instrumentationVersion, config) {
+        super(instrumentationName, instrumentationVersion, config);
+        if (this._config.enabled) {
+            this.enable();
+        }
+    }
+}
+exports.InstrumentationBase = InstrumentationBase;
+
+},{"../../instrumentation":157}],162:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.normalize = void 0;
+const api_1 = require("@opentelemetry/api");
+/**
+ * Placeholder normalize function to replace the node variant in browser runtimes,
+ * this should never be called and will perform a no-op and warn if it is called regardless.
+ *
+ * This is a workaround to fix https://github.com/open-telemetry/opentelemetry-js/issues/4373 until the instrumentation
+ * package can be made node-only.
+ *
+ * @param path input path
+ * @return unmodified path
+ * @internal
+ */
+function normalize(path) {
+    api_1.diag.warn('Path normalization is not implemented for this platform. To silence this warning, ensure no node-specific instrumentations are loaded, and node-specific types (e.g. InstrumentationNodeModuleFile), are not used in a browser context)');
+    return path;
+}
+exports.normalize = normalize;
+
+},{"@opentelemetry/api":34}],163:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isWrapped = exports.safeExecuteInTheMiddleAsync = exports.safeExecuteInTheMiddle = void 0;
+/**
+ * function to execute patched function and being able to catch errors
+ * @param execute - function to be executed
+ * @param onFinish - callback to run when execute finishes
+ */
+function safeExecuteInTheMiddle(execute, onFinish, preventThrowingError) {
+    let error;
+    let result;
+    try {
+        result = execute();
+    }
+    catch (e) {
+        error = e;
+    }
+    finally {
+        onFinish(error, result);
+        if (error && !preventThrowingError) {
+            // eslint-disable-next-line no-unsafe-finally
+            throw error;
+        }
+        // eslint-disable-next-line no-unsafe-finally
+        return result;
+    }
+}
+exports.safeExecuteInTheMiddle = safeExecuteInTheMiddle;
+/**
+ * Async function to execute patched function and being able to catch errors
+ * @param execute - function to be executed
+ * @param onFinish - callback to run when execute finishes
+ */
+async function safeExecuteInTheMiddleAsync(execute, onFinish, preventThrowingError) {
+    let error;
+    let result;
+    try {
+        result = await execute();
+    }
+    catch (e) {
+        error = e;
+    }
+    finally {
+        onFinish(error, result);
+        if (error && !preventThrowingError) {
+            // eslint-disable-next-line no-unsafe-finally
+            throw error;
+        }
+        // eslint-disable-next-line no-unsafe-finally
+        return result;
+    }
+}
+exports.safeExecuteInTheMiddleAsync = safeExecuteInTheMiddleAsync;
+/**
+ * Checks if certain function has been already wrapped
+ * @param func
+ */
+function isWrapped(func) {
+    return (typeof func === 'function' &&
+        typeof func.__original === 'function' &&
+        typeof func.__unwrap === 'function' &&
+        func.__wrapped === true);
+}
+exports.isWrapped = isWrapped;
+
+},{}],164:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AttributeNames = void 0;
+/**
+ * https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/http.md
+ */
+var AttributeNames;
+(function (AttributeNames) {
+    AttributeNames["HTTP_STATUS_TEXT"] = "http.status_text";
+})(AttributeNames = exports.AttributeNames || (exports.AttributeNames = {}));
+
+},{}],165:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EventNames = void 0;
+var EventNames;
+(function (EventNames) {
+    EventNames["METHOD_OPEN"] = "open";
+    EventNames["METHOD_SEND"] = "send";
+    EventNames["EVENT_ABORT"] = "abort";
+    EventNames["EVENT_ERROR"] = "error";
+    EventNames["EVENT_LOAD"] = "loaded";
+    EventNames["EVENT_TIMEOUT"] = "timeout";
+})(EventNames = exports.EventNames || (exports.EventNames = {}));
+
+},{}],166:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./xhr"), exports);
+
+},{"./xhr":168}],167:[function(require,module,exports){
+arguments[4][128][0].apply(exports,arguments)
+},{"dup":128}],168:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.XMLHttpRequestInstrumentation = void 0;
+const api = require("@opentelemetry/api");
+const instrumentation_1 = require("@opentelemetry/instrumentation");
+const core_1 = require("@opentelemetry/core");
+const semantic_conventions_1 = require("@opentelemetry/semantic-conventions");
+const sdk_trace_web_1 = require("@opentelemetry/sdk-trace-web");
+const EventNames_1 = require("./enums/EventNames");
+const version_1 = require("./version");
+const AttributeNames_1 = require("./enums/AttributeNames");
+// how long to wait for observer to collect information about resources
+// this is needed as event "load" is called before observer
+// hard to say how long it should really wait, seems like 300ms is
+// safe enough
+const OBSERVER_WAIT_TIME_MS = 300;
+/**
+ * This class represents a XMLHttpRequest plugin for auto instrumentation
+ */
+class XMLHttpRequestInstrumentation extends instrumentation_1.InstrumentationBase {
+    constructor(config = {}) {
+        super('@opentelemetry/instrumentation-xml-http-request', version_1.VERSION, config);
+        this.component = 'xml-http-request';
+        this.version = version_1.VERSION;
+        this.moduleName = this.component;
+        this._tasksCount = 0;
+        this._xhrMem = new WeakMap();
+        this._usedResources = new WeakSet();
+    }
+    init() { }
+    /**
+     * Adds custom headers to XMLHttpRequest
+     * @param xhr
+     * @param spanUrl
+     * @private
+     */
+    _addHeaders(xhr, spanUrl) {
+        const url = (0, sdk_trace_web_1.parseUrl)(spanUrl).href;
+        if (!(0, sdk_trace_web_1.shouldPropagateTraceHeaders)(url, this.getConfig().propagateTraceHeaderCorsUrls)) {
+            const headers = {};
+            api.propagation.inject(api.context.active(), headers);
+            if (Object.keys(headers).length > 0) {
+                this._diag.debug('headers inject skipped due to CORS policy');
+            }
+            return;
+        }
+        const headers = {};
+        api.propagation.inject(api.context.active(), headers);
+        Object.keys(headers).forEach(key => {
+            xhr.setRequestHeader(key, String(headers[key]));
+        });
+    }
+    /**
+     * Add cors pre flight child span
+     * @param span
+     * @param corsPreFlightRequest
+     * @private
+     */
+    _addChildSpan(span, corsPreFlightRequest) {
+        api.context.with(api.trace.setSpan(api.context.active(), span), () => {
+            const childSpan = this.tracer.startSpan('CORS Preflight', {
+                startTime: corsPreFlightRequest[sdk_trace_web_1.PerformanceTimingNames.FETCH_START],
+            });
+            if (!this.getConfig().ignoreNetworkEvents) {
+                (0, sdk_trace_web_1.addSpanNetworkEvents)(childSpan, corsPreFlightRequest);
+            }
+            childSpan.end(corsPreFlightRequest[sdk_trace_web_1.PerformanceTimingNames.RESPONSE_END]);
+        });
+    }
+    /**
+     * Add attributes when span is going to end
+     * @param span
+     * @param xhr
+     * @param spanUrl
+     * @private
+     */
+    _addFinalSpanAttributes(span, xhrMem, spanUrl) {
+        if (typeof spanUrl === 'string') {
+            const parsedUrl = (0, sdk_trace_web_1.parseUrl)(spanUrl);
+            if (xhrMem.status !== undefined) {
+                span.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_STATUS_CODE, xhrMem.status);
+            }
+            if (xhrMem.statusText !== undefined) {
+                span.setAttribute(AttributeNames_1.AttributeNames.HTTP_STATUS_TEXT, xhrMem.statusText);
+            }
+            span.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_HOST, parsedUrl.host);
+            span.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_SCHEME, parsedUrl.protocol.replace(':', ''));
+            // @TODO do we want to collect this or it will be collected earlier once only or
+            //    maybe when parent span is not available ?
+            span.setAttribute(semantic_conventions_1.SEMATTRS_HTTP_USER_AGENT, navigator.userAgent);
+        }
+    }
+    _applyAttributesAfterXHR(span, xhr) {
+        const applyCustomAttributesOnSpan = this.getConfig().applyCustomAttributesOnSpan;
+        if (typeof applyCustomAttributesOnSpan === 'function') {
+            (0, instrumentation_1.safeExecuteInTheMiddle)(() => applyCustomAttributesOnSpan(span, xhr), error => {
+                if (!error) {
+                    return;
+                }
+                this._diag.error('applyCustomAttributesOnSpan', error);
+            }, true);
+        }
+    }
+    /**
+     * will collect information about all resources created
+     * between "send" and "end" with additional waiting for main resource
+     * @param xhr
+     * @param spanUrl
+     * @private
+     */
+    _addResourceObserver(xhr, spanUrl) {
+        const xhrMem = this._xhrMem.get(xhr);
+        if (!xhrMem ||
+            typeof PerformanceObserver !== 'function' ||
+            typeof PerformanceResourceTiming !== 'function') {
+            return;
+        }
+        xhrMem.createdResources = {
+            observer: new PerformanceObserver(list => {
+                const entries = list.getEntries();
+                const parsedUrl = (0, sdk_trace_web_1.parseUrl)(spanUrl);
+                entries.forEach(entry => {
+                    if (entry.initiatorType === 'xmlhttprequest' &&
+                        entry.name === parsedUrl.href) {
+                        if (xhrMem.createdResources) {
+                            xhrMem.createdResources.entries.push(entry);
+                        }
+                    }
+                });
+            }),
+            entries: [],
+        };
+        xhrMem.createdResources.observer.observe({
+            entryTypes: ['resource'],
+        });
+    }
+    /**
+     * Clears the resource timings and all resources assigned with spans
+     *     when {@link XMLHttpRequestInstrumentationConfig.clearTimingResources} is
+     *     set to true (default false)
+     * @private
+     */
+    _clearResources() {
+        if (this._tasksCount === 0 && this.getConfig().clearTimingResources) {
+            core_1.otperformance.clearResourceTimings();
+            this._xhrMem = new WeakMap();
+            this._usedResources = new WeakSet();
+        }
+    }
+    /**
+     * Finds appropriate resource and add network events to the span
+     * @param span
+     */
+    _findResourceAndAddNetworkEvents(xhrMem, span, spanUrl, startTime, endTime) {
+        if (!spanUrl || !startTime || !endTime || !xhrMem.createdResources) {
+            return;
+        }
+        let resources = xhrMem.createdResources.entries;
+        if (!resources || !resources.length) {
+            // fallback - either Observer is not available or it took longer
+            // then OBSERVER_WAIT_TIME_MS and observer didn't collect enough
+            // information
+            // ts thinks this is the perf_hooks module, but it is the browser performance api
+            resources = core_1.otperformance.getEntriesByType('resource');
+        }
+        const resource = (0, sdk_trace_web_1.getResource)((0, sdk_trace_web_1.parseUrl)(spanUrl).href, startTime, endTime, resources, this._usedResources);
+        if (resource.mainRequest) {
+            const mainRequest = resource.mainRequest;
+            this._markResourceAsUsed(mainRequest);
+            const corsPreFlightRequest = resource.corsPreFlightRequest;
+            if (corsPreFlightRequest) {
+                this._addChildSpan(span, corsPreFlightRequest);
+                this._markResourceAsUsed(corsPreFlightRequest);
+            }
+            if (!this.getConfig().ignoreNetworkEvents) {
+                (0, sdk_trace_web_1.addSpanNetworkEvents)(span, mainRequest);
+            }
+        }
+    }
+    /**
+     * Removes the previous information about span.
+     * This might happened when the same xhr is used again.
+     * @param xhr
+     * @private
+     */
+    _cleanPreviousSpanInformation(xhr) {
+        const xhrMem = this._xhrMem.get(xhr);
+        if (xhrMem) {
+            const callbackToRemoveEvents = xhrMem.callbackToRemoveEvents;
+            if (callbackToRemoveEvents) {
+                callbackToRemoveEvents();
+            }
+            this._xhrMem.delete(xhr);
+        }
+    }
+    /**
+     * Creates a new span when method "open" is called
+     * @param xhr
+     * @param url
+     * @param method
+     * @private
+     */
+    _createSpan(xhr, url, method) {
+        if ((0, core_1.isUrlIgnored)(url, this.getConfig().ignoreUrls)) {
+            this._diag.debug('ignoring span as url matches ignored url');
+            return;
+        }
+        const spanName = method.toUpperCase();
+        const currentSpan = this.tracer.startSpan(spanName, {
+            kind: api.SpanKind.CLIENT,
+            attributes: {
+                [semantic_conventions_1.SEMATTRS_HTTP_METHOD]: method,
+                [semantic_conventions_1.SEMATTRS_HTTP_URL]: (0, sdk_trace_web_1.parseUrl)(url).toString(),
+            },
+        });
+        currentSpan.addEvent(EventNames_1.EventNames.METHOD_OPEN);
+        this._cleanPreviousSpanInformation(xhr);
+        this._xhrMem.set(xhr, {
+            span: currentSpan,
+            spanUrl: url,
+        });
+        return currentSpan;
+    }
+    /**
+     * Marks certain [resource]{@link PerformanceResourceTiming} when information
+     * from this is used to add events to span.
+     * This is done to avoid reusing the same resource again for next span
+     * @param resource
+     * @private
+     */
+    _markResourceAsUsed(resource) {
+        this._usedResources.add(resource);
+    }
+    /**
+     * Patches the method open
+     * @private
+     */
+    _patchOpen() {
+        return (original) => {
+            const plugin = this;
+            return function patchOpen(...args) {
+                const method = args[0];
+                const url = args[1];
+                plugin._createSpan(this, url, method);
+                return original.apply(this, args);
+            };
+        };
+    }
+    /**
+     * Patches the method send
+     * @private
+     */
+    _patchSend() {
+        const plugin = this;
+        function endSpanTimeout(eventName, xhrMem, performanceEndTime, endTime) {
+            const callbackToRemoveEvents = xhrMem.callbackToRemoveEvents;
+            if (typeof callbackToRemoveEvents === 'function') {
+                callbackToRemoveEvents();
+            }
+            const { span, spanUrl, sendStartTime } = xhrMem;
+            if (span) {
+                plugin._findResourceAndAddNetworkEvents(xhrMem, span, spanUrl, sendStartTime, performanceEndTime);
+                span.addEvent(eventName, endTime);
+                plugin._addFinalSpanAttributes(span, xhrMem, spanUrl);
+                span.end(endTime);
+                plugin._tasksCount--;
+            }
+            plugin._clearResources();
+        }
+        function endSpan(eventName, xhr) {
+            const xhrMem = plugin._xhrMem.get(xhr);
+            if (!xhrMem) {
+                return;
+            }
+            xhrMem.status = xhr.status;
+            xhrMem.statusText = xhr.statusText;
+            plugin._xhrMem.delete(xhr);
+            if (xhrMem.span) {
+                plugin._applyAttributesAfterXHR(xhrMem.span, xhr);
+            }
+            const performanceEndTime = (0, core_1.hrTime)();
+            const endTime = Date.now();
+            // the timeout is needed as observer doesn't have yet information
+            // when event "load" is called. Also the time may differ depends on
+            // browser and speed of computer
+            setTimeout(() => {
+                endSpanTimeout(eventName, xhrMem, performanceEndTime, endTime);
+            }, OBSERVER_WAIT_TIME_MS);
+        }
+        function onError() {
+            endSpan(EventNames_1.EventNames.EVENT_ERROR, this);
+        }
+        function onAbort() {
+            endSpan(EventNames_1.EventNames.EVENT_ABORT, this);
+        }
+        function onTimeout() {
+            endSpan(EventNames_1.EventNames.EVENT_TIMEOUT, this);
+        }
+        function onLoad() {
+            if (this.status < 299) {
+                endSpan(EventNames_1.EventNames.EVENT_LOAD, this);
+            }
+            else {
+                endSpan(EventNames_1.EventNames.EVENT_ERROR, this);
+            }
+        }
+        function unregister(xhr) {
+            xhr.removeEventListener('abort', onAbort);
+            xhr.removeEventListener('error', onError);
+            xhr.removeEventListener('load', onLoad);
+            xhr.removeEventListener('timeout', onTimeout);
+            const xhrMem = plugin._xhrMem.get(xhr);
+            if (xhrMem) {
+                xhrMem.callbackToRemoveEvents = undefined;
+            }
+        }
+        return (original) => {
+            return function patchSend(...args) {
+                const xhrMem = plugin._xhrMem.get(this);
+                if (!xhrMem) {
+                    return original.apply(this, args);
+                }
+                const currentSpan = xhrMem.span;
+                const spanUrl = xhrMem.spanUrl;
+                if (currentSpan && spanUrl) {
+                    api.context.with(api.trace.setSpan(api.context.active(), currentSpan), () => {
+                        plugin._tasksCount++;
+                        xhrMem.sendStartTime = (0, core_1.hrTime)();
+                        currentSpan.addEvent(EventNames_1.EventNames.METHOD_SEND);
+                        this.addEventListener('abort', onAbort);
+                        this.addEventListener('error', onError);
+                        this.addEventListener('load', onLoad);
+                        this.addEventListener('timeout', onTimeout);
+                        xhrMem.callbackToRemoveEvents = () => {
+                            unregister(this);
+                            if (xhrMem.createdResources) {
+                                xhrMem.createdResources.observer.disconnect();
+                            }
+                        };
+                        plugin._addHeaders(this, spanUrl);
+                        plugin._addResourceObserver(this, spanUrl);
+                    });
+                }
+                return original.apply(this, args);
+            };
+        };
+    }
+    /**
+     * implements enable function
+     */
+    enable() {
+        this._diag.debug('applying patch to', this.moduleName, this.version);
+        if ((0, instrumentation_1.isWrapped)(XMLHttpRequest.prototype.open)) {
+            this._unwrap(XMLHttpRequest.prototype, 'open');
+            this._diag.debug('removing previous patch from method open');
+        }
+        if ((0, instrumentation_1.isWrapped)(XMLHttpRequest.prototype.send)) {
+            this._unwrap(XMLHttpRequest.prototype, 'send');
+            this._diag.debug('removing previous patch from method send');
+        }
+        this._wrap(XMLHttpRequest.prototype, 'open', this._patchOpen());
+        this._wrap(XMLHttpRequest.prototype, 'send', this._patchSend());
+    }
+    /**
+     * implements disable function
+     */
+    disable() {
+        this._diag.debug('removing patch from', this.moduleName, this.version);
+        this._unwrap(XMLHttpRequest.prototype, 'open');
+        this._unwrap(XMLHttpRequest.prototype, 'send');
+        this._tasksCount = 0;
+        this._xhrMem = new WeakMap();
+        this._usedResources = new WeakSet();
+    }
+}
+exports.XMLHttpRequestInstrumentation = XMLHttpRequestInstrumentation;
+
+},{"./enums/AttributeNames":164,"./enums/EventNames":165,"./version":167,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/instrumentation":183,"@opentelemetry/sdk-trace-web":172,"@opentelemetry/semantic-conventions":175}],169:[function(require,module,exports){
+arguments[4][129][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":129}],170:[function(require,module,exports){
+arguments[4][130][0].apply(exports,arguments)
+},{"./StackContextManager":169,"@opentelemetry/sdk-trace-base":407,"dup":130}],171:[function(require,module,exports){
+arguments[4][131][0].apply(exports,arguments)
+},{"dup":131}],172:[function(require,module,exports){
+arguments[4][132][0].apply(exports,arguments)
+},{"./StackContextManager":169,"./WebTracerProvider":170,"./enums/PerformanceTimingNames":171,"./types":173,"./utils":174,"@opentelemetry/sdk-trace-base":407,"dup":132}],173:[function(require,module,exports){
+arguments[4][133][0].apply(exports,arguments)
+},{"./enums/PerformanceTimingNames":171,"dup":133}],174:[function(require,module,exports){
+arguments[4][134][0].apply(exports,arguments)
+},{"./enums/PerformanceTimingNames":171,"@opentelemetry/core":74,"@opentelemetry/semantic-conventions":175,"dup":134}],175:[function(require,module,exports){
+arguments[4][105][0].apply(exports,arguments)
+},{"./resource":178,"./trace":180,"dup":105}],176:[function(require,module,exports){
+arguments[4][106][0].apply(exports,arguments)
+},{"dup":106}],177:[function(require,module,exports){
+arguments[4][107][0].apply(exports,arguments)
+},{"../internal/utils":176,"dup":107}],178:[function(require,module,exports){
+arguments[4][108][0].apply(exports,arguments)
+},{"./SemanticResourceAttributes":177,"dup":108}],179:[function(require,module,exports){
+arguments[4][109][0].apply(exports,arguments)
+},{"../internal/utils":176,"dup":109}],180:[function(require,module,exports){
+arguments[4][110][0].apply(exports,arguments)
+},{"./SemanticAttributes":179,"dup":110}],181:[function(require,module,exports){
+arguments[4][154][0].apply(exports,arguments)
+},{"./autoLoaderUtils":182,"@opentelemetry/api":34,"@opentelemetry/api-logs":8,"dup":154}],182:[function(require,module,exports){
+arguments[4][155][0].apply(exports,arguments)
+},{"dup":155}],183:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.InstrumentationNodeModuleFile = exports.InstrumentationNodeModuleDefinition = exports.InstrumentationBase = exports.registerInstrumentations = void 0;
+var autoLoader_1 = require("./autoLoader");
+Object.defineProperty(exports, "registerInstrumentations", { enumerable: true, get: function () { return autoLoader_1.registerInstrumentations; } });
+var index_1 = require("./platform/index");
+Object.defineProperty(exports, "InstrumentationBase", { enumerable: true, get: function () { return index_1.InstrumentationBase; } });
+var instrumentationNodeModuleDefinition_1 = require("./instrumentationNodeModuleDefinition");
+Object.defineProperty(exports, "InstrumentationNodeModuleDefinition", { enumerable: true, get: function () { return instrumentationNodeModuleDefinition_1.InstrumentationNodeModuleDefinition; } });
+var instrumentationNodeModuleFile_1 = require("./instrumentationNodeModuleFile");
+Object.defineProperty(exports, "InstrumentationNodeModuleFile", { enumerable: true, get: function () { return instrumentationNodeModuleFile_1.InstrumentationNodeModuleFile; } });
+__exportStar(require("./types"), exports);
+__exportStar(require("./types_internal"), exports);
+__exportStar(require("./utils"), exports);
+
+},{"./autoLoader":181,"./instrumentationNodeModuleDefinition":185,"./instrumentationNodeModuleFile":186,"./platform/index":187,"./types":190,"./types_internal":191,"./utils":192}],184:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.InstrumentationAbstract = void 0;
+const api_1 = require("@opentelemetry/api");
+const api_logs_1 = require("@opentelemetry/api-logs");
+const shimmer = require("shimmer");
+/**
+ * Base abstract internal class for instrumenting node and web plugins
+ */
+class InstrumentationAbstract {
+    constructor(instrumentationName, instrumentationVersion, config) {
+        this.instrumentationName = instrumentationName;
+        this.instrumentationVersion = instrumentationVersion;
+        /* Api to wrap instrumented method */
+        this._wrap = shimmer.wrap;
+        /* Api to unwrap instrumented methods */
+        this._unwrap = shimmer.unwrap;
+        /* Api to mass wrap instrumented method */
+        this._massWrap = shimmer.massWrap;
+        /* Api to mass unwrap instrumented methods */
+        this._massUnwrap = shimmer.massUnwrap;
+        // copy config first level properties to ensure they are immutable.
+        // nested properties are not copied, thus are mutable from the outside.
+        this._config = Object.assign({ enabled: true }, config);
+        this._diag = api_1.diag.createComponentLogger({
+            namespace: instrumentationName,
+        });
+        this._tracer = api_1.trace.getTracer(instrumentationName, instrumentationVersion);
+        this._meter = api_1.metrics.getMeter(instrumentationName, instrumentationVersion);
+        this._logger = api_logs_1.logs.getLogger(instrumentationName, instrumentationVersion);
+        this._updateMetricInstruments();
+    }
+    /* Returns meter */
+    get meter() {
+        return this._meter;
+    }
+    /**
+     * Sets MeterProvider to this plugin
+     * @param meterProvider
+     */
+    setMeterProvider(meterProvider) {
+        this._meter = meterProvider.getMeter(this.instrumentationName, this.instrumentationVersion);
+        this._updateMetricInstruments();
+    }
+    /* Returns logger */
+    get logger() {
+        return this._logger;
+    }
+    /**
+     * Sets LoggerProvider to this plugin
+     * @param loggerProvider
+     */
+    setLoggerProvider(loggerProvider) {
+        this._logger = loggerProvider.getLogger(this.instrumentationName, this.instrumentationVersion);
+    }
+    /**
+     * @experimental
+     *
+     * Get module definitions defined by {@link init}.
+     * This can be used for experimental compile-time instrumentation.
+     *
+     * @returns an array of {@link InstrumentationModuleDefinition}
+     */
+    getModuleDefinitions() {
+        var _a;
+        const initResult = (_a = this.init()) !== null && _a !== void 0 ? _a : [];
+        if (!Array.isArray(initResult)) {
+            return [initResult];
+        }
+        return initResult;
+    }
+    /**
+     * Sets the new metric instruments with the current Meter.
+     */
+    _updateMetricInstruments() {
+        return;
+    }
+    /* Returns InstrumentationConfig */
+    getConfig() {
+        return this._config;
+    }
+    /**
+     * Sets InstrumentationConfig to this plugin
+     * @param InstrumentationConfig
+     */
+    setConfig(config) {
+        // copy config first level properties to ensure they are immutable.
+        // nested properties are not copied, thus are mutable from the outside.
+        this._config = Object.assign({}, config);
+    }
+    /**
+     * Sets TraceProvider to this plugin
+     * @param tracerProvider
+     */
+    setTracerProvider(tracerProvider) {
+        this._tracer = tracerProvider.getTracer(this.instrumentationName, this.instrumentationVersion);
+    }
+    /* Returns tracer */
+    get tracer() {
+        return this._tracer;
+    }
+    /**
+     * Execute span customization hook, if configured, and log any errors.
+     * Any semantics of the trigger and info are defined by the specific instrumentation.
+     * @param hookHandler The optional hook handler which the user has configured via instrumentation config
+     * @param triggerName The name of the trigger for executing the hook for logging purposes
+     * @param span The span to which the hook should be applied
+     * @param info The info object to be passed to the hook, with useful data the hook may use
+     */
+    _runSpanCustomizationHook(hookHandler, triggerName, span, info) {
+        if (!hookHandler) {
+            return;
+        }
+        try {
+            hookHandler(span, info);
+        }
+        catch (e) {
+            this._diag.error(`Error running span customization hook due to exception in handler`, { triggerName }, e);
+        }
+    }
+}
+exports.InstrumentationAbstract = InstrumentationAbstract;
+
+},{"@opentelemetry/api":34,"@opentelemetry/api-logs":8,"shimmer":536}],185:[function(require,module,exports){
+arguments[4][158][0].apply(exports,arguments)
+},{"dup":158}],186:[function(require,module,exports){
+arguments[4][159][0].apply(exports,arguments)
+},{"./platform/index":187,"dup":159}],187:[function(require,module,exports){
+arguments[4][160][0].apply(exports,arguments)
+},{"./instrumentation":188,"./noop-normalize":189,"dup":160}],188:[function(require,module,exports){
+arguments[4][161][0].apply(exports,arguments)
+},{"../../instrumentation":184,"dup":161}],189:[function(require,module,exports){
+arguments[4][162][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":162}],190:[function(require,module,exports){
+arguments[4][73][0].apply(exports,arguments)
+},{"dup":73}],191:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+
+},{}],192:[function(require,module,exports){
+arguments[4][163][0].apply(exports,arguments)
+},{"dup":163}],193:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -5892,7 +12407,7 @@ class OTLPExporterBase {
 }
 exports.OTLPExporterBase = OTLPExporterBase;
 
-},{"./util":115,"@opentelemetry/api":34,"@opentelemetry/core":74}],110:[function(require,module,exports){
+},{"./util":199,"@opentelemetry/api":34,"@opentelemetry/core":74}],194:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -5933,7 +12448,7 @@ Object.defineProperty(exports, "appendRootPathToUrlIfNeeded", { enumerable: true
 Object.defineProperty(exports, "configureExporterTimeout", { enumerable: true, get: function () { return util_1.configureExporterTimeout; } });
 Object.defineProperty(exports, "invalidTimeout", { enumerable: true, get: function () { return util_1.invalidTimeout; } });
 
-},{"./OTLPExporterBase":109,"./platform":112,"./types":114,"./util":115}],111:[function(require,module,exports){
+},{"./OTLPExporterBase":193,"./platform":196,"./types":198,"./util":199}],195:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -6007,7 +12522,7 @@ class OTLPExporterBrowserBase extends OTLPExporterBase_1.OTLPExporterBase {
 }
 exports.OTLPExporterBrowserBase = OTLPExporterBrowserBase;
 
-},{"../../OTLPExporterBase":109,"../../util":115,"./util":113,"@opentelemetry/api":34,"@opentelemetry/core":74}],112:[function(require,module,exports){
+},{"../../OTLPExporterBase":193,"../../util":199,"./util":197,"@opentelemetry/api":34,"@opentelemetry/core":74}],196:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -6031,7 +12546,7 @@ Object.defineProperty(exports, "OTLPExporterBrowserBase", { enumerable: true, ge
 var util_1 = require("./util");
 Object.defineProperty(exports, "sendWithXhr", { enumerable: true, get: function () { return util_1.sendWithXhr; } });
 
-},{"./OTLPExporterBrowserBase":111,"./util":113}],113:[function(require,module,exports){
+},{"./OTLPExporterBrowserBase":195,"./util":197}],197:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendWithXhr = exports.sendWithBeacon = void 0;
@@ -6159,7 +12674,7 @@ function sendWithXhr(body, url, headers, exporterTimeout, onSuccess, onError) {
 }
 exports.sendWithXhr = sendWithXhr;
 
-},{"../../types":114,"../../util":115,"@opentelemetry/api":34}],114:[function(require,module,exports){
+},{"../../types":198,"../../util":199,"@opentelemetry/api":34}],198:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -6191,7 +12706,7 @@ class OTLPExporterError extends Error {
 }
 exports.OTLPExporterError = OTLPExporterError;
 
-},{}],115:[function(require,module,exports){
+},{}],199:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -6323,7 +12838,7 @@ function parseRetryAfterToMills(retryAfter) {
 }
 exports.parseRetryAfterToMills = parseRetryAfterToMills;
 
-},{"@opentelemetry/api":34,"@opentelemetry/core":74}],116:[function(require,module,exports){
+},{"@opentelemetry/api":34,"@opentelemetry/core":74}],200:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -6393,7 +12908,7 @@ function getOtlpEncoder(options) {
 }
 exports.getOtlpEncoder = getOtlpEncoder;
 
-},{"@opentelemetry/core":74}],117:[function(require,module,exports){
+},{"@opentelemetry/core":74}],201:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toAnyValue = exports.toKeyValue = exports.toAttributes = exports.createInstrumentationScope = void 0;
@@ -6440,7 +12955,7 @@ function toAnyValue(value) {
 }
 exports.toAnyValue = toAnyValue;
 
-},{}],118:[function(require,module,exports){
+},{}],202:[function(require,module,exports){
 /*eslint-disable block-scoped-var, id-length, no-control-regex, no-magic-numbers, no-prototype-builtins, no-redeclare, no-shadow, no-var, sort-vars*/
 "use strict";
 var $protobuf = require("protobufjs/minimal");
@@ -19193,7 +25708,7 @@ $root.opentelemetry = (function () {
 })();
 module.exports = $root;
 
-},{"protobufjs/minimal":225}],119:[function(require,module,exports){
+},{"protobufjs/minimal":525}],203:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -19235,7 +25750,7 @@ Object.defineProperty(exports, "JsonTraceSerializer", { enumerable: true, get: f
 Object.defineProperty(exports, "JsonLogsSerializer", { enumerable: true, get: function () { return serializers_2.JsonLogsSerializer; } });
 Object.defineProperty(exports, "JsonMetricsSerializer", { enumerable: true, get: function () { return serializers_2.JsonMetricsSerializer; } });
 
-},{"./common":116,"./json/serializers":120,"./logs":121,"./metrics":122,"./protobuf/serializers":124,"./trace":126,"./trace/types":128}],120:[function(require,module,exports){
+},{"./common":200,"./json/serializers":204,"./logs":205,"./metrics":206,"./protobuf/serializers":208,"./trace":210,"./trace/types":212}],204:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JsonLogsSerializer = exports.JsonMetricsSerializer = exports.JsonTraceSerializer = void 0;
@@ -19284,7 +25799,7 @@ exports.JsonLogsSerializer = {
     },
 };
 
-},{"../logs":121,"../metrics":122,"../trace":126}],121:[function(require,module,exports){
+},{"../logs":205,"../metrics":206,"../trace":210}],205:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -19369,7 +25884,7 @@ function toLogAttributes(attributes) {
 }
 exports.toLogAttributes = toLogAttributes;
 
-},{"../common":116,"../common/internal":117,"../resource/internal":125}],122:[function(require,module,exports){
+},{"../common":200,"../common/internal":201,"../resource/internal":209}],206:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createExportMetricsServiceRequest = void 0;
@@ -19381,7 +25896,7 @@ function createExportMetricsServiceRequest(resourceMetrics, options) {
 }
 exports.createExportMetricsServiceRequest = createExportMetricsServiceRequest;
 
-},{"./internal":123}],123:[function(require,module,exports){
+},{"./internal":207}],207:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toMetric = exports.toScopeMetrics = exports.toResourceMetrics = void 0;
@@ -19513,7 +26028,7 @@ function toAggregationTemporality(temporality) {
     }
 }
 
-},{"../common":116,"../common/internal":117,"../resource/internal":125,"@opentelemetry/api":34,"@opentelemetry/sdk-metrics":190}],124:[function(require,module,exports){
+},{"../common":200,"../common/internal":201,"../resource/internal":209,"@opentelemetry/api":34,"@opentelemetry/sdk-metrics":341}],208:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -19576,7 +26091,7 @@ exports.ProtobufTraceSerializer = {
     },
 };
 
-},{"../generated/root":118,"../logs":121,"../metrics":122,"../trace":126}],125:[function(require,module,exports){
+},{"../generated/root":202,"../logs":205,"../metrics":206,"../trace":210}],209:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createResource = void 0;
@@ -19589,7 +26104,7 @@ function createResource(resource) {
 }
 exports.createResource = createResource;
 
-},{"../common/internal":117}],126:[function(require,module,exports){
+},{"../common/internal":201}],210:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createExportTraceServiceRequest = void 0;
@@ -19657,7 +26172,7 @@ function spanRecordsToResourceSpans(readableSpans, encoder) {
     return out;
 }
 
-},{"../common":116,"../common/internal":117,"../resource/internal":125,"./internal":127}],127:[function(require,module,exports){
+},{"../common":200,"../common/internal":201,"../resource/internal":209,"./internal":211}],211:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toOtlpSpanEvent = exports.toOtlpLink = exports.sdkSpanToOtlpSpan = void 0;
@@ -19713,7 +26228,7 @@ function toOtlpSpanEvent(timedEvent, encoder) {
 }
 exports.toOtlpSpanEvent = toOtlpSpanEvent;
 
-},{"../common/internal":117}],128:[function(require,module,exports){
+},{"../common/internal":201}],212:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -19764,7 +26279,7 @@ var ESpanKind;
     ESpanKind[ESpanKind["SPAN_KIND_CONSUMER"] = 5] = "SPAN_KIND_CONSUMER";
 })(ESpanKind = exports.ESpanKind || (exports.ESpanKind = {}));
 
-},{}],129:[function(require,module,exports){
+},{}],213:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -19878,7 +26393,7 @@ class Resource {
 exports.Resource = Resource;
 Resource.EMPTY = new Resource({});
 
-},{"./platform":148,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/semantic-conventions":212}],130:[function(require,module,exports){
+},{"./platform":232,"@opentelemetry/api":34,"@opentelemetry/core":244,"@opentelemetry/semantic-conventions":510}],214:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -19986,7 +26501,7 @@ const logResources = (resources) => {
     });
 };
 
-},{"./Resource":129,"./utils":149,"@opentelemetry/api":34}],131:[function(require,module,exports){
+},{"./Resource":213,"./utils":233,"@opentelemetry/api":34}],215:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20016,7 +26531,7 @@ class BrowserDetector {
 }
 exports.browserDetector = new BrowserDetector();
 
-},{"./BrowserDetectorSync":132}],132:[function(require,module,exports){
+},{"./BrowserDetectorSync":216}],216:[function(require,module,exports){
 (function (global){(function (){
 "use strict";
 /*
@@ -20080,7 +26595,7 @@ class BrowserDetectorSync {
 exports.browserDetectorSync = new BrowserDetectorSync();
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../Resource":129,"@opentelemetry/api":34,"@opentelemetry/semantic-conventions":212}],133:[function(require,module,exports){
+},{"../Resource":213,"@opentelemetry/api":34,"@opentelemetry/semantic-conventions":510}],217:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20118,7 +26633,7 @@ class EnvDetector {
 }
 exports.envDetector = new EnvDetector();
 
-},{"./EnvDetectorSync":134}],134:[function(require,module,exports){
+},{"./EnvDetectorSync":218}],218:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20257,7 +26772,7 @@ class EnvDetectorSync {
 }
 exports.envDetectorSync = new EnvDetectorSync();
 
-},{"../Resource":129,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/semantic-conventions":212}],135:[function(require,module,exports){
+},{"../Resource":213,"@opentelemetry/api":34,"@opentelemetry/core":244,"@opentelemetry/semantic-conventions":510}],219:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20285,7 +26800,7 @@ class NoopDetector {
 exports.NoopDetector = NoopDetector;
 exports.noopDetector = new NoopDetector();
 
-},{"./NoopDetectorSync":136}],136:[function(require,module,exports){
+},{"./NoopDetectorSync":220}],220:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20313,7 +26828,7 @@ class NoopDetectorSync {
 exports.NoopDetectorSync = NoopDetectorSync;
 exports.noopDetectorSync = new NoopDetectorSync();
 
-},{"../Resource":129}],137:[function(require,module,exports){
+},{"../Resource":213}],221:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20349,7 +26864,7 @@ Object.defineProperty(exports, "browserDetectorSync", { enumerable: true, get: f
 var EnvDetectorSync_1 = require("./EnvDetectorSync");
 Object.defineProperty(exports, "envDetectorSync", { enumerable: true, get: function () { return EnvDetectorSync_1.envDetectorSync; } });
 
-},{"./BrowserDetector":131,"./BrowserDetectorSync":132,"./EnvDetector":133,"./EnvDetectorSync":134,"./platform":145}],138:[function(require,module,exports){
+},{"./BrowserDetector":215,"./BrowserDetectorSync":216,"./EnvDetector":217,"./EnvDetectorSync":218,"./platform":229}],222:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20371,7 +26886,7 @@ exports.hostDetector = void 0;
 const NoopDetector_1 = require("../../NoopDetector");
 exports.hostDetector = NoopDetector_1.noopDetector;
 
-},{"../../NoopDetector":135}],139:[function(require,module,exports){
+},{"../../NoopDetector":219}],223:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20393,7 +26908,7 @@ exports.hostDetectorSync = void 0;
 const NoopDetectorSync_1 = require("../../NoopDetectorSync");
 exports.hostDetectorSync = NoopDetectorSync_1.noopDetectorSync;
 
-},{"../../NoopDetectorSync":136}],140:[function(require,module,exports){
+},{"../../NoopDetectorSync":220}],224:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20415,7 +26930,7 @@ exports.osDetector = void 0;
 const NoopDetector_1 = require("../../NoopDetector");
 exports.osDetector = NoopDetector_1.noopDetector;
 
-},{"../../NoopDetector":135}],141:[function(require,module,exports){
+},{"../../NoopDetector":219}],225:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20437,7 +26952,7 @@ exports.osDetectorSync = void 0;
 const NoopDetectorSync_1 = require("../../NoopDetectorSync");
 exports.osDetectorSync = NoopDetectorSync_1.noopDetectorSync;
 
-},{"../../NoopDetectorSync":136}],142:[function(require,module,exports){
+},{"../../NoopDetectorSync":220}],226:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20459,7 +26974,7 @@ exports.processDetector = void 0;
 const NoopDetector_1 = require("../../NoopDetector");
 exports.processDetector = NoopDetector_1.noopDetector;
 
-},{"../../NoopDetector":135}],143:[function(require,module,exports){
+},{"../../NoopDetector":219}],227:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20481,7 +26996,7 @@ exports.processDetectorSync = void 0;
 const NoopDetector_1 = require("../../NoopDetector");
 exports.processDetectorSync = NoopDetector_1.noopDetector;
 
-},{"../../NoopDetector":135}],144:[function(require,module,exports){
+},{"../../NoopDetector":219}],228:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20506,7 +27021,7 @@ const NoopDetectorSync_1 = require("../../NoopDetectorSync");
  */
 exports.serviceInstanceIdDetectorSync = NoopDetectorSync_1.noopDetectorSync;
 
-},{"../../NoopDetectorSync":136}],145:[function(require,module,exports){
+},{"../../NoopDetectorSync":220}],229:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20540,7 +27055,7 @@ Object.defineProperty(exports, "processDetectorSync", { enumerable: true, get: f
 var ServiceInstanceIdDetectorSync_1 = require("./ServiceInstanceIdDetectorSync");
 Object.defineProperty(exports, "serviceInstanceIdDetectorSync", { enumerable: true, get: function () { return ServiceInstanceIdDetectorSync_1.serviceInstanceIdDetectorSync; } });
 
-},{"./HostDetector":138,"./HostDetectorSync":139,"./OSDetector":140,"./OSDetectorSync":141,"./ProcessDetector":142,"./ProcessDetectorSync":143,"./ServiceInstanceIdDetectorSync":144}],146:[function(require,module,exports){
+},{"./HostDetector":222,"./HostDetectorSync":223,"./OSDetector":224,"./OSDetectorSync":225,"./ProcessDetector":226,"./ProcessDetectorSync":227,"./ServiceInstanceIdDetectorSync":228}],230:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20579,7 +27094,7 @@ var detect_resources_1 = require("./detect-resources");
 Object.defineProperty(exports, "detectResourcesSync", { enumerable: true, get: function () { return detect_resources_1.detectResourcesSync; } });
 Object.defineProperty(exports, "detectResources", { enumerable: true, get: function () { return detect_resources_1.detectResources; } });
 
-},{"./Resource":129,"./detect-resources":130,"./detectors":137,"./platform":148}],147:[function(require,module,exports){
+},{"./Resource":213,"./detect-resources":214,"./detectors":221,"./platform":232}],231:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20603,7 +27118,7 @@ function defaultServiceName() {
 }
 exports.defaultServiceName = defaultServiceName;
 
-},{}],148:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.defaultServiceName = void 0;
@@ -20625,7 +27140,7 @@ exports.defaultServiceName = void 0;
 var default_service_name_1 = require("./default-service-name");
 Object.defineProperty(exports, "defaultServiceName", { enumerable: true, get: function () { return default_service_name_1.defaultServiceName; } });
 
-},{"./default-service-name":147}],149:[function(require,module,exports){
+},{"./default-service-name":231}],233:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20649,7 +27164,258 @@ const isPromiseLike = (val) => {
 };
 exports.isPromiseLike = isPromiseLike;
 
-},{}],150:[function(require,module,exports){
+},{}],234:[function(require,module,exports){
+arguments[4][63][0].apply(exports,arguments)
+},{"dup":63}],235:[function(require,module,exports){
+arguments[4][64][0].apply(exports,arguments)
+},{"dup":64}],236:[function(require,module,exports){
+arguments[4][65][0].apply(exports,arguments)
+},{"../../trace/suppress-tracing":263,"../constants":235,"../utils":237,"@opentelemetry/api":34,"dup":65}],237:[function(require,module,exports){
+arguments[4][66][0].apply(exports,arguments)
+},{"./constants":235,"@opentelemetry/api":34,"dup":66}],238:[function(require,module,exports){
+arguments[4][67][0].apply(exports,arguments)
+},{"dup":67}],239:[function(require,module,exports){
+arguments[4][68][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":68}],240:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"./logging-error-handler":242,"dup":69}],241:[function(require,module,exports){
+arguments[4][70][0].apply(exports,arguments)
+},{"dup":70}],242:[function(require,module,exports){
+arguments[4][71][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":71}],243:[function(require,module,exports){
+arguments[4][72][0].apply(exports,arguments)
+},{"../platform":251,"dup":72}],244:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DEFAULT_ATTRIBUTE_VALUE_LENGTH_LIMIT = exports.DEFAULT_ATTRIBUTE_COUNT_LIMIT = exports.TraceState = exports.unsuppressTracing = exports.suppressTracing = exports.isTracingSuppressed = exports.TraceIdRatioBasedSampler = exports.ParentBasedSampler = exports.AlwaysOnSampler = exports.AlwaysOffSampler = exports.setRPCMetadata = exports.getRPCMetadata = exports.deleteRPCMetadata = exports.RPCType = exports.parseTraceParent = exports.W3CTraceContextPropagator = exports.TRACE_STATE_HEADER = exports.TRACE_PARENT_HEADER = exports.CompositePropagator = exports.unrefTimer = exports.otperformance = exports.hexToBase64 = exports.getEnvWithoutDefaults = exports.getEnv = exports._globalThis = exports.SDK_INFO = exports.RandomIdGenerator = exports.baggageUtils = exports.ExportResultCode = exports.hexToBinary = exports.timeInputToHrTime = exports.millisToHrTime = exports.isTimeInputHrTime = exports.isTimeInput = exports.hrTimeToTimeStamp = exports.hrTimeToNanoseconds = exports.hrTimeToMilliseconds = exports.hrTimeToMicroseconds = exports.hrTimeDuration = exports.hrTime = exports.getTimeOrigin = exports.addHrTimes = exports.loggingErrorHandler = exports.setGlobalErrorHandler = exports.globalErrorHandler = exports.sanitizeAttributes = exports.isAttributeValue = exports.isAttributeKey = exports.AnchoredClock = exports.W3CBaggagePropagator = void 0;
+exports.internal = exports.VERSION = exports.BindOnceFuture = exports.isWrapped = exports.urlMatches = exports.isUrlIgnored = exports.callWithTimeout = exports.TimeoutError = exports.TracesSamplerValues = exports.merge = exports.parseEnvironment = exports.DEFAULT_SPAN_ATTRIBUTE_PER_LINK_COUNT_LIMIT = exports.DEFAULT_SPAN_ATTRIBUTE_PER_EVENT_COUNT_LIMIT = exports.DEFAULT_ENVIRONMENT = void 0;
+var W3CBaggagePropagator_1 = require("./baggage/propagation/W3CBaggagePropagator");
+Object.defineProperty(exports, "W3CBaggagePropagator", { enumerable: true, get: function () { return W3CBaggagePropagator_1.W3CBaggagePropagator; } });
+var anchored_clock_1 = require("./common/anchored-clock");
+Object.defineProperty(exports, "AnchoredClock", { enumerable: true, get: function () { return anchored_clock_1.AnchoredClock; } });
+var attributes_1 = require("./common/attributes");
+Object.defineProperty(exports, "isAttributeKey", { enumerable: true, get: function () { return attributes_1.isAttributeKey; } });
+Object.defineProperty(exports, "isAttributeValue", { enumerable: true, get: function () { return attributes_1.isAttributeValue; } });
+Object.defineProperty(exports, "sanitizeAttributes", { enumerable: true, get: function () { return attributes_1.sanitizeAttributes; } });
+var global_error_handler_1 = require("./common/global-error-handler");
+Object.defineProperty(exports, "globalErrorHandler", { enumerable: true, get: function () { return global_error_handler_1.globalErrorHandler; } });
+Object.defineProperty(exports, "setGlobalErrorHandler", { enumerable: true, get: function () { return global_error_handler_1.setGlobalErrorHandler; } });
+var logging_error_handler_1 = require("./common/logging-error-handler");
+Object.defineProperty(exports, "loggingErrorHandler", { enumerable: true, get: function () { return logging_error_handler_1.loggingErrorHandler; } });
+var time_1 = require("./common/time");
+Object.defineProperty(exports, "addHrTimes", { enumerable: true, get: function () { return time_1.addHrTimes; } });
+Object.defineProperty(exports, "getTimeOrigin", { enumerable: true, get: function () { return time_1.getTimeOrigin; } });
+Object.defineProperty(exports, "hrTime", { enumerable: true, get: function () { return time_1.hrTime; } });
+Object.defineProperty(exports, "hrTimeDuration", { enumerable: true, get: function () { return time_1.hrTimeDuration; } });
+Object.defineProperty(exports, "hrTimeToMicroseconds", { enumerable: true, get: function () { return time_1.hrTimeToMicroseconds; } });
+Object.defineProperty(exports, "hrTimeToMilliseconds", { enumerable: true, get: function () { return time_1.hrTimeToMilliseconds; } });
+Object.defineProperty(exports, "hrTimeToNanoseconds", { enumerable: true, get: function () { return time_1.hrTimeToNanoseconds; } });
+Object.defineProperty(exports, "hrTimeToTimeStamp", { enumerable: true, get: function () { return time_1.hrTimeToTimeStamp; } });
+Object.defineProperty(exports, "isTimeInput", { enumerable: true, get: function () { return time_1.isTimeInput; } });
+Object.defineProperty(exports, "isTimeInputHrTime", { enumerable: true, get: function () { return time_1.isTimeInputHrTime; } });
+Object.defineProperty(exports, "millisToHrTime", { enumerable: true, get: function () { return time_1.millisToHrTime; } });
+Object.defineProperty(exports, "timeInputToHrTime", { enumerable: true, get: function () { return time_1.timeInputToHrTime; } });
+var hex_to_binary_1 = require("./common/hex-to-binary");
+Object.defineProperty(exports, "hexToBinary", { enumerable: true, get: function () { return hex_to_binary_1.hexToBinary; } });
+var ExportResult_1 = require("./ExportResult");
+Object.defineProperty(exports, "ExportResultCode", { enumerable: true, get: function () { return ExportResult_1.ExportResultCode; } });
+const utils_1 = require("./baggage/utils");
+exports.baggageUtils = {
+    getKeyPairs: utils_1.getKeyPairs,
+    serializeKeyPairs: utils_1.serializeKeyPairs,
+    parseKeyPairsIntoRecord: utils_1.parseKeyPairsIntoRecord,
+    parsePairKeyValue: utils_1.parsePairKeyValue,
+};
+var platform_1 = require("./platform");
+Object.defineProperty(exports, "RandomIdGenerator", { enumerable: true, get: function () { return platform_1.RandomIdGenerator; } });
+Object.defineProperty(exports, "SDK_INFO", { enumerable: true, get: function () { return platform_1.SDK_INFO; } });
+Object.defineProperty(exports, "_globalThis", { enumerable: true, get: function () { return platform_1._globalThis; } });
+Object.defineProperty(exports, "getEnv", { enumerable: true, get: function () { return platform_1.getEnv; } });
+Object.defineProperty(exports, "getEnvWithoutDefaults", { enumerable: true, get: function () { return platform_1.getEnvWithoutDefaults; } });
+Object.defineProperty(exports, "hexToBase64", { enumerable: true, get: function () { return platform_1.hexToBase64; } });
+Object.defineProperty(exports, "otperformance", { enumerable: true, get: function () { return platform_1.otperformance; } });
+Object.defineProperty(exports, "unrefTimer", { enumerable: true, get: function () { return platform_1.unrefTimer; } });
+var composite_1 = require("./propagation/composite");
+Object.defineProperty(exports, "CompositePropagator", { enumerable: true, get: function () { return composite_1.CompositePropagator; } });
+var W3CTraceContextPropagator_1 = require("./trace/W3CTraceContextPropagator");
+Object.defineProperty(exports, "TRACE_PARENT_HEADER", { enumerable: true, get: function () { return W3CTraceContextPropagator_1.TRACE_PARENT_HEADER; } });
+Object.defineProperty(exports, "TRACE_STATE_HEADER", { enumerable: true, get: function () { return W3CTraceContextPropagator_1.TRACE_STATE_HEADER; } });
+Object.defineProperty(exports, "W3CTraceContextPropagator", { enumerable: true, get: function () { return W3CTraceContextPropagator_1.W3CTraceContextPropagator; } });
+Object.defineProperty(exports, "parseTraceParent", { enumerable: true, get: function () { return W3CTraceContextPropagator_1.parseTraceParent; } });
+var rpc_metadata_1 = require("./trace/rpc-metadata");
+Object.defineProperty(exports, "RPCType", { enumerable: true, get: function () { return rpc_metadata_1.RPCType; } });
+Object.defineProperty(exports, "deleteRPCMetadata", { enumerable: true, get: function () { return rpc_metadata_1.deleteRPCMetadata; } });
+Object.defineProperty(exports, "getRPCMetadata", { enumerable: true, get: function () { return rpc_metadata_1.getRPCMetadata; } });
+Object.defineProperty(exports, "setRPCMetadata", { enumerable: true, get: function () { return rpc_metadata_1.setRPCMetadata; } });
+var AlwaysOffSampler_1 = require("./trace/sampler/AlwaysOffSampler");
+Object.defineProperty(exports, "AlwaysOffSampler", { enumerable: true, get: function () { return AlwaysOffSampler_1.AlwaysOffSampler; } });
+var AlwaysOnSampler_1 = require("./trace/sampler/AlwaysOnSampler");
+Object.defineProperty(exports, "AlwaysOnSampler", { enumerable: true, get: function () { return AlwaysOnSampler_1.AlwaysOnSampler; } });
+var ParentBasedSampler_1 = require("./trace/sampler/ParentBasedSampler");
+Object.defineProperty(exports, "ParentBasedSampler", { enumerable: true, get: function () { return ParentBasedSampler_1.ParentBasedSampler; } });
+var TraceIdRatioBasedSampler_1 = require("./trace/sampler/TraceIdRatioBasedSampler");
+Object.defineProperty(exports, "TraceIdRatioBasedSampler", { enumerable: true, get: function () { return TraceIdRatioBasedSampler_1.TraceIdRatioBasedSampler; } });
+var suppress_tracing_1 = require("./trace/suppress-tracing");
+Object.defineProperty(exports, "isTracingSuppressed", { enumerable: true, get: function () { return suppress_tracing_1.isTracingSuppressed; } });
+Object.defineProperty(exports, "suppressTracing", { enumerable: true, get: function () { return suppress_tracing_1.suppressTracing; } });
+Object.defineProperty(exports, "unsuppressTracing", { enumerable: true, get: function () { return suppress_tracing_1.unsuppressTracing; } });
+var TraceState_1 = require("./trace/TraceState");
+Object.defineProperty(exports, "TraceState", { enumerable: true, get: function () { return TraceState_1.TraceState; } });
+var environment_1 = require("./utils/environment");
+Object.defineProperty(exports, "DEFAULT_ATTRIBUTE_COUNT_LIMIT", { enumerable: true, get: function () { return environment_1.DEFAULT_ATTRIBUTE_COUNT_LIMIT; } });
+Object.defineProperty(exports, "DEFAULT_ATTRIBUTE_VALUE_LENGTH_LIMIT", { enumerable: true, get: function () { return environment_1.DEFAULT_ATTRIBUTE_VALUE_LENGTH_LIMIT; } });
+Object.defineProperty(exports, "DEFAULT_ENVIRONMENT", { enumerable: true, get: function () { return environment_1.DEFAULT_ENVIRONMENT; } });
+Object.defineProperty(exports, "DEFAULT_SPAN_ATTRIBUTE_PER_EVENT_COUNT_LIMIT", { enumerable: true, get: function () { return environment_1.DEFAULT_SPAN_ATTRIBUTE_PER_EVENT_COUNT_LIMIT; } });
+Object.defineProperty(exports, "DEFAULT_SPAN_ATTRIBUTE_PER_LINK_COUNT_LIMIT", { enumerable: true, get: function () { return environment_1.DEFAULT_SPAN_ATTRIBUTE_PER_LINK_COUNT_LIMIT; } });
+Object.defineProperty(exports, "parseEnvironment", { enumerable: true, get: function () { return environment_1.parseEnvironment; } });
+var merge_1 = require("./utils/merge");
+Object.defineProperty(exports, "merge", { enumerable: true, get: function () { return merge_1.merge; } });
+var sampling_1 = require("./utils/sampling");
+Object.defineProperty(exports, "TracesSamplerValues", { enumerable: true, get: function () { return sampling_1.TracesSamplerValues; } });
+var timeout_1 = require("./utils/timeout");
+Object.defineProperty(exports, "TimeoutError", { enumerable: true, get: function () { return timeout_1.TimeoutError; } });
+Object.defineProperty(exports, "callWithTimeout", { enumerable: true, get: function () { return timeout_1.callWithTimeout; } });
+var url_1 = require("./utils/url");
+Object.defineProperty(exports, "isUrlIgnored", { enumerable: true, get: function () { return url_1.isUrlIgnored; } });
+Object.defineProperty(exports, "urlMatches", { enumerable: true, get: function () { return url_1.urlMatches; } });
+var wrap_1 = require("./utils/wrap");
+Object.defineProperty(exports, "isWrapped", { enumerable: true, get: function () { return wrap_1.isWrapped; } });
+var callback_1 = require("./utils/callback");
+Object.defineProperty(exports, "BindOnceFuture", { enumerable: true, get: function () { return callback_1.BindOnceFuture; } });
+var version_1 = require("./version");
+Object.defineProperty(exports, "VERSION", { enumerable: true, get: function () { return version_1.VERSION; } });
+const exporter_1 = require("./internal/exporter");
+exports.internal = {
+    _export: exporter_1._export,
+};
+
+},{"./ExportResult":234,"./baggage/propagation/W3CBaggagePropagator":236,"./baggage/utils":237,"./common/anchored-clock":238,"./common/attributes":239,"./common/global-error-handler":240,"./common/hex-to-binary":241,"./common/logging-error-handler":242,"./common/time":243,"./internal/exporter":245,"./platform":251,"./propagation/composite":255,"./trace/TraceState":256,"./trace/W3CTraceContextPropagator":257,"./trace/rpc-metadata":258,"./trace/sampler/AlwaysOffSampler":259,"./trace/sampler/AlwaysOnSampler":260,"./trace/sampler/ParentBasedSampler":261,"./trace/sampler/TraceIdRatioBasedSampler":262,"./trace/suppress-tracing":263,"./utils/callback":264,"./utils/environment":265,"./utils/merge":267,"./utils/sampling":269,"./utils/timeout":270,"./utils/url":271,"./utils/wrap":272,"./version":273}],245:[function(require,module,exports){
+arguments[4][75][0].apply(exports,arguments)
+},{"../trace/suppress-tracing":263,"@opentelemetry/api":34,"dup":75}],246:[function(require,module,exports){
+arguments[4][76][0].apply(exports,arguments)
+},{"dup":76}],247:[function(require,module,exports){
+arguments[4][77][0].apply(exports,arguments)
+},{"dup":77}],248:[function(require,module,exports){
+arguments[4][78][0].apply(exports,arguments)
+},{"../../utils/environment":265,"./globalThis":249,"dup":78}],249:[function(require,module,exports){
+arguments[4][79][0].apply(exports,arguments)
+},{"dup":79}],250:[function(require,module,exports){
+arguments[4][80][0].apply(exports,arguments)
+},{"../../common/hex-to-binary":241,"dup":80}],251:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.unrefTimer = exports.SDK_INFO = exports.otperformance = exports.RandomIdGenerator = exports.hexToBase64 = exports._globalThis = exports.getEnv = exports.getEnvWithoutDefaults = void 0;
+var environment_1 = require("./environment");
+Object.defineProperty(exports, "getEnvWithoutDefaults", { enumerable: true, get: function () { return environment_1.getEnvWithoutDefaults; } });
+Object.defineProperty(exports, "getEnv", { enumerable: true, get: function () { return environment_1.getEnv; } });
+var globalThis_1 = require("./globalThis");
+Object.defineProperty(exports, "_globalThis", { enumerable: true, get: function () { return globalThis_1._globalThis; } });
+var hex_to_base64_1 = require("./hex-to-base64");
+Object.defineProperty(exports, "hexToBase64", { enumerable: true, get: function () { return hex_to_base64_1.hexToBase64; } });
+var RandomIdGenerator_1 = require("./RandomIdGenerator");
+Object.defineProperty(exports, "RandomIdGenerator", { enumerable: true, get: function () { return RandomIdGenerator_1.RandomIdGenerator; } });
+var performance_1 = require("./performance");
+Object.defineProperty(exports, "otperformance", { enumerable: true, get: function () { return performance_1.otperformance; } });
+var sdk_info_1 = require("./sdk-info");
+Object.defineProperty(exports, "SDK_INFO", { enumerable: true, get: function () { return sdk_info_1.SDK_INFO; } });
+var timer_util_1 = require("./timer-util");
+Object.defineProperty(exports, "unrefTimer", { enumerable: true, get: function () { return timer_util_1.unrefTimer; } });
+
+},{"./RandomIdGenerator":247,"./environment":248,"./globalThis":249,"./hex-to-base64":250,"./performance":252,"./sdk-info":253,"./timer-util":254}],252:[function(require,module,exports){
+arguments[4][82][0].apply(exports,arguments)
+},{"dup":82}],253:[function(require,module,exports){
+arguments[4][83][0].apply(exports,arguments)
+},{"../../version":273,"@opentelemetry/semantic-conventions":510,"dup":83}],254:[function(require,module,exports){
+arguments[4][84][0].apply(exports,arguments)
+},{"dup":84}],255:[function(require,module,exports){
+arguments[4][85][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":85}],256:[function(require,module,exports){
+arguments[4][87][0].apply(exports,arguments)
+},{"../internal/validators":246,"dup":87}],257:[function(require,module,exports){
+arguments[4][88][0].apply(exports,arguments)
+},{"./TraceState":256,"./suppress-tracing":263,"@opentelemetry/api":34,"dup":88}],258:[function(require,module,exports){
+arguments[4][89][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":89}],259:[function(require,module,exports){
+arguments[4][90][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":90}],260:[function(require,module,exports){
+arguments[4][91][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":91}],261:[function(require,module,exports){
+arguments[4][92][0].apply(exports,arguments)
+},{"../../common/global-error-handler":240,"./AlwaysOffSampler":259,"./AlwaysOnSampler":260,"@opentelemetry/api":34,"dup":92}],262:[function(require,module,exports){
+arguments[4][93][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":93}],263:[function(require,module,exports){
+arguments[4][94][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":94}],264:[function(require,module,exports){
+arguments[4][95][0].apply(exports,arguments)
+},{"./promise":268,"dup":95}],265:[function(require,module,exports){
+arguments[4][96][0].apply(exports,arguments)
+},{"./sampling":269,"@opentelemetry/api":34,"dup":96}],266:[function(require,module,exports){
+arguments[4][97][0].apply(exports,arguments)
+},{"dup":97}],267:[function(require,module,exports){
+arguments[4][98][0].apply(exports,arguments)
+},{"./lodash.merge":266,"dup":98}],268:[function(require,module,exports){
+arguments[4][99][0].apply(exports,arguments)
+},{"dup":99}],269:[function(require,module,exports){
+arguments[4][100][0].apply(exports,arguments)
+},{"dup":100}],270:[function(require,module,exports){
+arguments[4][101][0].apply(exports,arguments)
+},{"dup":101}],271:[function(require,module,exports){
+arguments[4][102][0].apply(exports,arguments)
+},{"dup":102}],272:[function(require,module,exports){
+arguments[4][103][0].apply(exports,arguments)
+},{"dup":103}],273:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.VERSION = void 0;
+// this is autogenerated file, see scripts/version-update.js
+exports.VERSION = '1.26.0';
+
+},{}],274:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20820,7 +27586,7 @@ class LogRecord {
 }
 exports.LogRecord = LogRecord;
 
-},{"@opentelemetry/api":34,"@opentelemetry/core":74}],151:[function(require,module,exports){
+},{"@opentelemetry/api":34,"@opentelemetry/core":74}],275:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -20868,7 +27634,7 @@ class Logger {
 }
 exports.Logger = Logger;
 
-},{"./LogRecord":150,"@opentelemetry/api":34}],152:[function(require,module,exports){
+},{"./LogRecord":274,"@opentelemetry/api":34}],276:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoggerProvider = exports.DEFAULT_LOGGER_NAME = void 0;
@@ -20970,7 +27736,7 @@ class LoggerProvider {
 }
 exports.LoggerProvider = LoggerProvider;
 
-},{"./Logger":151,"./MultiLogRecordProcessor":153,"./config":154,"./internal/LoggerProviderSharedState":161,"@opentelemetry/api":34,"@opentelemetry/api-logs":8,"@opentelemetry/core":74,"@opentelemetry/resources":146}],153:[function(require,module,exports){
+},{"./Logger":275,"./MultiLogRecordProcessor":277,"./config":278,"./internal/LoggerProviderSharedState":285,"@opentelemetry/api":34,"@opentelemetry/api-logs":8,"@opentelemetry/core":74,"@opentelemetry/resources":305}],277:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21012,7 +27778,7 @@ class MultiLogRecordProcessor {
 }
 exports.MultiLogRecordProcessor = MultiLogRecordProcessor;
 
-},{"@opentelemetry/core":74}],154:[function(require,module,exports){
+},{"@opentelemetry/core":74}],278:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21064,7 +27830,7 @@ function reconfigureLimits(logRecordLimits) {
 }
 exports.reconfigureLimits = reconfigureLimits;
 
-},{"@opentelemetry/core":74}],155:[function(require,module,exports){
+},{"@opentelemetry/core":74}],279:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21210,7 +27976,7 @@ class BatchLogRecordProcessorBase {
 }
 exports.BatchLogRecordProcessorBase = BatchLogRecordProcessorBase;
 
-},{"@opentelemetry/api":34,"@opentelemetry/core":74}],156:[function(require,module,exports){
+},{"@opentelemetry/api":34,"@opentelemetry/core":74}],280:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21285,7 +28051,7 @@ class ConsoleLogRecordExporter {
 }
 exports.ConsoleLogRecordExporter = ConsoleLogRecordExporter;
 
-},{"@opentelemetry/core":74}],157:[function(require,module,exports){
+},{"@opentelemetry/core":74}],281:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21343,7 +28109,7 @@ class InMemoryLogRecordExporter {
 }
 exports.InMemoryLogRecordExporter = InMemoryLogRecordExporter;
 
-},{"@opentelemetry/core":74}],158:[function(require,module,exports){
+},{"@opentelemetry/core":74}],282:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21373,7 +28139,7 @@ class NoopLogRecordProcessor {
 }
 exports.NoopLogRecordProcessor = NoopLogRecordProcessor;
 
-},{}],159:[function(require,module,exports){
+},{}],283:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21444,7 +28210,7 @@ class SimpleLogRecordProcessor {
 }
 exports.SimpleLogRecordProcessor = SimpleLogRecordProcessor;
 
-},{"@opentelemetry/core":74}],160:[function(require,module,exports){
+},{"@opentelemetry/core":74}],284:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21478,7 +28244,7 @@ Object.defineProperty(exports, "InMemoryLogRecordExporter", { enumerable: true, 
 var platform_1 = require("./platform");
 Object.defineProperty(exports, "BatchLogRecordProcessor", { enumerable: true, get: function () { return platform_1.BatchLogRecordProcessor; } });
 
-},{"./LogRecord":150,"./LoggerProvider":152,"./export/ConsoleLogRecordExporter":156,"./export/InMemoryLogRecordExporter":157,"./export/NoopLogRecordProcessor":158,"./export/SimpleLogRecordProcessor":159,"./platform":163}],161:[function(require,module,exports){
+},{"./LogRecord":274,"./LoggerProvider":276,"./export/ConsoleLogRecordExporter":280,"./export/InMemoryLogRecordExporter":281,"./export/NoopLogRecordProcessor":282,"./export/SimpleLogRecordProcessor":283,"./platform":287}],285:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21510,7 +28276,7 @@ class LoggerProviderSharedState {
 }
 exports.LoggerProviderSharedState = LoggerProviderSharedState;
 
-},{"../export/NoopLogRecordProcessor":158}],162:[function(require,module,exports){
+},{"../export/NoopLogRecordProcessor":282}],286:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21566,7 +28332,7 @@ class BatchLogRecordProcessor extends BatchLogRecordProcessorBase_1.BatchLogReco
 }
 exports.BatchLogRecordProcessor = BatchLogRecordProcessor;
 
-},{"../../../export/BatchLogRecordProcessorBase":155}],163:[function(require,module,exports){
+},{"../../../export/BatchLogRecordProcessorBase":279}],287:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21588,7 +28354,61 @@ exports.BatchLogRecordProcessor = void 0;
 var BatchLogRecordProcessor_1 = require("./export/BatchLogRecordProcessor");
 Object.defineProperty(exports, "BatchLogRecordProcessor", { enumerable: true, get: function () { return BatchLogRecordProcessor_1.BatchLogRecordProcessor; } });
 
-},{"./export/BatchLogRecordProcessor":162}],164:[function(require,module,exports){
+},{"./export/BatchLogRecordProcessor":286}],288:[function(require,module,exports){
+arguments[4][213][0].apply(exports,arguments)
+},{"./platform":307,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/semantic-conventions":309,"dup":213}],289:[function(require,module,exports){
+arguments[4][214][0].apply(exports,arguments)
+},{"./Resource":288,"./utils":308,"@opentelemetry/api":34,"dup":214}],290:[function(require,module,exports){
+arguments[4][215][0].apply(exports,arguments)
+},{"./BrowserDetectorSync":291,"dup":215}],291:[function(require,module,exports){
+arguments[4][216][0].apply(exports,arguments)
+},{"../Resource":288,"@opentelemetry/api":34,"@opentelemetry/semantic-conventions":309,"dup":216}],292:[function(require,module,exports){
+arguments[4][217][0].apply(exports,arguments)
+},{"./EnvDetectorSync":293,"dup":217}],293:[function(require,module,exports){
+arguments[4][218][0].apply(exports,arguments)
+},{"../Resource":288,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/semantic-conventions":309,"dup":218}],294:[function(require,module,exports){
+arguments[4][219][0].apply(exports,arguments)
+},{"./NoopDetectorSync":295,"dup":219}],295:[function(require,module,exports){
+arguments[4][220][0].apply(exports,arguments)
+},{"../Resource":288,"dup":220}],296:[function(require,module,exports){
+arguments[4][221][0].apply(exports,arguments)
+},{"./BrowserDetector":290,"./BrowserDetectorSync":291,"./EnvDetector":292,"./EnvDetectorSync":293,"./platform":304,"dup":221}],297:[function(require,module,exports){
+arguments[4][222][0].apply(exports,arguments)
+},{"../../NoopDetector":294,"dup":222}],298:[function(require,module,exports){
+arguments[4][223][0].apply(exports,arguments)
+},{"../../NoopDetectorSync":295,"dup":223}],299:[function(require,module,exports){
+arguments[4][224][0].apply(exports,arguments)
+},{"../../NoopDetector":294,"dup":224}],300:[function(require,module,exports){
+arguments[4][225][0].apply(exports,arguments)
+},{"../../NoopDetectorSync":295,"dup":225}],301:[function(require,module,exports){
+arguments[4][226][0].apply(exports,arguments)
+},{"../../NoopDetector":294,"dup":226}],302:[function(require,module,exports){
+arguments[4][227][0].apply(exports,arguments)
+},{"../../NoopDetector":294,"dup":227}],303:[function(require,module,exports){
+arguments[4][228][0].apply(exports,arguments)
+},{"../../NoopDetectorSync":295,"dup":228}],304:[function(require,module,exports){
+arguments[4][229][0].apply(exports,arguments)
+},{"./HostDetector":297,"./HostDetectorSync":298,"./OSDetector":299,"./OSDetectorSync":300,"./ProcessDetector":301,"./ProcessDetectorSync":302,"./ServiceInstanceIdDetectorSync":303,"dup":229}],305:[function(require,module,exports){
+arguments[4][230][0].apply(exports,arguments)
+},{"./Resource":288,"./detect-resources":289,"./detectors":296,"./platform":307,"dup":230}],306:[function(require,module,exports){
+arguments[4][231][0].apply(exports,arguments)
+},{"dup":231}],307:[function(require,module,exports){
+arguments[4][232][0].apply(exports,arguments)
+},{"./default-service-name":306,"dup":232}],308:[function(require,module,exports){
+arguments[4][233][0].apply(exports,arguments)
+},{"dup":233}],309:[function(require,module,exports){
+arguments[4][105][0].apply(exports,arguments)
+},{"./resource":312,"./trace":314,"dup":105}],310:[function(require,module,exports){
+arguments[4][106][0].apply(exports,arguments)
+},{"dup":106}],311:[function(require,module,exports){
+arguments[4][107][0].apply(exports,arguments)
+},{"../internal/utils":310,"dup":107}],312:[function(require,module,exports){
+arguments[4][108][0].apply(exports,arguments)
+},{"./SemanticResourceAttributes":311,"dup":108}],313:[function(require,module,exports){
+arguments[4][109][0].apply(exports,arguments)
+},{"../internal/utils":310,"dup":109}],314:[function(require,module,exports){
+arguments[4][110][0].apply(exports,arguments)
+},{"./SemanticAttributes":313,"dup":110}],315:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21665,7 +28485,7 @@ function isValidName(name) {
 }
 exports.isValidName = isValidName;
 
-},{"./utils":203,"@opentelemetry/api":34}],165:[function(require,module,exports){
+},{"./utils":354,"@opentelemetry/api":34}],316:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21799,7 +28619,7 @@ function isObservableInstrument(it) {
 }
 exports.isObservableInstrument = isObservableInstrument;
 
-},{"@opentelemetry/api":34,"@opentelemetry/core":74}],166:[function(require,module,exports){
+},{"@opentelemetry/api":34,"@opentelemetry/core":74}],317:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -21898,7 +28718,7 @@ class Meter {
 }
 exports.Meter = Meter;
 
-},{"./InstrumentDescriptor":164,"./Instruments":165}],167:[function(require,module,exports){
+},{"./InstrumentDescriptor":315,"./Instruments":316}],318:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -22007,7 +28827,7 @@ class MeterProvider {
 }
 exports.MeterProvider = MeterProvider;
 
-},{"./state/MeterProviderSharedState":194,"./state/MetricCollector":196,"@opentelemetry/api":34,"@opentelemetry/resources":146}],168:[function(require,module,exports){
+},{"./state/MeterProviderSharedState":345,"./state/MetricCollector":347,"@opentelemetry/api":34,"@opentelemetry/resources":380}],319:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -22101,7 +28921,7 @@ class BatchObservableResultImpl {
 }
 exports.BatchObservableResultImpl = BatchObservableResultImpl;
 
-},{"./Instruments":165,"./state/HashMap":193,"@opentelemetry/api":34}],169:[function(require,module,exports){
+},{"./Instruments":316,"./state/HashMap":344,"@opentelemetry/api":34}],320:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -22141,7 +28961,7 @@ class DropAggregator {
 }
 exports.DropAggregator = DropAggregator;
 
-},{"./types":182}],170:[function(require,module,exports){
+},{"./types":333}],321:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -22608,7 +29428,7 @@ class ExponentialHistogramAggregator {
 }
 exports.ExponentialHistogramAggregator = ExponentialHistogramAggregator;
 
-},{"../InstrumentDescriptor":164,"../export/MetricData":187,"./exponential-histogram/Buckets":174,"./exponential-histogram/mapping/getMapping":177,"./exponential-histogram/util":180,"./types":182,"@opentelemetry/api":34}],171:[function(require,module,exports){
+},{"../InstrumentDescriptor":315,"../export/MetricData":338,"./exponential-histogram/Buckets":325,"./exponential-histogram/mapping/getMapping":328,"./exponential-histogram/util":331,"./types":333,"@opentelemetry/api":34}],322:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -22791,7 +29611,7 @@ class HistogramAggregator {
 }
 exports.HistogramAggregator = HistogramAggregator;
 
-},{"../InstrumentDescriptor":164,"../export/MetricData":187,"../utils":203,"./types":182}],172:[function(require,module,exports){
+},{"../InstrumentDescriptor":315,"../export/MetricData":338,"../utils":354,"./types":333}],323:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -22884,7 +29704,7 @@ class LastValueAggregator {
 }
 exports.LastValueAggregator = LastValueAggregator;
 
-},{"../export/MetricData":187,"./types":182,"@opentelemetry/core":74}],173:[function(require,module,exports){
+},{"../export/MetricData":338,"./types":333,"@opentelemetry/core":74}],324:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -22981,7 +29801,7 @@ class SumAggregator {
 }
 exports.SumAggregator = SumAggregator;
 
-},{"../export/MetricData":187,"./types":182}],174:[function(require,module,exports){
+},{"../export/MetricData":338,"./types":333}],325:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Buckets = void 0;
@@ -23254,7 +30074,7 @@ class BucketsBacking {
     }
 }
 
-},{}],175:[function(require,module,exports){
+},{}],326:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExponentMapping = void 0;
@@ -23344,7 +30164,7 @@ class ExponentMapping {
 }
 exports.ExponentMapping = ExponentMapping;
 
-},{"../util":180,"./ieee754":178,"./types":179}],176:[function(require,module,exports){
+},{"../util":331,"./ieee754":329,"./types":330}],327:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LogarithmMapping = void 0;
@@ -23440,7 +30260,7 @@ class LogarithmMapping {
 }
 exports.LogarithmMapping = LogarithmMapping;
 
-},{"../util":180,"./ieee754":178,"./types":179}],177:[function(require,module,exports){
+},{"../util":331,"./ieee754":329,"./types":330}],328:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getMapping = void 0;
@@ -23486,7 +30306,7 @@ function getMapping(scale) {
 }
 exports.getMapping = getMapping;
 
-},{"./ExponentMapping":175,"./LogarithmMapping":176,"./types":179}],178:[function(require,module,exports){
+},{"./ExponentMapping":326,"./LogarithmMapping":327,"./types":330}],329:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -23581,7 +30401,7 @@ function getSignificand(value) {
 }
 exports.getSignificand = getSignificand;
 
-},{}],179:[function(require,module,exports){
+},{}],330:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MappingError = void 0;
@@ -23604,7 +30424,7 @@ class MappingError extends Error {
 }
 exports.MappingError = MappingError;
 
-},{}],180:[function(require,module,exports){
+},{}],331:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -23668,7 +30488,7 @@ function nextGreaterSquare(v) {
 }
 exports.nextGreaterSquare = nextGreaterSquare;
 
-},{}],181:[function(require,module,exports){
+},{}],332:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -23702,7 +30522,7 @@ __exportStar(require("./ExponentialHistogram"), exports);
 __exportStar(require("./LastValue"), exports);
 __exportStar(require("./Sum"), exports);
 
-},{"./Drop":169,"./ExponentialHistogram":170,"./Histogram":171,"./LastValue":172,"./Sum":173}],182:[function(require,module,exports){
+},{"./Drop":320,"./ExponentialHistogram":321,"./Histogram":322,"./LastValue":323,"./Sum":324}],333:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -23731,7 +30551,7 @@ var AggregatorKind;
     AggregatorKind[AggregatorKind["EXPONENTIAL_HISTOGRAM"] = 4] = "EXPONENTIAL_HISTOGRAM";
 })(AggregatorKind = exports.AggregatorKind || (exports.AggregatorKind = {}));
 
-},{}],183:[function(require,module,exports){
+},{}],334:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -23757,7 +30577,7 @@ exports.DEFAULT_AGGREGATION_SELECTOR = DEFAULT_AGGREGATION_SELECTOR;
 const DEFAULT_AGGREGATION_TEMPORALITY_SELECTOR = _instrumentType => AggregationTemporality_1.AggregationTemporality.CUMULATIVE;
 exports.DEFAULT_AGGREGATION_TEMPORALITY_SELECTOR = DEFAULT_AGGREGATION_TEMPORALITY_SELECTOR;
 
-},{"../view/Aggregation":204,"./AggregationTemporality":184}],184:[function(require,module,exports){
+},{"../view/Aggregation":355,"./AggregationTemporality":335}],335:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -23785,7 +30605,7 @@ var AggregationTemporality;
     AggregationTemporality[AggregationTemporality["CUMULATIVE"] = 1] = "CUMULATIVE";
 })(AggregationTemporality = exports.AggregationTemporality || (exports.AggregationTemporality = {}));
 
-},{}],185:[function(require,module,exports){
+},{}],336:[function(require,module,exports){
 (function (setImmediate){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -23849,7 +30669,7 @@ class ConsoleMetricExporter {
 exports.ConsoleMetricExporter = ConsoleMetricExporter;
 
 }).call(this)}).call(this,require("timers").setImmediate)
-},{"./AggregationSelector":183,"@opentelemetry/core":74,"timers":2}],186:[function(require,module,exports){
+},{"./AggregationSelector":334,"@opentelemetry/core":74,"timers":2}],337:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -23915,7 +30735,7 @@ class InMemoryMetricExporter {
 }
 exports.InMemoryMetricExporter = InMemoryMetricExporter;
 
-},{"@opentelemetry/core":74}],187:[function(require,module,exports){
+},{"@opentelemetry/core":74}],338:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -23963,7 +30783,7 @@ var DataPointType;
     DataPointType[DataPointType["SUM"] = 3] = "SUM";
 })(DataPointType = exports.DataPointType || (exports.DataPointType = {}));
 
-},{}],188:[function(require,module,exports){
+},{}],339:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24112,7 +30932,7 @@ class MetricReader {
 }
 exports.MetricReader = MetricReader;
 
-},{"../utils":203,"./AggregationSelector":183,"@opentelemetry/api":34}],189:[function(require,module,exports){
+},{"../utils":354,"./AggregationSelector":334,"@opentelemetry/api":34}],340:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24220,7 +31040,7 @@ class PeriodicExportingMetricReader extends MetricReader_1.MetricReader {
 }
 exports.PeriodicExportingMetricReader = PeriodicExportingMetricReader;
 
-},{"../utils":203,"./MetricReader":188,"@opentelemetry/api":34,"@opentelemetry/core":74}],190:[function(require,module,exports){
+},{"../utils":354,"./MetricReader":339,"@opentelemetry/api":34,"@opentelemetry/core":74}],341:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24269,7 +31089,7 @@ Object.defineProperty(exports, "View", { enumerable: true, get: function () { re
 var utils_1 = require("./utils");
 Object.defineProperty(exports, "TimeoutError", { enumerable: true, get: function () { return utils_1.TimeoutError; } });
 
-},{"./InstrumentDescriptor":164,"./MeterProvider":167,"./export/AggregationTemporality":184,"./export/ConsoleMetricExporter":185,"./export/InMemoryMetricExporter":186,"./export/MetricData":187,"./export/MetricReader":188,"./export/PeriodicExportingMetricReader":189,"./utils":203,"./view/Aggregation":204,"./view/View":210}],191:[function(require,module,exports){
+},{"./InstrumentDescriptor":315,"./MeterProvider":318,"./export/AggregationTemporality":335,"./export/ConsoleMetricExporter":336,"./export/InMemoryMetricExporter":337,"./export/MetricData":338,"./export/MetricReader":339,"./export/PeriodicExportingMetricReader":340,"./utils":354,"./view/Aggregation":355,"./view/View":361}],342:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24325,7 +31145,7 @@ class AsyncMetricStorage extends MetricStorage_1.MetricStorage {
 }
 exports.AsyncMetricStorage = AsyncMetricStorage;
 
-},{"./DeltaMetricProcessor":192,"./HashMap":193,"./MetricStorage":197,"./TemporalMetricProcessor":202}],192:[function(require,module,exports){
+},{"./DeltaMetricProcessor":343,"./HashMap":344,"./MetricStorage":348,"./TemporalMetricProcessor":353}],343:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24400,7 +31220,7 @@ class DeltaMetricProcessor {
 }
 exports.DeltaMetricProcessor = DeltaMetricProcessor;
 
-},{"./HashMap":193}],193:[function(require,module,exports){
+},{"./HashMap":344}],344:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24483,7 +31303,7 @@ class AttributeHashMap extends HashMap {
 }
 exports.AttributeHashMap = AttributeHashMap;
 
-},{"../utils":203}],194:[function(require,module,exports){
+},{"../utils":354}],345:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24534,7 +31354,7 @@ class MeterProviderSharedState {
 }
 exports.MeterProviderSharedState = MeterProviderSharedState;
 
-},{"../utils":203,"../view/ViewRegistry":211,"./MeterSharedState":195}],195:[function(require,module,exports){
+},{"../utils":354,"../view/ViewRegistry":362,"./MeterSharedState":346}],346:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24651,7 +31471,7 @@ class MeterSharedState {
 }
 exports.MeterSharedState = MeterSharedState;
 
-},{"../InstrumentDescriptor":164,"../Meter":166,"../utils":203,"../view/AttributesProcessor":205,"./AsyncMetricStorage":191,"./MetricStorageRegistry":198,"./MultiWritableMetricStorage":199,"./ObservableRegistry":200,"./SyncMetricStorage":201}],196:[function(require,module,exports){
+},{"../InstrumentDescriptor":315,"../Meter":317,"../utils":354,"../view/AttributesProcessor":356,"./AsyncMetricStorage":342,"./MetricStorageRegistry":349,"./MultiWritableMetricStorage":350,"./ObservableRegistry":351,"./SyncMetricStorage":352}],347:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24726,7 +31546,7 @@ class MetricCollector {
 }
 exports.MetricCollector = MetricCollector;
 
-},{"@opentelemetry/core":74}],197:[function(require,module,exports){
+},{"@opentelemetry/core":74}],348:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24769,7 +31589,7 @@ class MetricStorage {
 }
 exports.MetricStorage = MetricStorage;
 
-},{"../InstrumentDescriptor":164}],198:[function(require,module,exports){
+},{"../InstrumentDescriptor":315}],349:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24884,7 +31704,7 @@ class MetricStorageRegistry {
 }
 exports.MetricStorageRegistry = MetricStorageRegistry;
 
-},{"../InstrumentDescriptor":164,"../view/RegistrationConflicts":209,"@opentelemetry/api":34}],199:[function(require,module,exports){
+},{"../InstrumentDescriptor":315,"../view/RegistrationConflicts":360,"@opentelemetry/api":34}],350:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -24918,7 +31738,7 @@ class MultiMetricStorage {
 }
 exports.MultiMetricStorage = MultiMetricStorage;
 
-},{}],200:[function(require,module,exports){
+},{}],351:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -25049,7 +31869,7 @@ class ObservableRegistry {
 }
 exports.ObservableRegistry = ObservableRegistry;
 
-},{"../Instruments":165,"../ObservableResult":168,"../utils":203,"@opentelemetry/api":34}],201:[function(require,module,exports){
+},{"../Instruments":316,"../ObservableResult":319,"../utils":354,"@opentelemetry/api":34}],352:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -25100,7 +31920,7 @@ class SyncMetricStorage extends MetricStorage_1.MetricStorage {
 }
 exports.SyncMetricStorage = SyncMetricStorage;
 
-},{"./DeltaMetricProcessor":192,"./MetricStorage":197,"./TemporalMetricProcessor":202}],202:[function(require,module,exports){
+},{"./DeltaMetricProcessor":343,"./MetricStorage":348,"./TemporalMetricProcessor":353}],353:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -25256,7 +32076,7 @@ function AttributesMapToAccumulationRecords(map) {
     return Array.from(map.entries());
 }
 
-},{"../export/AggregationTemporality":184,"./HashMap":193}],203:[function(require,module,exports){
+},{"../export/AggregationTemporality":335,"./HashMap":344}],354:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -25418,7 +32238,7 @@ function equalsCaseInsensitive(lhs, rhs) {
 }
 exports.equalsCaseInsensitive = equalsCaseInsensitive;
 
-},{}],204:[function(require,module,exports){
+},{}],355:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -25598,7 +32418,7 @@ const HISTOGRAM_AGGREGATION = new HistogramAggregation();
 const EXPONENTIAL_HISTOGRAM_AGGREGATION = new ExponentialHistogramAggregation();
 const DEFAULT_AGGREGATION = new DefaultAggregation();
 
-},{"../InstrumentDescriptor":164,"../aggregator":181,"@opentelemetry/api":34}],205:[function(require,module,exports){
+},{"../InstrumentDescriptor":315,"../aggregator":332,"@opentelemetry/api":34}],356:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -25654,7 +32474,7 @@ class FilteringAttributesProcessor extends AttributesProcessor {
 exports.FilteringAttributesProcessor = FilteringAttributesProcessor;
 const NOOP = new NoopAttributesProcessor();
 
-},{}],206:[function(require,module,exports){
+},{}],357:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -25693,7 +32513,7 @@ class InstrumentSelector {
 }
 exports.InstrumentSelector = InstrumentSelector;
 
-},{"./Predicate":208}],207:[function(require,module,exports){
+},{"./Predicate":359}],358:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -25734,7 +32554,7 @@ class MeterSelector {
 }
 exports.MeterSelector = MeterSelector;
 
-},{"./Predicate":208}],208:[function(require,module,exports){
+},{"./Predicate":359}],359:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -25802,7 +32622,7 @@ class ExactPredicate {
 }
 exports.ExactPredicate = ExactPredicate;
 
-},{}],209:[function(require,module,exports){
+},{}],360:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -25888,7 +32708,7 @@ function getConflictResolutionRecipe(existing, otherDescriptor) {
 }
 exports.getConflictResolutionRecipe = getConflictResolutionRecipe;
 
-},{}],210:[function(require,module,exports){
+},{}],361:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -26014,7 +32834,7 @@ class View {
 }
 exports.View = View;
 
-},{"./Aggregation":204,"./AttributesProcessor":205,"./InstrumentSelector":206,"./MeterSelector":207,"./Predicate":208}],211:[function(require,module,exports){
+},{"./Aggregation":355,"./AttributesProcessor":356,"./InstrumentSelector":357,"./MeterSelector":358,"./Predicate":359}],362:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -26063,7 +32883,1492 @@ class ViewRegistry {
 }
 exports.ViewRegistry = ViewRegistry;
 
-},{}],212:[function(require,module,exports){
+},{}],363:[function(require,module,exports){
+arguments[4][213][0].apply(exports,arguments)
+},{"./platform":382,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/semantic-conventions":384,"dup":213}],364:[function(require,module,exports){
+arguments[4][214][0].apply(exports,arguments)
+},{"./Resource":363,"./utils":383,"@opentelemetry/api":34,"dup":214}],365:[function(require,module,exports){
+arguments[4][215][0].apply(exports,arguments)
+},{"./BrowserDetectorSync":366,"dup":215}],366:[function(require,module,exports){
+arguments[4][216][0].apply(exports,arguments)
+},{"../Resource":363,"@opentelemetry/api":34,"@opentelemetry/semantic-conventions":384,"dup":216}],367:[function(require,module,exports){
+arguments[4][217][0].apply(exports,arguments)
+},{"./EnvDetectorSync":368,"dup":217}],368:[function(require,module,exports){
+arguments[4][218][0].apply(exports,arguments)
+},{"../Resource":363,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/semantic-conventions":384,"dup":218}],369:[function(require,module,exports){
+arguments[4][219][0].apply(exports,arguments)
+},{"./NoopDetectorSync":370,"dup":219}],370:[function(require,module,exports){
+arguments[4][220][0].apply(exports,arguments)
+},{"../Resource":363,"dup":220}],371:[function(require,module,exports){
+arguments[4][221][0].apply(exports,arguments)
+},{"./BrowserDetector":365,"./BrowserDetectorSync":366,"./EnvDetector":367,"./EnvDetectorSync":368,"./platform":379,"dup":221}],372:[function(require,module,exports){
+arguments[4][222][0].apply(exports,arguments)
+},{"../../NoopDetector":369,"dup":222}],373:[function(require,module,exports){
+arguments[4][223][0].apply(exports,arguments)
+},{"../../NoopDetectorSync":370,"dup":223}],374:[function(require,module,exports){
+arguments[4][224][0].apply(exports,arguments)
+},{"../../NoopDetector":369,"dup":224}],375:[function(require,module,exports){
+arguments[4][225][0].apply(exports,arguments)
+},{"../../NoopDetectorSync":370,"dup":225}],376:[function(require,module,exports){
+arguments[4][226][0].apply(exports,arguments)
+},{"../../NoopDetector":369,"dup":226}],377:[function(require,module,exports){
+arguments[4][227][0].apply(exports,arguments)
+},{"../../NoopDetector":369,"dup":227}],378:[function(require,module,exports){
+arguments[4][228][0].apply(exports,arguments)
+},{"../../NoopDetectorSync":370,"dup":228}],379:[function(require,module,exports){
+arguments[4][229][0].apply(exports,arguments)
+},{"./HostDetector":372,"./HostDetectorSync":373,"./OSDetector":374,"./OSDetectorSync":375,"./ProcessDetector":376,"./ProcessDetectorSync":377,"./ServiceInstanceIdDetectorSync":378,"dup":229}],380:[function(require,module,exports){
+arguments[4][230][0].apply(exports,arguments)
+},{"./Resource":363,"./detect-resources":364,"./detectors":371,"./platform":382,"dup":230}],381:[function(require,module,exports){
+arguments[4][231][0].apply(exports,arguments)
+},{"dup":231}],382:[function(require,module,exports){
+arguments[4][232][0].apply(exports,arguments)
+},{"./default-service-name":381,"dup":232}],383:[function(require,module,exports){
+arguments[4][233][0].apply(exports,arguments)
+},{"dup":233}],384:[function(require,module,exports){
+arguments[4][105][0].apply(exports,arguments)
+},{"./resource":387,"./trace":389,"dup":105}],385:[function(require,module,exports){
+arguments[4][106][0].apply(exports,arguments)
+},{"dup":106}],386:[function(require,module,exports){
+arguments[4][107][0].apply(exports,arguments)
+},{"../internal/utils":385,"dup":107}],387:[function(require,module,exports){
+arguments[4][108][0].apply(exports,arguments)
+},{"./SemanticResourceAttributes":386,"dup":108}],388:[function(require,module,exports){
+arguments[4][109][0].apply(exports,arguments)
+},{"../internal/utils":385,"dup":109}],389:[function(require,module,exports){
+arguments[4][110][0].apply(exports,arguments)
+},{"./SemanticAttributes":388,"dup":110}],390:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BasicTracerProvider = exports.ForceFlushState = void 0;
+const api_1 = require("@opentelemetry/api");
+const core_1 = require("@opentelemetry/core");
+const resources_1 = require("@opentelemetry/resources");
+const _1 = require(".");
+const config_1 = require("./config");
+const MultiSpanProcessor_1 = require("./MultiSpanProcessor");
+const NoopSpanProcessor_1 = require("./export/NoopSpanProcessor");
+const platform_1 = require("./platform");
+const utility_1 = require("./utility");
+var ForceFlushState;
+(function (ForceFlushState) {
+    ForceFlushState[ForceFlushState["resolved"] = 0] = "resolved";
+    ForceFlushState[ForceFlushState["timeout"] = 1] = "timeout";
+    ForceFlushState[ForceFlushState["error"] = 2] = "error";
+    ForceFlushState[ForceFlushState["unresolved"] = 3] = "unresolved";
+})(ForceFlushState = exports.ForceFlushState || (exports.ForceFlushState = {}));
+/**
+ * This class represents a basic tracer provider which platform libraries can extend
+ */
+class BasicTracerProvider {
+    constructor(config = {}) {
+        var _a;
+        this._registeredSpanProcessors = [];
+        this._tracers = new Map();
+        const mergedConfig = (0, core_1.merge)({}, (0, config_1.loadDefaultConfig)(), (0, utility_1.reconfigureLimits)(config));
+        this.resource = (_a = mergedConfig.resource) !== null && _a !== void 0 ? _a : resources_1.Resource.empty();
+        this.resource = resources_1.Resource.default().merge(this.resource);
+        this._config = Object.assign({}, mergedConfig, {
+            resource: this.resource,
+        });
+        const defaultExporter = this._buildExporterFromEnv();
+        if (defaultExporter !== undefined) {
+            const batchProcessor = new platform_1.BatchSpanProcessor(defaultExporter);
+            this.activeSpanProcessor = batchProcessor;
+        }
+        else {
+            this.activeSpanProcessor = new NoopSpanProcessor_1.NoopSpanProcessor();
+        }
+    }
+    getTracer(name, version, options) {
+        const key = `${name}@${version || ''}:${(options === null || options === void 0 ? void 0 : options.schemaUrl) || ''}`;
+        if (!this._tracers.has(key)) {
+            this._tracers.set(key, new _1.Tracer({ name, version, schemaUrl: options === null || options === void 0 ? void 0 : options.schemaUrl }, this._config, this));
+        }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return this._tracers.get(key);
+    }
+    /**
+     * Adds a new {@link SpanProcessor} to this tracer.
+     * @param spanProcessor the new SpanProcessor to be added.
+     */
+    addSpanProcessor(spanProcessor) {
+        if (this._registeredSpanProcessors.length === 0) {
+            // since we might have enabled by default a batchProcessor, we disable it
+            // before adding the new one
+            this.activeSpanProcessor
+                .shutdown()
+                .catch(err => api_1.diag.error('Error while trying to shutdown current span processor', err));
+        }
+        this._registeredSpanProcessors.push(spanProcessor);
+        this.activeSpanProcessor = new MultiSpanProcessor_1.MultiSpanProcessor(this._registeredSpanProcessors);
+    }
+    getActiveSpanProcessor() {
+        return this.activeSpanProcessor;
+    }
+    /**
+     * Register this TracerProvider for use with the OpenTelemetry API.
+     * Undefined values may be replaced with defaults, and
+     * null values will be skipped.
+     *
+     * @param config Configuration object for SDK registration
+     */
+    register(config = {}) {
+        api_1.trace.setGlobalTracerProvider(this);
+        if (config.propagator === undefined) {
+            config.propagator = this._buildPropagatorFromEnv();
+        }
+        if (config.contextManager) {
+            api_1.context.setGlobalContextManager(config.contextManager);
+        }
+        if (config.propagator) {
+            api_1.propagation.setGlobalPropagator(config.propagator);
+        }
+    }
+    forceFlush() {
+        const timeout = this._config.forceFlushTimeoutMillis;
+        const promises = this._registeredSpanProcessors.map((spanProcessor) => {
+            return new Promise(resolve => {
+                let state;
+                const timeoutInterval = setTimeout(() => {
+                    resolve(new Error(`Span processor did not completed within timeout period of ${timeout} ms`));
+                    state = ForceFlushState.timeout;
+                }, timeout);
+                spanProcessor
+                    .forceFlush()
+                    .then(() => {
+                    clearTimeout(timeoutInterval);
+                    if (state !== ForceFlushState.timeout) {
+                        state = ForceFlushState.resolved;
+                        resolve(state);
+                    }
+                })
+                    .catch(error => {
+                    clearTimeout(timeoutInterval);
+                    state = ForceFlushState.error;
+                    resolve(error);
+                });
+            });
+        });
+        return new Promise((resolve, reject) => {
+            Promise.all(promises)
+                .then(results => {
+                const errors = results.filter(result => result !== ForceFlushState.resolved);
+                if (errors.length > 0) {
+                    reject(errors);
+                }
+                else {
+                    resolve();
+                }
+            })
+                .catch(error => reject([error]));
+        });
+    }
+    shutdown() {
+        return this.activeSpanProcessor.shutdown();
+    }
+    /**
+     * TS cannot yet infer the type of this.constructor:
+     * https://github.com/Microsoft/TypeScript/issues/3841#issuecomment-337560146
+     * There is no need to override either of the getters in your child class.
+     * The type of the registered component maps should be the same across all
+     * classes in the inheritance tree.
+     */
+    _getPropagator(name) {
+        var _a;
+        return (_a = this.constructor._registeredPropagators.get(name)) === null || _a === void 0 ? void 0 : _a();
+    }
+    _getSpanExporter(name) {
+        var _a;
+        return (_a = this.constructor._registeredExporters.get(name)) === null || _a === void 0 ? void 0 : _a();
+    }
+    _buildPropagatorFromEnv() {
+        // per spec, propagators from env must be deduplicated
+        const uniquePropagatorNames = Array.from(new Set((0, core_1.getEnv)().OTEL_PROPAGATORS));
+        const propagators = uniquePropagatorNames.map(name => {
+            const propagator = this._getPropagator(name);
+            if (!propagator) {
+                api_1.diag.warn(`Propagator "${name}" requested through environment variable is unavailable.`);
+            }
+            return propagator;
+        });
+        const validPropagators = propagators.reduce((list, item) => {
+            if (item) {
+                list.push(item);
+            }
+            return list;
+        }, []);
+        if (validPropagators.length === 0) {
+            return;
+        }
+        else if (uniquePropagatorNames.length === 1) {
+            return validPropagators[0];
+        }
+        else {
+            return new core_1.CompositePropagator({
+                propagators: validPropagators,
+            });
+        }
+    }
+    _buildExporterFromEnv() {
+        const exporterName = (0, core_1.getEnv)().OTEL_TRACES_EXPORTER;
+        if (exporterName === 'none' || exporterName === '')
+            return;
+        const exporter = this._getSpanExporter(exporterName);
+        if (!exporter) {
+            api_1.diag.error(`Exporter "${exporterName}" requested through environment variable is unavailable.`);
+        }
+        return exporter;
+    }
+}
+exports.BasicTracerProvider = BasicTracerProvider;
+BasicTracerProvider._registeredPropagators = new Map([
+    ['tracecontext', () => new core_1.W3CTraceContextPropagator()],
+    ['baggage', () => new core_1.W3CBaggagePropagator()],
+]);
+BasicTracerProvider._registeredExporters = new Map();
+
+},{".":407,"./MultiSpanProcessor":392,"./config":398,"./export/NoopSpanProcessor":403,"./platform":410,"./utility":416,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/resources":434}],391:[function(require,module,exports){
+arguments[4][86][0].apply(exports,arguments)
+},{"dup":86}],392:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MultiSpanProcessor = void 0;
+const core_1 = require("@opentelemetry/core");
+/**
+ * Implementation of the {@link SpanProcessor} that simply forwards all
+ * received events to a list of {@link SpanProcessor}s.
+ */
+class MultiSpanProcessor {
+    constructor(_spanProcessors) {
+        this._spanProcessors = _spanProcessors;
+    }
+    forceFlush() {
+        const promises = [];
+        for (const spanProcessor of this._spanProcessors) {
+            promises.push(spanProcessor.forceFlush());
+        }
+        return new Promise(resolve => {
+            Promise.all(promises)
+                .then(() => {
+                resolve();
+            })
+                .catch(error => {
+                (0, core_1.globalErrorHandler)(error || new Error('MultiSpanProcessor: forceFlush failed'));
+                resolve();
+            });
+        });
+    }
+    onStart(span, context) {
+        for (const spanProcessor of this._spanProcessors) {
+            spanProcessor.onStart(span, context);
+        }
+    }
+    onEnd(span) {
+        for (const spanProcessor of this._spanProcessors) {
+            spanProcessor.onEnd(span);
+        }
+    }
+    shutdown() {
+        const promises = [];
+        for (const spanProcessor of this._spanProcessors) {
+            promises.push(spanProcessor.shutdown());
+        }
+        return new Promise((resolve, reject) => {
+            Promise.all(promises).then(() => {
+                resolve();
+            }, reject);
+        });
+    }
+}
+exports.MultiSpanProcessor = MultiSpanProcessor;
+
+},{"@opentelemetry/core":74}],393:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SamplingDecision = void 0;
+/**
+ * A sampling decision that determines how a {@link Span} will be recorded
+ * and collected.
+ */
+var SamplingDecision;
+(function (SamplingDecision) {
+    /**
+     * `Span.isRecording() === false`, span will not be recorded and all events
+     * and attributes will be dropped.
+     */
+    SamplingDecision[SamplingDecision["NOT_RECORD"] = 0] = "NOT_RECORD";
+    /**
+     * `Span.isRecording() === true`, but `Sampled` flag in {@link TraceFlags}
+     * MUST NOT be set.
+     */
+    SamplingDecision[SamplingDecision["RECORD"] = 1] = "RECORD";
+    /**
+     * `Span.isRecording() === true` AND `Sampled` flag in {@link TraceFlags}
+     * MUST be set.
+     */
+    SamplingDecision[SamplingDecision["RECORD_AND_SAMPLED"] = 2] = "RECORD_AND_SAMPLED";
+})(SamplingDecision = exports.SamplingDecision || (exports.SamplingDecision = {}));
+
+},{}],394:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Span = void 0;
+const api_1 = require("@opentelemetry/api");
+const core_1 = require("@opentelemetry/core");
+const semantic_conventions_1 = require("@opentelemetry/semantic-conventions");
+const enums_1 = require("./enums");
+/**
+ * This class represents a span.
+ */
+class Span {
+    /**
+     * Constructs a new Span instance.
+     *
+     * @deprecated calling Span constructor directly is not supported. Please use tracer.startSpan.
+     * */
+    constructor(parentTracer, context, spanName, spanContext, kind, parentSpanId, links = [], startTime, _deprecatedClock, // keeping this argument even though it is unused to ensure backwards compatibility
+    attributes) {
+        this.attributes = {};
+        this.links = [];
+        this.events = [];
+        this._droppedAttributesCount = 0;
+        this._droppedEventsCount = 0;
+        this._droppedLinksCount = 0;
+        this.status = {
+            code: api_1.SpanStatusCode.UNSET,
+        };
+        this.endTime = [0, 0];
+        this._ended = false;
+        this._duration = [-1, -1];
+        this.name = spanName;
+        this._spanContext = spanContext;
+        this.parentSpanId = parentSpanId;
+        this.kind = kind;
+        this.links = links;
+        const now = Date.now();
+        this._performanceStartTime = core_1.otperformance.now();
+        this._performanceOffset =
+            now - (this._performanceStartTime + (0, core_1.getTimeOrigin)());
+        this._startTimeProvided = startTime != null;
+        this.startTime = this._getTime(startTime !== null && startTime !== void 0 ? startTime : now);
+        this.resource = parentTracer.resource;
+        this.instrumentationLibrary = parentTracer.instrumentationLibrary;
+        this._spanLimits = parentTracer.getSpanLimits();
+        this._attributeValueLengthLimit =
+            this._spanLimits.attributeValueLengthLimit || 0;
+        if (attributes != null) {
+            this.setAttributes(attributes);
+        }
+        this._spanProcessor = parentTracer.getActiveSpanProcessor();
+        this._spanProcessor.onStart(this, context);
+    }
+    spanContext() {
+        return this._spanContext;
+    }
+    setAttribute(key, value) {
+        if (value == null || this._isSpanEnded())
+            return this;
+        if (key.length === 0) {
+            api_1.diag.warn(`Invalid attribute key: ${key}`);
+            return this;
+        }
+        if (!(0, core_1.isAttributeValue)(value)) {
+            api_1.diag.warn(`Invalid attribute value set for key: ${key}`);
+            return this;
+        }
+        if (Object.keys(this.attributes).length >=
+            this._spanLimits.attributeCountLimit &&
+            !Object.prototype.hasOwnProperty.call(this.attributes, key)) {
+            this._droppedAttributesCount++;
+            return this;
+        }
+        this.attributes[key] = this._truncateToSize(value);
+        return this;
+    }
+    setAttributes(attributes) {
+        for (const [k, v] of Object.entries(attributes)) {
+            this.setAttribute(k, v);
+        }
+        return this;
+    }
+    /**
+     *
+     * @param name Span Name
+     * @param [attributesOrStartTime] Span attributes or start time
+     *     if type is {@type TimeInput} and 3rd param is undefined
+     * @param [timeStamp] Specified time stamp for the event
+     */
+    addEvent(name, attributesOrStartTime, timeStamp) {
+        if (this._isSpanEnded())
+            return this;
+        if (this._spanLimits.eventCountLimit === 0) {
+            api_1.diag.warn('No events allowed.');
+            this._droppedEventsCount++;
+            return this;
+        }
+        if (this.events.length >= this._spanLimits.eventCountLimit) {
+            if (this._droppedEventsCount === 0) {
+                api_1.diag.debug('Dropping extra events.');
+            }
+            this.events.shift();
+            this._droppedEventsCount++;
+        }
+        if ((0, core_1.isTimeInput)(attributesOrStartTime)) {
+            if (!(0, core_1.isTimeInput)(timeStamp)) {
+                timeStamp = attributesOrStartTime;
+            }
+            attributesOrStartTime = undefined;
+        }
+        const attributes = (0, core_1.sanitizeAttributes)(attributesOrStartTime);
+        this.events.push({
+            name,
+            attributes,
+            time: this._getTime(timeStamp),
+            droppedAttributesCount: 0,
+        });
+        return this;
+    }
+    addLink(link) {
+        this.links.push(link);
+        return this;
+    }
+    addLinks(links) {
+        this.links.push(...links);
+        return this;
+    }
+    setStatus(status) {
+        if (this._isSpanEnded())
+            return this;
+        this.status = status;
+        return this;
+    }
+    updateName(name) {
+        if (this._isSpanEnded())
+            return this;
+        this.name = name;
+        return this;
+    }
+    end(endTime) {
+        if (this._isSpanEnded()) {
+            api_1.diag.error(`${this.name} ${this._spanContext.traceId}-${this._spanContext.spanId} - You can only call end() on a span once.`);
+            return;
+        }
+        this._ended = true;
+        this.endTime = this._getTime(endTime);
+        this._duration = (0, core_1.hrTimeDuration)(this.startTime, this.endTime);
+        if (this._duration[0] < 0) {
+            api_1.diag.warn('Inconsistent start and end time, startTime > endTime. Setting span duration to 0ms.', this.startTime, this.endTime);
+            this.endTime = this.startTime.slice();
+            this._duration = [0, 0];
+        }
+        if (this._droppedEventsCount > 0) {
+            api_1.diag.warn(`Dropped ${this._droppedEventsCount} events because eventCountLimit reached`);
+        }
+        this._spanProcessor.onEnd(this);
+    }
+    _getTime(inp) {
+        if (typeof inp === 'number' && inp < core_1.otperformance.now()) {
+            // must be a performance timestamp
+            // apply correction and convert to hrtime
+            return (0, core_1.hrTime)(inp + this._performanceOffset);
+        }
+        if (typeof inp === 'number') {
+            return (0, core_1.millisToHrTime)(inp);
+        }
+        if (inp instanceof Date) {
+            return (0, core_1.millisToHrTime)(inp.getTime());
+        }
+        if ((0, core_1.isTimeInputHrTime)(inp)) {
+            return inp;
+        }
+        if (this._startTimeProvided) {
+            // if user provided a time for the start manually
+            // we can't use duration to calculate event/end times
+            return (0, core_1.millisToHrTime)(Date.now());
+        }
+        const msDuration = core_1.otperformance.now() - this._performanceStartTime;
+        return (0, core_1.addHrTimes)(this.startTime, (0, core_1.millisToHrTime)(msDuration));
+    }
+    isRecording() {
+        return this._ended === false;
+    }
+    recordException(exception, time) {
+        const attributes = {};
+        if (typeof exception === 'string') {
+            attributes[semantic_conventions_1.SEMATTRS_EXCEPTION_MESSAGE] = exception;
+        }
+        else if (exception) {
+            if (exception.code) {
+                attributes[semantic_conventions_1.SEMATTRS_EXCEPTION_TYPE] = exception.code.toString();
+            }
+            else if (exception.name) {
+                attributes[semantic_conventions_1.SEMATTRS_EXCEPTION_TYPE] = exception.name;
+            }
+            if (exception.message) {
+                attributes[semantic_conventions_1.SEMATTRS_EXCEPTION_MESSAGE] = exception.message;
+            }
+            if (exception.stack) {
+                attributes[semantic_conventions_1.SEMATTRS_EXCEPTION_STACKTRACE] = exception.stack;
+            }
+        }
+        // these are minimum requirements from spec
+        if (attributes[semantic_conventions_1.SEMATTRS_EXCEPTION_TYPE] ||
+            attributes[semantic_conventions_1.SEMATTRS_EXCEPTION_MESSAGE]) {
+            this.addEvent(enums_1.ExceptionEventName, attributes, time);
+        }
+        else {
+            api_1.diag.warn(`Failed to record an exception ${exception}`);
+        }
+    }
+    get duration() {
+        return this._duration;
+    }
+    get ended() {
+        return this._ended;
+    }
+    get droppedAttributesCount() {
+        return this._droppedAttributesCount;
+    }
+    get droppedEventsCount() {
+        return this._droppedEventsCount;
+    }
+    get droppedLinksCount() {
+        return this._droppedLinksCount;
+    }
+    _isSpanEnded() {
+        if (this._ended) {
+            api_1.diag.warn(`Can not execute the operation on ended Span {traceId: ${this._spanContext.traceId}, spanId: ${this._spanContext.spanId}}`);
+        }
+        return this._ended;
+    }
+    // Utility function to truncate given value within size
+    // for value type of string, will truncate to given limit
+    // for type of non-string, will return same value
+    _truncateToLimitUtil(value, limit) {
+        if (value.length <= limit) {
+            return value;
+        }
+        return value.substr(0, limit);
+    }
+    /**
+     * If the given attribute value is of type string and has more characters than given {@code attributeValueLengthLimit} then
+     * return string with truncated to {@code attributeValueLengthLimit} characters
+     *
+     * If the given attribute value is array of strings then
+     * return new array of strings with each element truncated to {@code attributeValueLengthLimit} characters
+     *
+     * Otherwise return same Attribute {@code value}
+     *
+     * @param value Attribute value
+     * @returns truncated attribute value if required, otherwise same value
+     */
+    _truncateToSize(value) {
+        const limit = this._attributeValueLengthLimit;
+        // Check limit
+        if (limit <= 0) {
+            // Negative values are invalid, so do not truncate
+            api_1.diag.warn(`Attribute value limit must be positive, got ${limit}`);
+            return value;
+        }
+        // String
+        if (typeof value === 'string') {
+            return this._truncateToLimitUtil(value, limit);
+        }
+        // Array of strings
+        if (Array.isArray(value)) {
+            return value.map(val => typeof val === 'string' ? this._truncateToLimitUtil(val, limit) : val);
+        }
+        // Other types, no need to apply value length limit
+        return value;
+    }
+}
+exports.Span = Span;
+
+},{"./enums":399,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/semantic-conventions":438}],395:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+
+},{}],396:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+
+},{}],397:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Tracer = void 0;
+const api = require("@opentelemetry/api");
+const core_1 = require("@opentelemetry/core");
+const Span_1 = require("./Span");
+const utility_1 = require("./utility");
+const platform_1 = require("./platform");
+/**
+ * This class represents a basic tracer.
+ */
+class Tracer {
+    /**
+     * Constructs a new Tracer instance.
+     */
+    constructor(instrumentationLibrary, config, _tracerProvider) {
+        this._tracerProvider = _tracerProvider;
+        const localConfig = (0, utility_1.mergeConfig)(config);
+        this._sampler = localConfig.sampler;
+        this._generalLimits = localConfig.generalLimits;
+        this._spanLimits = localConfig.spanLimits;
+        this._idGenerator = config.idGenerator || new platform_1.RandomIdGenerator();
+        this.resource = _tracerProvider.resource;
+        this.instrumentationLibrary = instrumentationLibrary;
+    }
+    /**
+     * Starts a new Span or returns the default NoopSpan based on the sampling
+     * decision.
+     */
+    startSpan(name, options = {}, context = api.context.active()) {
+        var _a, _b, _c;
+        // remove span from context in case a root span is requested via options
+        if (options.root) {
+            context = api.trace.deleteSpan(context);
+        }
+        const parentSpan = api.trace.getSpan(context);
+        if ((0, core_1.isTracingSuppressed)(context)) {
+            api.diag.debug('Instrumentation suppressed, returning Noop Span');
+            const nonRecordingSpan = api.trace.wrapSpanContext(api.INVALID_SPAN_CONTEXT);
+            return nonRecordingSpan;
+        }
+        const parentSpanContext = parentSpan === null || parentSpan === void 0 ? void 0 : parentSpan.spanContext();
+        const spanId = this._idGenerator.generateSpanId();
+        let traceId;
+        let traceState;
+        let parentSpanId;
+        if (!parentSpanContext ||
+            !api.trace.isSpanContextValid(parentSpanContext)) {
+            // New root span.
+            traceId = this._idGenerator.generateTraceId();
+        }
+        else {
+            // New child span.
+            traceId = parentSpanContext.traceId;
+            traceState = parentSpanContext.traceState;
+            parentSpanId = parentSpanContext.spanId;
+        }
+        const spanKind = (_a = options.kind) !== null && _a !== void 0 ? _a : api.SpanKind.INTERNAL;
+        const links = ((_b = options.links) !== null && _b !== void 0 ? _b : []).map(link => {
+            return {
+                context: link.context,
+                attributes: (0, core_1.sanitizeAttributes)(link.attributes),
+            };
+        });
+        const attributes = (0, core_1.sanitizeAttributes)(options.attributes);
+        // make sampling decision
+        const samplingResult = this._sampler.shouldSample(context, traceId, name, spanKind, attributes, links);
+        traceState = (_c = samplingResult.traceState) !== null && _c !== void 0 ? _c : traceState;
+        const traceFlags = samplingResult.decision === api.SamplingDecision.RECORD_AND_SAMPLED
+            ? api.TraceFlags.SAMPLED
+            : api.TraceFlags.NONE;
+        const spanContext = { traceId, spanId, traceFlags, traceState };
+        if (samplingResult.decision === api.SamplingDecision.NOT_RECORD) {
+            api.diag.debug('Recording is off, propagating context in a non-recording span');
+            const nonRecordingSpan = api.trace.wrapSpanContext(spanContext);
+            return nonRecordingSpan;
+        }
+        // Set initial span attributes. The attributes object may have been mutated
+        // by the sampler, so we sanitize the merged attributes before setting them.
+        const initAttributes = (0, core_1.sanitizeAttributes)(Object.assign(attributes, samplingResult.attributes));
+        const span = new Span_1.Span(this, context, name, spanContext, spanKind, parentSpanId, links, options.startTime, undefined, initAttributes);
+        return span;
+    }
+    startActiveSpan(name, arg2, arg3, arg4) {
+        let opts;
+        let ctx;
+        let fn;
+        if (arguments.length < 2) {
+            return;
+        }
+        else if (arguments.length === 2) {
+            fn = arg2;
+        }
+        else if (arguments.length === 3) {
+            opts = arg2;
+            fn = arg3;
+        }
+        else {
+            opts = arg2;
+            ctx = arg3;
+            fn = arg4;
+        }
+        const parentContext = ctx !== null && ctx !== void 0 ? ctx : api.context.active();
+        const span = this.startSpan(name, opts, parentContext);
+        const contextWithSpanSet = api.trace.setSpan(parentContext, span);
+        return api.context.with(contextWithSpanSet, fn, undefined, span);
+    }
+    /** Returns the active {@link GeneralLimits}. */
+    getGeneralLimits() {
+        return this._generalLimits;
+    }
+    /** Returns the active {@link SpanLimits}. */
+    getSpanLimits() {
+        return this._spanLimits;
+    }
+    getActiveSpanProcessor() {
+        return this._tracerProvider.getActiveSpanProcessor();
+    }
+}
+exports.Tracer = Tracer;
+
+},{"./Span":394,"./platform":410,"./utility":416,"@opentelemetry/api":34,"@opentelemetry/core":74}],398:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.buildSamplerFromEnv = exports.loadDefaultConfig = void 0;
+const api_1 = require("@opentelemetry/api");
+const core_1 = require("@opentelemetry/core");
+const AlwaysOffSampler_1 = require("./sampler/AlwaysOffSampler");
+const AlwaysOnSampler_1 = require("./sampler/AlwaysOnSampler");
+const ParentBasedSampler_1 = require("./sampler/ParentBasedSampler");
+const TraceIdRatioBasedSampler_1 = require("./sampler/TraceIdRatioBasedSampler");
+const env = (0, core_1.getEnv)();
+const FALLBACK_OTEL_TRACES_SAMPLER = core_1.TracesSamplerValues.AlwaysOn;
+const DEFAULT_RATIO = 1;
+/**
+ * Load default configuration. For fields with primitive values, any user-provided
+ * value will override the corresponding default value. For fields with
+ * non-primitive values (like `spanLimits`), the user-provided value will be
+ * used to extend the default value.
+ */
+// object needs to be wrapped in this function and called when needed otherwise
+// envs are parsed before tests are ran - causes tests using these envs to fail
+function loadDefaultConfig() {
+    return {
+        sampler: buildSamplerFromEnv(env),
+        forceFlushTimeoutMillis: 30000,
+        generalLimits: {
+            attributeValueLengthLimit: (0, core_1.getEnv)().OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT,
+            attributeCountLimit: (0, core_1.getEnv)().OTEL_ATTRIBUTE_COUNT_LIMIT,
+        },
+        spanLimits: {
+            attributeValueLengthLimit: (0, core_1.getEnv)().OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT,
+            attributeCountLimit: (0, core_1.getEnv)().OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT,
+            linkCountLimit: (0, core_1.getEnv)().OTEL_SPAN_LINK_COUNT_LIMIT,
+            eventCountLimit: (0, core_1.getEnv)().OTEL_SPAN_EVENT_COUNT_LIMIT,
+            attributePerEventCountLimit: (0, core_1.getEnv)().OTEL_SPAN_ATTRIBUTE_PER_EVENT_COUNT_LIMIT,
+            attributePerLinkCountLimit: (0, core_1.getEnv)().OTEL_SPAN_ATTRIBUTE_PER_LINK_COUNT_LIMIT,
+        },
+    };
+}
+exports.loadDefaultConfig = loadDefaultConfig;
+/**
+ * Based on environment, builds a sampler, complies with specification.
+ * @param environment optional, by default uses getEnv(), but allows passing a value to reuse parsed environment
+ */
+function buildSamplerFromEnv(environment = (0, core_1.getEnv)()) {
+    switch (environment.OTEL_TRACES_SAMPLER) {
+        case core_1.TracesSamplerValues.AlwaysOn:
+            return new AlwaysOnSampler_1.AlwaysOnSampler();
+        case core_1.TracesSamplerValues.AlwaysOff:
+            return new AlwaysOffSampler_1.AlwaysOffSampler();
+        case core_1.TracesSamplerValues.ParentBasedAlwaysOn:
+            return new ParentBasedSampler_1.ParentBasedSampler({
+                root: new AlwaysOnSampler_1.AlwaysOnSampler(),
+            });
+        case core_1.TracesSamplerValues.ParentBasedAlwaysOff:
+            return new ParentBasedSampler_1.ParentBasedSampler({
+                root: new AlwaysOffSampler_1.AlwaysOffSampler(),
+            });
+        case core_1.TracesSamplerValues.TraceIdRatio:
+            return new TraceIdRatioBasedSampler_1.TraceIdRatioBasedSampler(getSamplerProbabilityFromEnv(environment));
+        case core_1.TracesSamplerValues.ParentBasedTraceIdRatio:
+            return new ParentBasedSampler_1.ParentBasedSampler({
+                root: new TraceIdRatioBasedSampler_1.TraceIdRatioBasedSampler(getSamplerProbabilityFromEnv(environment)),
+            });
+        default:
+            api_1.diag.error(`OTEL_TRACES_SAMPLER value "${environment.OTEL_TRACES_SAMPLER} invalid, defaulting to ${FALLBACK_OTEL_TRACES_SAMPLER}".`);
+            return new AlwaysOnSampler_1.AlwaysOnSampler();
+    }
+}
+exports.buildSamplerFromEnv = buildSamplerFromEnv;
+function getSamplerProbabilityFromEnv(environment) {
+    if (environment.OTEL_TRACES_SAMPLER_ARG === undefined ||
+        environment.OTEL_TRACES_SAMPLER_ARG === '') {
+        api_1.diag.error(`OTEL_TRACES_SAMPLER_ARG is blank, defaulting to ${DEFAULT_RATIO}.`);
+        return DEFAULT_RATIO;
+    }
+    const probability = Number(environment.OTEL_TRACES_SAMPLER_ARG);
+    if (isNaN(probability)) {
+        api_1.diag.error(`OTEL_TRACES_SAMPLER_ARG=${environment.OTEL_TRACES_SAMPLER_ARG} was given, but it is invalid, defaulting to ${DEFAULT_RATIO}.`);
+        return DEFAULT_RATIO;
+    }
+    if (probability < 0 || probability > 1) {
+        api_1.diag.error(`OTEL_TRACES_SAMPLER_ARG=${environment.OTEL_TRACES_SAMPLER_ARG} was given, but it is out of range ([0..1]), defaulting to ${DEFAULT_RATIO}.`);
+        return DEFAULT_RATIO;
+    }
+    return probability;
+}
+
+},{"./sampler/AlwaysOffSampler":411,"./sampler/AlwaysOnSampler":412,"./sampler/ParentBasedSampler":413,"./sampler/TraceIdRatioBasedSampler":414,"@opentelemetry/api":34,"@opentelemetry/core":74}],399:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ExceptionEventName = void 0;
+// Event name definitions
+exports.ExceptionEventName = 'exception';
+
+},{}],400:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BatchSpanProcessorBase = void 0;
+const api_1 = require("@opentelemetry/api");
+const core_1 = require("@opentelemetry/core");
+/**
+ * Implementation of the {@link SpanProcessor} that batches spans exported by
+ * the SDK then pushes them to the exporter pipeline.
+ */
+class BatchSpanProcessorBase {
+    constructor(_exporter, config) {
+        this._exporter = _exporter;
+        this._isExporting = false;
+        this._finishedSpans = [];
+        this._droppedSpansCount = 0;
+        const env = (0, core_1.getEnv)();
+        this._maxExportBatchSize =
+            typeof (config === null || config === void 0 ? void 0 : config.maxExportBatchSize) === 'number'
+                ? config.maxExportBatchSize
+                : env.OTEL_BSP_MAX_EXPORT_BATCH_SIZE;
+        this._maxQueueSize =
+            typeof (config === null || config === void 0 ? void 0 : config.maxQueueSize) === 'number'
+                ? config.maxQueueSize
+                : env.OTEL_BSP_MAX_QUEUE_SIZE;
+        this._scheduledDelayMillis =
+            typeof (config === null || config === void 0 ? void 0 : config.scheduledDelayMillis) === 'number'
+                ? config.scheduledDelayMillis
+                : env.OTEL_BSP_SCHEDULE_DELAY;
+        this._exportTimeoutMillis =
+            typeof (config === null || config === void 0 ? void 0 : config.exportTimeoutMillis) === 'number'
+                ? config.exportTimeoutMillis
+                : env.OTEL_BSP_EXPORT_TIMEOUT;
+        this._shutdownOnce = new core_1.BindOnceFuture(this._shutdown, this);
+        if (this._maxExportBatchSize > this._maxQueueSize) {
+            api_1.diag.warn('BatchSpanProcessor: maxExportBatchSize must be smaller or equal to maxQueueSize, setting maxExportBatchSize to match maxQueueSize');
+            this._maxExportBatchSize = this._maxQueueSize;
+        }
+    }
+    forceFlush() {
+        if (this._shutdownOnce.isCalled) {
+            return this._shutdownOnce.promise;
+        }
+        return this._flushAll();
+    }
+    // does nothing.
+    onStart(_span, _parentContext) { }
+    onEnd(span) {
+        if (this._shutdownOnce.isCalled) {
+            return;
+        }
+        if ((span.spanContext().traceFlags & api_1.TraceFlags.SAMPLED) === 0) {
+            return;
+        }
+        this._addToBuffer(span);
+    }
+    shutdown() {
+        return this._shutdownOnce.call();
+    }
+    _shutdown() {
+        return Promise.resolve()
+            .then(() => {
+            return this.onShutdown();
+        })
+            .then(() => {
+            return this._flushAll();
+        })
+            .then(() => {
+            return this._exporter.shutdown();
+        });
+    }
+    /** Add a span in the buffer. */
+    _addToBuffer(span) {
+        if (this._finishedSpans.length >= this._maxQueueSize) {
+            // limit reached, drop span
+            if (this._droppedSpansCount === 0) {
+                api_1.diag.debug('maxQueueSize reached, dropping spans');
+            }
+            this._droppedSpansCount++;
+            return;
+        }
+        if (this._droppedSpansCount > 0) {
+            // some spans were dropped, log once with count of spans dropped
+            api_1.diag.warn(`Dropped ${this._droppedSpansCount} spans because maxQueueSize reached`);
+            this._droppedSpansCount = 0;
+        }
+        this._finishedSpans.push(span);
+        this._maybeStartTimer();
+    }
+    /**
+     * Send all spans to the exporter respecting the batch size limit
+     * This function is used only on forceFlush or shutdown,
+     * for all other cases _flush should be used
+     * */
+    _flushAll() {
+        return new Promise((resolve, reject) => {
+            const promises = [];
+            // calculate number of batches
+            const count = Math.ceil(this._finishedSpans.length / this._maxExportBatchSize);
+            for (let i = 0, j = count; i < j; i++) {
+                promises.push(this._flushOneBatch());
+            }
+            Promise.all(promises)
+                .then(() => {
+                resolve();
+            })
+                .catch(reject);
+        });
+    }
+    _flushOneBatch() {
+        this._clearTimer();
+        if (this._finishedSpans.length === 0) {
+            return Promise.resolve();
+        }
+        return new Promise((resolve, reject) => {
+            const timer = setTimeout(() => {
+                // don't wait anymore for export, this way the next batch can start
+                reject(new Error('Timeout'));
+            }, this._exportTimeoutMillis);
+            // prevent downstream exporter calls from generating spans
+            api_1.context.with((0, core_1.suppressTracing)(api_1.context.active()), () => {
+                // Reset the finished spans buffer here because the next invocations of the _flush method
+                // could pass the same finished spans to the exporter if the buffer is cleared
+                // outside the execution of this callback.
+                let spans;
+                if (this._finishedSpans.length <= this._maxExportBatchSize) {
+                    spans = this._finishedSpans;
+                    this._finishedSpans = [];
+                }
+                else {
+                    spans = this._finishedSpans.splice(0, this._maxExportBatchSize);
+                }
+                const doExport = () => this._exporter.export(spans, result => {
+                    var _a;
+                    clearTimeout(timer);
+                    if (result.code === core_1.ExportResultCode.SUCCESS) {
+                        resolve();
+                    }
+                    else {
+                        reject((_a = result.error) !== null && _a !== void 0 ? _a : new Error('BatchSpanProcessor: span export failed'));
+                    }
+                });
+                let pendingResources = null;
+                for (let i = 0, len = spans.length; i < len; i++) {
+                    const span = spans[i];
+                    if (span.resource.asyncAttributesPending &&
+                        span.resource.waitForAsyncAttributes) {
+                        pendingResources !== null && pendingResources !== void 0 ? pendingResources : (pendingResources = []);
+                        pendingResources.push(span.resource.waitForAsyncAttributes());
+                    }
+                }
+                // Avoid scheduling a promise to make the behavior more predictable and easier to test
+                if (pendingResources === null) {
+                    doExport();
+                }
+                else {
+                    Promise.all(pendingResources).then(doExport, err => {
+                        (0, core_1.globalErrorHandler)(err);
+                        reject(err);
+                    });
+                }
+            });
+        });
+    }
+    _maybeStartTimer() {
+        if (this._isExporting)
+            return;
+        const flush = () => {
+            this._isExporting = true;
+            this._flushOneBatch()
+                .finally(() => {
+                this._isExporting = false;
+                if (this._finishedSpans.length > 0) {
+                    this._clearTimer();
+                    this._maybeStartTimer();
+                }
+            })
+                .catch(e => {
+                this._isExporting = false;
+                (0, core_1.globalErrorHandler)(e);
+            });
+        };
+        // we only wait if the queue doesn't have enough elements yet
+        if (this._finishedSpans.length >= this._maxExportBatchSize) {
+            return flush();
+        }
+        if (this._timer !== undefined)
+            return;
+        this._timer = setTimeout(() => flush(), this._scheduledDelayMillis);
+        (0, core_1.unrefTimer)(this._timer);
+    }
+    _clearTimer() {
+        if (this._timer !== undefined) {
+            clearTimeout(this._timer);
+            this._timer = undefined;
+        }
+    }
+}
+exports.BatchSpanProcessorBase = BatchSpanProcessorBase;
+
+},{"@opentelemetry/api":34,"@opentelemetry/core":74}],401:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConsoleSpanExporter = void 0;
+const core_1 = require("@opentelemetry/core");
+/**
+ * This is implementation of {@link SpanExporter} that prints spans to the
+ * console. This class can be used for diagnostic purposes.
+ */
+/* eslint-disable no-console */
+class ConsoleSpanExporter {
+    /**
+     * Export spans.
+     * @param spans
+     * @param resultCallback
+     */
+    export(spans, resultCallback) {
+        return this._sendSpans(spans, resultCallback);
+    }
+    /**
+     * Shutdown the exporter.
+     */
+    shutdown() {
+        this._sendSpans([]);
+        return this.forceFlush();
+    }
+    /**
+     * Exports any pending spans in exporter
+     */
+    forceFlush() {
+        return Promise.resolve();
+    }
+    /**
+     * converts span info into more readable format
+     * @param span
+     */
+    _exportInfo(span) {
+        var _a;
+        return {
+            resource: {
+                attributes: span.resource.attributes,
+            },
+            traceId: span.spanContext().traceId,
+            parentId: span.parentSpanId,
+            traceState: (_a = span.spanContext().traceState) === null || _a === void 0 ? void 0 : _a.serialize(),
+            name: span.name,
+            id: span.spanContext().spanId,
+            kind: span.kind,
+            timestamp: (0, core_1.hrTimeToMicroseconds)(span.startTime),
+            duration: (0, core_1.hrTimeToMicroseconds)(span.duration),
+            attributes: span.attributes,
+            status: span.status,
+            events: span.events,
+            links: span.links,
+        };
+    }
+    /**
+     * Showing spans in console
+     * @param spans
+     * @param done
+     */
+    _sendSpans(spans, done) {
+        for (const span of spans) {
+            console.dir(this._exportInfo(span), { depth: 3 });
+        }
+        if (done) {
+            return done({ code: core_1.ExportResultCode.SUCCESS });
+        }
+    }
+}
+exports.ConsoleSpanExporter = ConsoleSpanExporter;
+
+},{"@opentelemetry/core":74}],402:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.InMemorySpanExporter = void 0;
+const core_1 = require("@opentelemetry/core");
+/**
+ * This class can be used for testing purposes. It stores the exported spans
+ * in a list in memory that can be retrieved using the `getFinishedSpans()`
+ * method.
+ */
+class InMemorySpanExporter {
+    constructor() {
+        this._finishedSpans = [];
+        /**
+         * Indicates if the exporter has been "shutdown."
+         * When false, exported spans will not be stored in-memory.
+         */
+        this._stopped = false;
+    }
+    export(spans, resultCallback) {
+        if (this._stopped)
+            return resultCallback({
+                code: core_1.ExportResultCode.FAILED,
+                error: new Error('Exporter has been stopped'),
+            });
+        this._finishedSpans.push(...spans);
+        setTimeout(() => resultCallback({ code: core_1.ExportResultCode.SUCCESS }), 0);
+    }
+    shutdown() {
+        this._stopped = true;
+        this._finishedSpans = [];
+        return this.forceFlush();
+    }
+    /**
+     * Exports any pending spans in the exporter
+     */
+    forceFlush() {
+        return Promise.resolve();
+    }
+    reset() {
+        this._finishedSpans = [];
+    }
+    getFinishedSpans() {
+        return this._finishedSpans;
+    }
+}
+exports.InMemorySpanExporter = InMemorySpanExporter;
+
+},{"@opentelemetry/core":74}],403:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NoopSpanProcessor = void 0;
+/** No-op implementation of SpanProcessor */
+class NoopSpanProcessor {
+    onStart(_span, _context) { }
+    onEnd(_span) { }
+    shutdown() {
+        return Promise.resolve();
+    }
+    forceFlush() {
+        return Promise.resolve();
+    }
+}
+exports.NoopSpanProcessor = NoopSpanProcessor;
+
+},{}],404:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+
+},{}],405:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SimpleSpanProcessor = void 0;
+const api_1 = require("@opentelemetry/api");
+const core_1 = require("@opentelemetry/core");
+/**
+ * An implementation of the {@link SpanProcessor} that converts the {@link Span}
+ * to {@link ReadableSpan} and passes it to the configured exporter.
+ *
+ * Only spans that are sampled are converted.
+ *
+ * NOTE: This {@link SpanProcessor} exports every ended span individually instead of batching spans together, which causes significant performance overhead with most exporters. For production use, please consider using the {@link BatchSpanProcessor} instead.
+ */
+class SimpleSpanProcessor {
+    constructor(_exporter) {
+        this._exporter = _exporter;
+        this._shutdownOnce = new core_1.BindOnceFuture(this._shutdown, this);
+        this._unresolvedExports = new Set();
+    }
+    async forceFlush() {
+        // await unresolved resources before resolving
+        await Promise.all(Array.from(this._unresolvedExports));
+        if (this._exporter.forceFlush) {
+            await this._exporter.forceFlush();
+        }
+    }
+    onStart(_span, _parentContext) { }
+    onEnd(span) {
+        var _a, _b;
+        if (this._shutdownOnce.isCalled) {
+            return;
+        }
+        if ((span.spanContext().traceFlags & api_1.TraceFlags.SAMPLED) === 0) {
+            return;
+        }
+        const doExport = () => core_1.internal
+            ._export(this._exporter, [span])
+            .then((result) => {
+            var _a;
+            if (result.code !== core_1.ExportResultCode.SUCCESS) {
+                (0, core_1.globalErrorHandler)((_a = result.error) !== null && _a !== void 0 ? _a : new Error(`SimpleSpanProcessor: span export failed (status ${result})`));
+            }
+        })
+            .catch(error => {
+            (0, core_1.globalErrorHandler)(error);
+        });
+        // Avoid scheduling a promise to make the behavior more predictable and easier to test
+        if (span.resource.asyncAttributesPending) {
+            const exportPromise = (_b = (_a = span.resource).waitForAsyncAttributes) === null || _b === void 0 ? void 0 : _b.call(_a).then(() => {
+                if (exportPromise != null) {
+                    this._unresolvedExports.delete(exportPromise);
+                }
+                return doExport();
+            }, err => (0, core_1.globalErrorHandler)(err));
+            // store the unresolved exports
+            if (exportPromise != null) {
+                this._unresolvedExports.add(exportPromise);
+            }
+        }
+        else {
+            void doExport();
+        }
+    }
+    shutdown() {
+        return this._shutdownOnce.call();
+    }
+    _shutdown() {
+        return this._exporter.shutdown();
+    }
+}
+exports.SimpleSpanProcessor = SimpleSpanProcessor;
+
+},{"@opentelemetry/api":34,"@opentelemetry/core":74}],406:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+
+},{}],407:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -26091,10 +34396,27 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./trace"), exports);
-__exportStar(require("./resource"), exports);
+__exportStar(require("./Tracer"), exports);
+__exportStar(require("./BasicTracerProvider"), exports);
+__exportStar(require("./platform"), exports);
+__exportStar(require("./export/ConsoleSpanExporter"), exports);
+__exportStar(require("./export/InMemorySpanExporter"), exports);
+__exportStar(require("./export/ReadableSpan"), exports);
+__exportStar(require("./export/SimpleSpanProcessor"), exports);
+__exportStar(require("./export/SpanExporter"), exports);
+__exportStar(require("./export/NoopSpanProcessor"), exports);
+__exportStar(require("./sampler/AlwaysOffSampler"), exports);
+__exportStar(require("./sampler/AlwaysOnSampler"), exports);
+__exportStar(require("./sampler/ParentBasedSampler"), exports);
+__exportStar(require("./sampler/TraceIdRatioBasedSampler"), exports);
+__exportStar(require("./Sampler"), exports);
+__exportStar(require("./Span"), exports);
+__exportStar(require("./SpanProcessor"), exports);
+__exportStar(require("./TimedEvent"), exports);
+__exportStar(require("./types"), exports);
+__exportStar(require("./IdGenerator"), exports);
 
-},{"./resource":215,"./trace":217}],213:[function(require,module,exports){
+},{"./BasicTracerProvider":390,"./IdGenerator":391,"./Sampler":393,"./Span":394,"./SpanProcessor":395,"./TimedEvent":396,"./Tracer":397,"./export/ConsoleSpanExporter":401,"./export/InMemorySpanExporter":402,"./export/NoopSpanProcessor":403,"./export/ReadableSpan":404,"./export/SimpleSpanProcessor":405,"./export/SpanExporter":406,"./platform":410,"./sampler/AlwaysOffSampler":411,"./sampler/AlwaysOnSampler":412,"./sampler/ParentBasedSampler":413,"./sampler/TraceIdRatioBasedSampler":414,"./types":415}],408:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -26112,28 +34434,907 @@ __exportStar(require("./resource"), exports);
  * limitations under the License.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createConstMap = void 0;
-/**
- * Creates a const map from the given values
- * @param values - An array of values to be used as keys and values in the map.
- * @returns A populated version of the map with the values and keys derived from the values.
+exports.RandomIdGenerator = void 0;
+const SPAN_ID_BYTES = 8;
+const TRACE_ID_BYTES = 16;
+class RandomIdGenerator {
+    constructor() {
+        /**
+         * Returns a random 16-byte trace ID formatted/encoded as a 32 lowercase hex
+         * characters corresponding to 128 bits.
+         */
+        this.generateTraceId = getIdGenerator(TRACE_ID_BYTES);
+        /**
+         * Returns a random 8-byte span ID formatted/encoded as a 16 lowercase hex
+         * characters corresponding to 64 bits.
+         */
+        this.generateSpanId = getIdGenerator(SPAN_ID_BYTES);
+    }
+}
+exports.RandomIdGenerator = RandomIdGenerator;
+const SHARED_CHAR_CODES_ARRAY = Array(32);
+function getIdGenerator(bytes) {
+    return function generateId() {
+        for (let i = 0; i < bytes * 2; i++) {
+            SHARED_CHAR_CODES_ARRAY[i] = Math.floor(Math.random() * 16) + 48;
+            // valid hex characters in the range 48-57 and 97-102
+            if (SHARED_CHAR_CODES_ARRAY[i] >= 58) {
+                SHARED_CHAR_CODES_ARRAY[i] += 39;
+            }
+        }
+        return String.fromCharCode.apply(null, SHARED_CHAR_CODES_ARRAY.slice(0, bytes * 2));
+    };
+}
+
+},{}],409:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-/*#__NO_SIDE_EFFECTS__*/
-function createConstMap(values) {
-    // eslint-disable-next-line prefer-const, @typescript-eslint/no-explicit-any
-    let res = {};
-    const len = values.length;
-    for (let lp = 0; lp < len; lp++) {
-        const val = values[lp];
-        if (val) {
-            res[String(val).toUpperCase().replace(/[-.]/g, '_')] = val;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BatchSpanProcessor = void 0;
+const BatchSpanProcessorBase_1 = require("../../../export/BatchSpanProcessorBase");
+class BatchSpanProcessor extends BatchSpanProcessorBase_1.BatchSpanProcessorBase {
+    constructor(_exporter, config) {
+        super(_exporter, config);
+        this.onInit(config);
+    }
+    onInit(config) {
+        if ((config === null || config === void 0 ? void 0 : config.disableAutoFlushOnDocumentHide) !== true &&
+            typeof document !== 'undefined') {
+            this._visibilityChangeListener = () => {
+                if (document.visibilityState === 'hidden') {
+                    void this.forceFlush();
+                }
+            };
+            this._pageHideListener = () => {
+                void this.forceFlush();
+            };
+            document.addEventListener('visibilitychange', this._visibilityChangeListener);
+            // use 'pagehide' event as a fallback for Safari; see https://bugs.webkit.org/show_bug.cgi?id=116769
+            document.addEventListener('pagehide', this._pageHideListener);
         }
     }
-    return res;
+    onShutdown() {
+        if (typeof document !== 'undefined') {
+            if (this._visibilityChangeListener) {
+                document.removeEventListener('visibilitychange', this._visibilityChangeListener);
+            }
+            if (this._pageHideListener) {
+                document.removeEventListener('pagehide', this._pageHideListener);
+            }
+        }
+    }
 }
-exports.createConstMap = createConstMap;
+exports.BatchSpanProcessor = BatchSpanProcessor;
 
-},{}],214:[function(require,module,exports){
+},{"../../../export/BatchSpanProcessorBase":400}],410:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./export/BatchSpanProcessor"), exports);
+__exportStar(require("./RandomIdGenerator"), exports);
+
+},{"./RandomIdGenerator":408,"./export/BatchSpanProcessor":409}],411:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AlwaysOffSampler = void 0;
+const Sampler_1 = require("../Sampler");
+/** Sampler that samples no traces. */
+class AlwaysOffSampler {
+    shouldSample() {
+        return {
+            decision: Sampler_1.SamplingDecision.NOT_RECORD,
+        };
+    }
+    toString() {
+        return 'AlwaysOffSampler';
+    }
+}
+exports.AlwaysOffSampler = AlwaysOffSampler;
+
+},{"../Sampler":393}],412:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AlwaysOnSampler = void 0;
+const Sampler_1 = require("../Sampler");
+/** Sampler that samples all traces. */
+class AlwaysOnSampler {
+    shouldSample() {
+        return {
+            decision: Sampler_1.SamplingDecision.RECORD_AND_SAMPLED,
+        };
+    }
+    toString() {
+        return 'AlwaysOnSampler';
+    }
+}
+exports.AlwaysOnSampler = AlwaysOnSampler;
+
+},{"../Sampler":393}],413:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ParentBasedSampler = void 0;
+const api_1 = require("@opentelemetry/api");
+const core_1 = require("@opentelemetry/core");
+const AlwaysOffSampler_1 = require("./AlwaysOffSampler");
+const AlwaysOnSampler_1 = require("./AlwaysOnSampler");
+/**
+ * A composite sampler that either respects the parent span's sampling decision
+ * or delegates to `delegateSampler` for root spans.
+ */
+class ParentBasedSampler {
+    constructor(config) {
+        var _a, _b, _c, _d;
+        this._root = config.root;
+        if (!this._root) {
+            (0, core_1.globalErrorHandler)(new Error('ParentBasedSampler must have a root sampler configured'));
+            this._root = new AlwaysOnSampler_1.AlwaysOnSampler();
+        }
+        this._remoteParentSampled =
+            (_a = config.remoteParentSampled) !== null && _a !== void 0 ? _a : new AlwaysOnSampler_1.AlwaysOnSampler();
+        this._remoteParentNotSampled =
+            (_b = config.remoteParentNotSampled) !== null && _b !== void 0 ? _b : new AlwaysOffSampler_1.AlwaysOffSampler();
+        this._localParentSampled =
+            (_c = config.localParentSampled) !== null && _c !== void 0 ? _c : new AlwaysOnSampler_1.AlwaysOnSampler();
+        this._localParentNotSampled =
+            (_d = config.localParentNotSampled) !== null && _d !== void 0 ? _d : new AlwaysOffSampler_1.AlwaysOffSampler();
+    }
+    shouldSample(context, traceId, spanName, spanKind, attributes, links) {
+        const parentContext = api_1.trace.getSpanContext(context);
+        if (!parentContext || !(0, api_1.isSpanContextValid)(parentContext)) {
+            return this._root.shouldSample(context, traceId, spanName, spanKind, attributes, links);
+        }
+        if (parentContext.isRemote) {
+            if (parentContext.traceFlags & api_1.TraceFlags.SAMPLED) {
+                return this._remoteParentSampled.shouldSample(context, traceId, spanName, spanKind, attributes, links);
+            }
+            return this._remoteParentNotSampled.shouldSample(context, traceId, spanName, spanKind, attributes, links);
+        }
+        if (parentContext.traceFlags & api_1.TraceFlags.SAMPLED) {
+            return this._localParentSampled.shouldSample(context, traceId, spanName, spanKind, attributes, links);
+        }
+        return this._localParentNotSampled.shouldSample(context, traceId, spanName, spanKind, attributes, links);
+    }
+    toString() {
+        return `ParentBased{root=${this._root.toString()}, remoteParentSampled=${this._remoteParentSampled.toString()}, remoteParentNotSampled=${this._remoteParentNotSampled.toString()}, localParentSampled=${this._localParentSampled.toString()}, localParentNotSampled=${this._localParentNotSampled.toString()}}`;
+    }
+}
+exports.ParentBasedSampler = ParentBasedSampler;
+
+},{"./AlwaysOffSampler":411,"./AlwaysOnSampler":412,"@opentelemetry/api":34,"@opentelemetry/core":74}],414:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TraceIdRatioBasedSampler = void 0;
+const api_1 = require("@opentelemetry/api");
+const Sampler_1 = require("../Sampler");
+/** Sampler that samples a given fraction of traces based of trace id deterministically. */
+class TraceIdRatioBasedSampler {
+    constructor(_ratio = 0) {
+        this._ratio = _ratio;
+        this._ratio = this._normalize(_ratio);
+        this._upperBound = Math.floor(this._ratio * 0xffffffff);
+    }
+    shouldSample(context, traceId) {
+        return {
+            decision: (0, api_1.isValidTraceId)(traceId) && this._accumulate(traceId) < this._upperBound
+                ? Sampler_1.SamplingDecision.RECORD_AND_SAMPLED
+                : Sampler_1.SamplingDecision.NOT_RECORD,
+        };
+    }
+    toString() {
+        return `TraceIdRatioBased{${this._ratio}}`;
+    }
+    _normalize(ratio) {
+        if (typeof ratio !== 'number' || isNaN(ratio))
+            return 0;
+        return ratio >= 1 ? 1 : ratio <= 0 ? 0 : ratio;
+    }
+    _accumulate(traceId) {
+        let accumulation = 0;
+        for (let i = 0; i < traceId.length / 8; i++) {
+            const pos = i * 8;
+            const part = parseInt(traceId.slice(pos, pos + 8), 16);
+            accumulation = (accumulation ^ part) >>> 0;
+        }
+        return accumulation;
+    }
+}
+exports.TraceIdRatioBasedSampler = TraceIdRatioBasedSampler;
+
+},{"../Sampler":393,"@opentelemetry/api":34}],415:[function(require,module,exports){
+arguments[4][73][0].apply(exports,arguments)
+},{"dup":73}],416:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reconfigureLimits = exports.mergeConfig = void 0;
+const config_1 = require("./config");
+const core_1 = require("@opentelemetry/core");
+/**
+ * Function to merge Default configuration (as specified in './config') with
+ * user provided configurations.
+ */
+function mergeConfig(userConfig) {
+    const perInstanceDefaults = {
+        sampler: (0, config_1.buildSamplerFromEnv)(),
+    };
+    const DEFAULT_CONFIG = (0, config_1.loadDefaultConfig)();
+    const target = Object.assign({}, DEFAULT_CONFIG, perInstanceDefaults, userConfig);
+    target.generalLimits = Object.assign({}, DEFAULT_CONFIG.generalLimits, userConfig.generalLimits || {});
+    target.spanLimits = Object.assign({}, DEFAULT_CONFIG.spanLimits, userConfig.spanLimits || {});
+    return target;
+}
+exports.mergeConfig = mergeConfig;
+/**
+ * When general limits are provided and model specific limits are not,
+ * configures the model specific limits by using the values from the general ones.
+ * @param userConfig User provided tracer configuration
+ */
+function reconfigureLimits(userConfig) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+    const spanLimits = Object.assign({}, userConfig.spanLimits);
+    const parsedEnvConfig = (0, core_1.getEnvWithoutDefaults)();
+    /**
+     * Reassign span attribute count limit to use first non null value defined by user or use default value
+     */
+    spanLimits.attributeCountLimit =
+        (_f = (_e = (_d = (_b = (_a = userConfig.spanLimits) === null || _a === void 0 ? void 0 : _a.attributeCountLimit) !== null && _b !== void 0 ? _b : (_c = userConfig.generalLimits) === null || _c === void 0 ? void 0 : _c.attributeCountLimit) !== null && _d !== void 0 ? _d : parsedEnvConfig.OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT) !== null && _e !== void 0 ? _e : parsedEnvConfig.OTEL_ATTRIBUTE_COUNT_LIMIT) !== null && _f !== void 0 ? _f : core_1.DEFAULT_ATTRIBUTE_COUNT_LIMIT;
+    /**
+     * Reassign span attribute value length limit to use first non null value defined by user or use default value
+     */
+    spanLimits.attributeValueLengthLimit =
+        (_m = (_l = (_k = (_h = (_g = userConfig.spanLimits) === null || _g === void 0 ? void 0 : _g.attributeValueLengthLimit) !== null && _h !== void 0 ? _h : (_j = userConfig.generalLimits) === null || _j === void 0 ? void 0 : _j.attributeValueLengthLimit) !== null && _k !== void 0 ? _k : parsedEnvConfig.OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT) !== null && _l !== void 0 ? _l : parsedEnvConfig.OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT) !== null && _m !== void 0 ? _m : core_1.DEFAULT_ATTRIBUTE_VALUE_LENGTH_LIMIT;
+    return Object.assign({}, userConfig, { spanLimits });
+}
+exports.reconfigureLimits = reconfigureLimits;
+
+},{"./config":398,"@opentelemetry/core":74}],417:[function(require,module,exports){
+arguments[4][213][0].apply(exports,arguments)
+},{"./platform":436,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/semantic-conventions":438,"dup":213}],418:[function(require,module,exports){
+arguments[4][214][0].apply(exports,arguments)
+},{"./Resource":417,"./utils":437,"@opentelemetry/api":34,"dup":214}],419:[function(require,module,exports){
+arguments[4][215][0].apply(exports,arguments)
+},{"./BrowserDetectorSync":420,"dup":215}],420:[function(require,module,exports){
+arguments[4][216][0].apply(exports,arguments)
+},{"../Resource":417,"@opentelemetry/api":34,"@opentelemetry/semantic-conventions":438,"dup":216}],421:[function(require,module,exports){
+arguments[4][217][0].apply(exports,arguments)
+},{"./EnvDetectorSync":422,"dup":217}],422:[function(require,module,exports){
+arguments[4][218][0].apply(exports,arguments)
+},{"../Resource":417,"@opentelemetry/api":34,"@opentelemetry/core":74,"@opentelemetry/semantic-conventions":438,"dup":218}],423:[function(require,module,exports){
+arguments[4][219][0].apply(exports,arguments)
+},{"./NoopDetectorSync":424,"dup":219}],424:[function(require,module,exports){
+arguments[4][220][0].apply(exports,arguments)
+},{"../Resource":417,"dup":220}],425:[function(require,module,exports){
+arguments[4][221][0].apply(exports,arguments)
+},{"./BrowserDetector":419,"./BrowserDetectorSync":420,"./EnvDetector":421,"./EnvDetectorSync":422,"./platform":433,"dup":221}],426:[function(require,module,exports){
+arguments[4][222][0].apply(exports,arguments)
+},{"../../NoopDetector":423,"dup":222}],427:[function(require,module,exports){
+arguments[4][223][0].apply(exports,arguments)
+},{"../../NoopDetectorSync":424,"dup":223}],428:[function(require,module,exports){
+arguments[4][224][0].apply(exports,arguments)
+},{"../../NoopDetector":423,"dup":224}],429:[function(require,module,exports){
+arguments[4][225][0].apply(exports,arguments)
+},{"../../NoopDetectorSync":424,"dup":225}],430:[function(require,module,exports){
+arguments[4][226][0].apply(exports,arguments)
+},{"../../NoopDetector":423,"dup":226}],431:[function(require,module,exports){
+arguments[4][227][0].apply(exports,arguments)
+},{"../../NoopDetector":423,"dup":227}],432:[function(require,module,exports){
+arguments[4][228][0].apply(exports,arguments)
+},{"../../NoopDetectorSync":424,"dup":228}],433:[function(require,module,exports){
+arguments[4][229][0].apply(exports,arguments)
+},{"./HostDetector":426,"./HostDetectorSync":427,"./OSDetector":428,"./OSDetectorSync":429,"./ProcessDetector":430,"./ProcessDetectorSync":431,"./ServiceInstanceIdDetectorSync":432,"dup":229}],434:[function(require,module,exports){
+arguments[4][230][0].apply(exports,arguments)
+},{"./Resource":417,"./detect-resources":418,"./detectors":425,"./platform":436,"dup":230}],435:[function(require,module,exports){
+arguments[4][231][0].apply(exports,arguments)
+},{"dup":231}],436:[function(require,module,exports){
+arguments[4][232][0].apply(exports,arguments)
+},{"./default-service-name":435,"dup":232}],437:[function(require,module,exports){
+arguments[4][233][0].apply(exports,arguments)
+},{"dup":233}],438:[function(require,module,exports){
+arguments[4][105][0].apply(exports,arguments)
+},{"./resource":441,"./trace":443,"dup":105}],439:[function(require,module,exports){
+arguments[4][106][0].apply(exports,arguments)
+},{"dup":106}],440:[function(require,module,exports){
+arguments[4][107][0].apply(exports,arguments)
+},{"../internal/utils":439,"dup":107}],441:[function(require,module,exports){
+arguments[4][108][0].apply(exports,arguments)
+},{"./SemanticResourceAttributes":440,"dup":108}],442:[function(require,module,exports){
+arguments[4][109][0].apply(exports,arguments)
+},{"../internal/utils":439,"dup":109}],443:[function(require,module,exports){
+arguments[4][110][0].apply(exports,arguments)
+},{"./SemanticAttributes":442,"dup":110}],444:[function(require,module,exports){
+arguments[4][129][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":129}],445:[function(require,module,exports){
+arguments[4][130][0].apply(exports,arguments)
+},{"./StackContextManager":444,"@opentelemetry/sdk-trace-base":501,"dup":130}],446:[function(require,module,exports){
+arguments[4][131][0].apply(exports,arguments)
+},{"dup":131}],447:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Tracer = exports.TraceIdRatioBasedSampler = exports.Span = exports.SimpleSpanProcessor = exports.SamplingDecision = exports.RandomIdGenerator = exports.ParentBasedSampler = exports.NoopSpanProcessor = exports.InMemorySpanExporter = exports.ForceFlushState = exports.ConsoleSpanExporter = exports.BatchSpanProcessor = exports.BasicTracerProvider = exports.AlwaysOnSampler = exports.AlwaysOffSampler = exports.sortResources = exports.shouldPropagateTraceHeaders = exports.parseUrl = exports.normalizeUrl = exports.hasKey = exports.getResource = exports.getElementXPath = exports.addSpanNetworkEvents = exports.addSpanNetworkEvent = exports.PerformanceTimingNames = exports.StackContextManager = exports.WebTracerProvider = void 0;
+var WebTracerProvider_1 = require("./WebTracerProvider");
+Object.defineProperty(exports, "WebTracerProvider", { enumerable: true, get: function () { return WebTracerProvider_1.WebTracerProvider; } });
+var StackContextManager_1 = require("./StackContextManager");
+Object.defineProperty(exports, "StackContextManager", { enumerable: true, get: function () { return StackContextManager_1.StackContextManager; } });
+var PerformanceTimingNames_1 = require("./enums/PerformanceTimingNames");
+Object.defineProperty(exports, "PerformanceTimingNames", { enumerable: true, get: function () { return PerformanceTimingNames_1.PerformanceTimingNames; } });
+var utils_1 = require("./utils");
+Object.defineProperty(exports, "addSpanNetworkEvent", { enumerable: true, get: function () { return utils_1.addSpanNetworkEvent; } });
+Object.defineProperty(exports, "addSpanNetworkEvents", { enumerable: true, get: function () { return utils_1.addSpanNetworkEvents; } });
+Object.defineProperty(exports, "getElementXPath", { enumerable: true, get: function () { return utils_1.getElementXPath; } });
+Object.defineProperty(exports, "getResource", { enumerable: true, get: function () { return utils_1.getResource; } });
+Object.defineProperty(exports, "hasKey", { enumerable: true, get: function () { return utils_1.hasKey; } });
+Object.defineProperty(exports, "normalizeUrl", { enumerable: true, get: function () { return utils_1.normalizeUrl; } });
+Object.defineProperty(exports, "parseUrl", { enumerable: true, get: function () { return utils_1.parseUrl; } });
+Object.defineProperty(exports, "shouldPropagateTraceHeaders", { enumerable: true, get: function () { return utils_1.shouldPropagateTraceHeaders; } });
+Object.defineProperty(exports, "sortResources", { enumerable: true, get: function () { return utils_1.sortResources; } });
+var sdk_trace_base_1 = require("@opentelemetry/sdk-trace-base");
+Object.defineProperty(exports, "AlwaysOffSampler", { enumerable: true, get: function () { return sdk_trace_base_1.AlwaysOffSampler; } });
+Object.defineProperty(exports, "AlwaysOnSampler", { enumerable: true, get: function () { return sdk_trace_base_1.AlwaysOnSampler; } });
+Object.defineProperty(exports, "BasicTracerProvider", { enumerable: true, get: function () { return sdk_trace_base_1.BasicTracerProvider; } });
+Object.defineProperty(exports, "BatchSpanProcessor", { enumerable: true, get: function () { return sdk_trace_base_1.BatchSpanProcessor; } });
+Object.defineProperty(exports, "ConsoleSpanExporter", { enumerable: true, get: function () { return sdk_trace_base_1.ConsoleSpanExporter; } });
+Object.defineProperty(exports, "ForceFlushState", { enumerable: true, get: function () { return sdk_trace_base_1.ForceFlushState; } });
+Object.defineProperty(exports, "InMemorySpanExporter", { enumerable: true, get: function () { return sdk_trace_base_1.InMemorySpanExporter; } });
+Object.defineProperty(exports, "NoopSpanProcessor", { enumerable: true, get: function () { return sdk_trace_base_1.NoopSpanProcessor; } });
+Object.defineProperty(exports, "ParentBasedSampler", { enumerable: true, get: function () { return sdk_trace_base_1.ParentBasedSampler; } });
+Object.defineProperty(exports, "RandomIdGenerator", { enumerable: true, get: function () { return sdk_trace_base_1.RandomIdGenerator; } });
+Object.defineProperty(exports, "SamplingDecision", { enumerable: true, get: function () { return sdk_trace_base_1.SamplingDecision; } });
+Object.defineProperty(exports, "SimpleSpanProcessor", { enumerable: true, get: function () { return sdk_trace_base_1.SimpleSpanProcessor; } });
+Object.defineProperty(exports, "Span", { enumerable: true, get: function () { return sdk_trace_base_1.Span; } });
+Object.defineProperty(exports, "TraceIdRatioBasedSampler", { enumerable: true, get: function () { return sdk_trace_base_1.TraceIdRatioBasedSampler; } });
+Object.defineProperty(exports, "Tracer", { enumerable: true, get: function () { return sdk_trace_base_1.Tracer; } });
+
+},{"./StackContextManager":444,"./WebTracerProvider":445,"./enums/PerformanceTimingNames":446,"./utils":448,"@opentelemetry/sdk-trace-base":501}],448:[function(require,module,exports){
+arguments[4][134][0].apply(exports,arguments)
+},{"./enums/PerformanceTimingNames":446,"@opentelemetry/core":459,"@opentelemetry/semantic-conventions":510,"dup":134}],449:[function(require,module,exports){
+arguments[4][63][0].apply(exports,arguments)
+},{"dup":63}],450:[function(require,module,exports){
+arguments[4][64][0].apply(exports,arguments)
+},{"dup":64}],451:[function(require,module,exports){
+arguments[4][65][0].apply(exports,arguments)
+},{"../../trace/suppress-tracing":478,"../constants":450,"../utils":452,"@opentelemetry/api":34,"dup":65}],452:[function(require,module,exports){
+arguments[4][66][0].apply(exports,arguments)
+},{"./constants":450,"@opentelemetry/api":34,"dup":66}],453:[function(require,module,exports){
+arguments[4][67][0].apply(exports,arguments)
+},{"dup":67}],454:[function(require,module,exports){
+arguments[4][68][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":68}],455:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"./logging-error-handler":457,"dup":69}],456:[function(require,module,exports){
+arguments[4][70][0].apply(exports,arguments)
+},{"dup":70}],457:[function(require,module,exports){
+arguments[4][71][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":71}],458:[function(require,module,exports){
+arguments[4][72][0].apply(exports,arguments)
+},{"../platform":466,"dup":72}],459:[function(require,module,exports){
+arguments[4][244][0].apply(exports,arguments)
+},{"./ExportResult":449,"./baggage/propagation/W3CBaggagePropagator":451,"./baggage/utils":452,"./common/anchored-clock":453,"./common/attributes":454,"./common/global-error-handler":455,"./common/hex-to-binary":456,"./common/logging-error-handler":457,"./common/time":458,"./internal/exporter":460,"./platform":466,"./propagation/composite":470,"./trace/TraceState":471,"./trace/W3CTraceContextPropagator":472,"./trace/rpc-metadata":473,"./trace/sampler/AlwaysOffSampler":474,"./trace/sampler/AlwaysOnSampler":475,"./trace/sampler/ParentBasedSampler":476,"./trace/sampler/TraceIdRatioBasedSampler":477,"./trace/suppress-tracing":478,"./utils/callback":479,"./utils/environment":480,"./utils/merge":482,"./utils/sampling":484,"./utils/timeout":485,"./utils/url":486,"./utils/wrap":487,"./version":488,"dup":244}],460:[function(require,module,exports){
+arguments[4][75][0].apply(exports,arguments)
+},{"../trace/suppress-tracing":478,"@opentelemetry/api":34,"dup":75}],461:[function(require,module,exports){
+arguments[4][76][0].apply(exports,arguments)
+},{"dup":76}],462:[function(require,module,exports){
+arguments[4][77][0].apply(exports,arguments)
+},{"dup":77}],463:[function(require,module,exports){
+arguments[4][78][0].apply(exports,arguments)
+},{"../../utils/environment":480,"./globalThis":464,"dup":78}],464:[function(require,module,exports){
+arguments[4][79][0].apply(exports,arguments)
+},{"dup":79}],465:[function(require,module,exports){
+arguments[4][80][0].apply(exports,arguments)
+},{"../../common/hex-to-binary":456,"dup":80}],466:[function(require,module,exports){
+arguments[4][251][0].apply(exports,arguments)
+},{"./RandomIdGenerator":462,"./environment":463,"./globalThis":464,"./hex-to-base64":465,"./performance":467,"./sdk-info":468,"./timer-util":469,"dup":251}],467:[function(require,module,exports){
+arguments[4][82][0].apply(exports,arguments)
+},{"dup":82}],468:[function(require,module,exports){
+arguments[4][83][0].apply(exports,arguments)
+},{"../../version":488,"@opentelemetry/semantic-conventions":510,"dup":83}],469:[function(require,module,exports){
+arguments[4][84][0].apply(exports,arguments)
+},{"dup":84}],470:[function(require,module,exports){
+arguments[4][85][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":85}],471:[function(require,module,exports){
+arguments[4][87][0].apply(exports,arguments)
+},{"../internal/validators":461,"dup":87}],472:[function(require,module,exports){
+arguments[4][88][0].apply(exports,arguments)
+},{"./TraceState":471,"./suppress-tracing":478,"@opentelemetry/api":34,"dup":88}],473:[function(require,module,exports){
+arguments[4][89][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":89}],474:[function(require,module,exports){
+arguments[4][90][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":90}],475:[function(require,module,exports){
+arguments[4][91][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":91}],476:[function(require,module,exports){
+arguments[4][92][0].apply(exports,arguments)
+},{"../../common/global-error-handler":455,"./AlwaysOffSampler":474,"./AlwaysOnSampler":475,"@opentelemetry/api":34,"dup":92}],477:[function(require,module,exports){
+arguments[4][93][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":93}],478:[function(require,module,exports){
+arguments[4][94][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"dup":94}],479:[function(require,module,exports){
+arguments[4][95][0].apply(exports,arguments)
+},{"./promise":483,"dup":95}],480:[function(require,module,exports){
+arguments[4][96][0].apply(exports,arguments)
+},{"./sampling":484,"@opentelemetry/api":34,"dup":96}],481:[function(require,module,exports){
+arguments[4][97][0].apply(exports,arguments)
+},{"dup":97}],482:[function(require,module,exports){
+arguments[4][98][0].apply(exports,arguments)
+},{"./lodash.merge":481,"dup":98}],483:[function(require,module,exports){
+arguments[4][99][0].apply(exports,arguments)
+},{"dup":99}],484:[function(require,module,exports){
+arguments[4][100][0].apply(exports,arguments)
+},{"dup":100}],485:[function(require,module,exports){
+arguments[4][101][0].apply(exports,arguments)
+},{"dup":101}],486:[function(require,module,exports){
+arguments[4][102][0].apply(exports,arguments)
+},{"dup":102}],487:[function(require,module,exports){
+arguments[4][103][0].apply(exports,arguments)
+},{"dup":103}],488:[function(require,module,exports){
+arguments[4][273][0].apply(exports,arguments)
+},{"dup":273}],489:[function(require,module,exports){
+arguments[4][390][0].apply(exports,arguments)
+},{".":501,"./MultiSpanProcessor":490,"./config":494,"./export/NoopSpanProcessor":499,"./platform":504,"./utility":509,"@opentelemetry/api":34,"@opentelemetry/core":459,"@opentelemetry/resources":230,"dup":390}],490:[function(require,module,exports){
+arguments[4][392][0].apply(exports,arguments)
+},{"@opentelemetry/core":459,"dup":392}],491:[function(require,module,exports){
+arguments[4][393][0].apply(exports,arguments)
+},{"dup":393}],492:[function(require,module,exports){
+arguments[4][394][0].apply(exports,arguments)
+},{"./enums":495,"@opentelemetry/api":34,"@opentelemetry/core":459,"@opentelemetry/semantic-conventions":510,"dup":394}],493:[function(require,module,exports){
+arguments[4][397][0].apply(exports,arguments)
+},{"./Span":492,"./platform":504,"./utility":509,"@opentelemetry/api":34,"@opentelemetry/core":459,"dup":397}],494:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.buildSamplerFromEnv = exports.loadDefaultConfig = void 0;
+const api_1 = require("@opentelemetry/api");
+const core_1 = require("@opentelemetry/core");
+const AlwaysOffSampler_1 = require("./sampler/AlwaysOffSampler");
+const AlwaysOnSampler_1 = require("./sampler/AlwaysOnSampler");
+const ParentBasedSampler_1 = require("./sampler/ParentBasedSampler");
+const TraceIdRatioBasedSampler_1 = require("./sampler/TraceIdRatioBasedSampler");
+const env = (0, core_1.getEnv)();
+const FALLBACK_OTEL_TRACES_SAMPLER = core_1.TracesSamplerValues.AlwaysOn;
+const DEFAULT_RATIO = 1;
+/**
+ * Load default configuration. For fields with primitive values, any user-provided
+ * value will override the corresponding default value. For fields with
+ * non-primitive values (like `spanLimits`), the user-provided value will be
+ * used to extend the default value.
+ */
+// object needs to be wrapped in this function and called when needed otherwise
+// envs are parsed before tests are ran - causes tests using these envs to fail
+function loadDefaultConfig() {
+    const _env = (0, core_1.getEnv)();
+    return {
+        sampler: buildSamplerFromEnv(env),
+        forceFlushTimeoutMillis: 30000,
+        generalLimits: {
+            attributeValueLengthLimit: _env.OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT,
+            attributeCountLimit: _env.OTEL_ATTRIBUTE_COUNT_LIMIT,
+        },
+        spanLimits: {
+            attributeValueLengthLimit: _env.OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT,
+            attributeCountLimit: _env.OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT,
+            linkCountLimit: _env.OTEL_SPAN_LINK_COUNT_LIMIT,
+            eventCountLimit: _env.OTEL_SPAN_EVENT_COUNT_LIMIT,
+            attributePerEventCountLimit: _env.OTEL_SPAN_ATTRIBUTE_PER_EVENT_COUNT_LIMIT,
+            attributePerLinkCountLimit: _env.OTEL_SPAN_ATTRIBUTE_PER_LINK_COUNT_LIMIT,
+        },
+    };
+}
+exports.loadDefaultConfig = loadDefaultConfig;
+/**
+ * Based on environment, builds a sampler, complies with specification.
+ * @param environment optional, by default uses getEnv(), but allows passing a value to reuse parsed environment
+ */
+function buildSamplerFromEnv(environment = (0, core_1.getEnv)()) {
+    switch (environment.OTEL_TRACES_SAMPLER) {
+        case core_1.TracesSamplerValues.AlwaysOn:
+            return new AlwaysOnSampler_1.AlwaysOnSampler();
+        case core_1.TracesSamplerValues.AlwaysOff:
+            return new AlwaysOffSampler_1.AlwaysOffSampler();
+        case core_1.TracesSamplerValues.ParentBasedAlwaysOn:
+            return new ParentBasedSampler_1.ParentBasedSampler({
+                root: new AlwaysOnSampler_1.AlwaysOnSampler(),
+            });
+        case core_1.TracesSamplerValues.ParentBasedAlwaysOff:
+            return new ParentBasedSampler_1.ParentBasedSampler({
+                root: new AlwaysOffSampler_1.AlwaysOffSampler(),
+            });
+        case core_1.TracesSamplerValues.TraceIdRatio:
+            return new TraceIdRatioBasedSampler_1.TraceIdRatioBasedSampler(getSamplerProbabilityFromEnv(environment));
+        case core_1.TracesSamplerValues.ParentBasedTraceIdRatio:
+            return new ParentBasedSampler_1.ParentBasedSampler({
+                root: new TraceIdRatioBasedSampler_1.TraceIdRatioBasedSampler(getSamplerProbabilityFromEnv(environment)),
+            });
+        default:
+            api_1.diag.error(`OTEL_TRACES_SAMPLER value "${environment.OTEL_TRACES_SAMPLER} invalid, defaulting to ${FALLBACK_OTEL_TRACES_SAMPLER}".`);
+            return new AlwaysOnSampler_1.AlwaysOnSampler();
+    }
+}
+exports.buildSamplerFromEnv = buildSamplerFromEnv;
+function getSamplerProbabilityFromEnv(environment) {
+    if (environment.OTEL_TRACES_SAMPLER_ARG === undefined ||
+        environment.OTEL_TRACES_SAMPLER_ARG === '') {
+        api_1.diag.error(`OTEL_TRACES_SAMPLER_ARG is blank, defaulting to ${DEFAULT_RATIO}.`);
+        return DEFAULT_RATIO;
+    }
+    const probability = Number(environment.OTEL_TRACES_SAMPLER_ARG);
+    if (isNaN(probability)) {
+        api_1.diag.error(`OTEL_TRACES_SAMPLER_ARG=${environment.OTEL_TRACES_SAMPLER_ARG} was given, but it is invalid, defaulting to ${DEFAULT_RATIO}.`);
+        return DEFAULT_RATIO;
+    }
+    if (probability < 0 || probability > 1) {
+        api_1.diag.error(`OTEL_TRACES_SAMPLER_ARG=${environment.OTEL_TRACES_SAMPLER_ARG} was given, but it is out of range ([0..1]), defaulting to ${DEFAULT_RATIO}.`);
+        return DEFAULT_RATIO;
+    }
+    return probability;
+}
+
+},{"./sampler/AlwaysOffSampler":505,"./sampler/AlwaysOnSampler":506,"./sampler/ParentBasedSampler":507,"./sampler/TraceIdRatioBasedSampler":508,"@opentelemetry/api":34,"@opentelemetry/core":459}],495:[function(require,module,exports){
+arguments[4][399][0].apply(exports,arguments)
+},{"dup":399}],496:[function(require,module,exports){
+arguments[4][400][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"@opentelemetry/core":459,"dup":400}],497:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConsoleSpanExporter = void 0;
+const core_1 = require("@opentelemetry/core");
+/**
+ * This is implementation of {@link SpanExporter} that prints spans to the
+ * console. This class can be used for diagnostic purposes.
+ *
+ * NOTE: This {@link SpanExporter} is intended for diagnostics use only, output rendered to the console may change at any time.
+ */
+/* eslint-disable no-console */
+class ConsoleSpanExporter {
+    /**
+     * Export spans.
+     * @param spans
+     * @param resultCallback
+     */
+    export(spans, resultCallback) {
+        return this._sendSpans(spans, resultCallback);
+    }
+    /**
+     * Shutdown the exporter.
+     */
+    shutdown() {
+        this._sendSpans([]);
+        return this.forceFlush();
+    }
+    /**
+     * Exports any pending spans in exporter
+     */
+    forceFlush() {
+        return Promise.resolve();
+    }
+    /**
+     * converts span info into more readable format
+     * @param span
+     */
+    _exportInfo(span) {
+        var _a;
+        return {
+            resource: {
+                attributes: span.resource.attributes,
+            },
+            instrumentationScope: span.instrumentationLibrary,
+            traceId: span.spanContext().traceId,
+            parentId: span.parentSpanId,
+            traceState: (_a = span.spanContext().traceState) === null || _a === void 0 ? void 0 : _a.serialize(),
+            name: span.name,
+            id: span.spanContext().spanId,
+            kind: span.kind,
+            timestamp: (0, core_1.hrTimeToMicroseconds)(span.startTime),
+            duration: (0, core_1.hrTimeToMicroseconds)(span.duration),
+            attributes: span.attributes,
+            status: span.status,
+            events: span.events,
+            links: span.links,
+        };
+    }
+    /**
+     * Showing spans in console
+     * @param spans
+     * @param done
+     */
+    _sendSpans(spans, done) {
+        for (const span of spans) {
+            console.dir(this._exportInfo(span), { depth: 3 });
+        }
+        if (done) {
+            return done({ code: core_1.ExportResultCode.SUCCESS });
+        }
+    }
+}
+exports.ConsoleSpanExporter = ConsoleSpanExporter;
+
+},{"@opentelemetry/core":459}],498:[function(require,module,exports){
+arguments[4][402][0].apply(exports,arguments)
+},{"@opentelemetry/core":459,"dup":402}],499:[function(require,module,exports){
+arguments[4][403][0].apply(exports,arguments)
+},{"dup":403}],500:[function(require,module,exports){
+arguments[4][405][0].apply(exports,arguments)
+},{"@opentelemetry/api":34,"@opentelemetry/core":459,"dup":405}],501:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Span = exports.SamplingDecision = exports.TraceIdRatioBasedSampler = exports.ParentBasedSampler = exports.AlwaysOnSampler = exports.AlwaysOffSampler = exports.NoopSpanProcessor = exports.SimpleSpanProcessor = exports.InMemorySpanExporter = exports.ConsoleSpanExporter = exports.RandomIdGenerator = exports.BatchSpanProcessor = exports.ForceFlushState = exports.BasicTracerProvider = exports.Tracer = void 0;
+var Tracer_1 = require("./Tracer");
+Object.defineProperty(exports, "Tracer", { enumerable: true, get: function () { return Tracer_1.Tracer; } });
+var BasicTracerProvider_1 = require("./BasicTracerProvider");
+Object.defineProperty(exports, "BasicTracerProvider", { enumerable: true, get: function () { return BasicTracerProvider_1.BasicTracerProvider; } });
+Object.defineProperty(exports, "ForceFlushState", { enumerable: true, get: function () { return BasicTracerProvider_1.ForceFlushState; } });
+var platform_1 = require("./platform");
+Object.defineProperty(exports, "BatchSpanProcessor", { enumerable: true, get: function () { return platform_1.BatchSpanProcessor; } });
+Object.defineProperty(exports, "RandomIdGenerator", { enumerable: true, get: function () { return platform_1.RandomIdGenerator; } });
+var ConsoleSpanExporter_1 = require("./export/ConsoleSpanExporter");
+Object.defineProperty(exports, "ConsoleSpanExporter", { enumerable: true, get: function () { return ConsoleSpanExporter_1.ConsoleSpanExporter; } });
+var InMemorySpanExporter_1 = require("./export/InMemorySpanExporter");
+Object.defineProperty(exports, "InMemorySpanExporter", { enumerable: true, get: function () { return InMemorySpanExporter_1.InMemorySpanExporter; } });
+var SimpleSpanProcessor_1 = require("./export/SimpleSpanProcessor");
+Object.defineProperty(exports, "SimpleSpanProcessor", { enumerable: true, get: function () { return SimpleSpanProcessor_1.SimpleSpanProcessor; } });
+var NoopSpanProcessor_1 = require("./export/NoopSpanProcessor");
+Object.defineProperty(exports, "NoopSpanProcessor", { enumerable: true, get: function () { return NoopSpanProcessor_1.NoopSpanProcessor; } });
+var AlwaysOffSampler_1 = require("./sampler/AlwaysOffSampler");
+Object.defineProperty(exports, "AlwaysOffSampler", { enumerable: true, get: function () { return AlwaysOffSampler_1.AlwaysOffSampler; } });
+var AlwaysOnSampler_1 = require("./sampler/AlwaysOnSampler");
+Object.defineProperty(exports, "AlwaysOnSampler", { enumerable: true, get: function () { return AlwaysOnSampler_1.AlwaysOnSampler; } });
+var ParentBasedSampler_1 = require("./sampler/ParentBasedSampler");
+Object.defineProperty(exports, "ParentBasedSampler", { enumerable: true, get: function () { return ParentBasedSampler_1.ParentBasedSampler; } });
+var TraceIdRatioBasedSampler_1 = require("./sampler/TraceIdRatioBasedSampler");
+Object.defineProperty(exports, "TraceIdRatioBasedSampler", { enumerable: true, get: function () { return TraceIdRatioBasedSampler_1.TraceIdRatioBasedSampler; } });
+var Sampler_1 = require("./Sampler");
+Object.defineProperty(exports, "SamplingDecision", { enumerable: true, get: function () { return Sampler_1.SamplingDecision; } });
+var Span_1 = require("./Span");
+Object.defineProperty(exports, "Span", { enumerable: true, get: function () { return Span_1.Span; } });
+
+},{"./BasicTracerProvider":489,"./Sampler":491,"./Span":492,"./Tracer":493,"./export/ConsoleSpanExporter":497,"./export/InMemorySpanExporter":498,"./export/NoopSpanProcessor":499,"./export/SimpleSpanProcessor":500,"./platform":504,"./sampler/AlwaysOffSampler":505,"./sampler/AlwaysOnSampler":506,"./sampler/ParentBasedSampler":507,"./sampler/TraceIdRatioBasedSampler":508}],502:[function(require,module,exports){
+arguments[4][408][0].apply(exports,arguments)
+},{"dup":408}],503:[function(require,module,exports){
+arguments[4][409][0].apply(exports,arguments)
+},{"../../../export/BatchSpanProcessorBase":496,"dup":409}],504:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RandomIdGenerator = exports.BatchSpanProcessor = void 0;
+var BatchSpanProcessor_1 = require("./export/BatchSpanProcessor");
+Object.defineProperty(exports, "BatchSpanProcessor", { enumerable: true, get: function () { return BatchSpanProcessor_1.BatchSpanProcessor; } });
+var RandomIdGenerator_1 = require("./RandomIdGenerator");
+Object.defineProperty(exports, "RandomIdGenerator", { enumerable: true, get: function () { return RandomIdGenerator_1.RandomIdGenerator; } });
+
+},{"./RandomIdGenerator":502,"./export/BatchSpanProcessor":503}],505:[function(require,module,exports){
+arguments[4][411][0].apply(exports,arguments)
+},{"../Sampler":491,"dup":411}],506:[function(require,module,exports){
+arguments[4][412][0].apply(exports,arguments)
+},{"../Sampler":491,"dup":412}],507:[function(require,module,exports){
+arguments[4][413][0].apply(exports,arguments)
+},{"./AlwaysOffSampler":505,"./AlwaysOnSampler":506,"@opentelemetry/api":34,"@opentelemetry/core":459,"dup":413}],508:[function(require,module,exports){
+arguments[4][414][0].apply(exports,arguments)
+},{"../Sampler":491,"@opentelemetry/api":34,"dup":414}],509:[function(require,module,exports){
+arguments[4][416][0].apply(exports,arguments)
+},{"./config":494,"@opentelemetry/core":459,"dup":416}],510:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable no-restricted-syntax --
+ * These re-exports are only of constants, only two-levels deep, and
+ * should not cause problems for tree-shakers.
+ */
+// Deprecated. These are kept around for compatibility purposes
+__exportStar(require("./trace"), exports);
+__exportStar(require("./resource"), exports);
+// Use these instead
+__exportStar(require("./stable_attributes"), exports);
+__exportStar(require("./stable_metrics"), exports);
+
+},{"./resource":513,"./stable_attributes":514,"./stable_metrics":515,"./trace":517}],511:[function(require,module,exports){
+arguments[4][106][0].apply(exports,arguments)
+},{"dup":106}],512:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -26162,7 +35363,7 @@ const utils_1 = require("../internal/utils");
 // Constant values for SemanticResourceAttributes
 //----------------------------------------------------------------------------------------------------------
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_CLOUD_PROVIDER = 'cloud.provider';
 const TMP_CLOUD_ACCOUNT_ID = 'cloud.account.id';
 const TMP_CLOUD_REGION = 'cloud.region';
@@ -26246,124 +35447,176 @@ const TMP_WEBENGINE_VERSION = 'webengine.version';
 const TMP_WEBENGINE_DESCRIPTION = 'webengine.description';
 /**
  * Name of the cloud provider.
+ *
+ * @deprecated use ATTR_CLOUD_PROVIDER
  */
 exports.SEMRESATTRS_CLOUD_PROVIDER = TMP_CLOUD_PROVIDER;
 /**
  * The cloud account ID the resource is assigned to.
+ *
+ * @deprecated use ATTR_CLOUD_ACCOUNT_ID
  */
 exports.SEMRESATTRS_CLOUD_ACCOUNT_ID = TMP_CLOUD_ACCOUNT_ID;
 /**
  * The geographical region the resource is running. Refer to your provider&#39;s docs to see the available regions, for example [Alibaba Cloud regions](https://www.alibabacloud.com/help/doc-detail/40654.htm), [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/), [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), or [Google Cloud regions](https://cloud.google.com/about/locations).
+ *
+ * @deprecated use ATTR_CLOUD_REGION
  */
 exports.SEMRESATTRS_CLOUD_REGION = TMP_CLOUD_REGION;
 /**
  * Cloud regions often have multiple, isolated locations known as zones to increase availability. Availability zone represents the zone where the resource is running.
  *
  * Note: Availability zones are called &#34;zones&#34; on Alibaba Cloud and Google Cloud.
+ *
+ * @deprecated use ATTR_CLOUD_AVAILABILITY_ZONE
  */
 exports.SEMRESATTRS_CLOUD_AVAILABILITY_ZONE = TMP_CLOUD_AVAILABILITY_ZONE;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated use ATTR_CLOUD_PLATFORM
  */
 exports.SEMRESATTRS_CLOUD_PLATFORM = TMP_CLOUD_PLATFORM;
 /**
  * The Amazon Resource Name (ARN) of an [ECS container instance](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_instances.html).
+ *
+ * @deprecated use ATTR_AWS_ECS_CONTAINER_ARN
  */
 exports.SEMRESATTRS_AWS_ECS_CONTAINER_ARN = TMP_AWS_ECS_CONTAINER_ARN;
 /**
  * The ARN of an [ECS cluster](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/clusters.html).
+ *
+ * @deprecated use ATTR_AWS_ECS_CLUSTER_ARN
  */
 exports.SEMRESATTRS_AWS_ECS_CLUSTER_ARN = TMP_AWS_ECS_CLUSTER_ARN;
 /**
  * The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task.
+ *
+ * @deprecated use ATTR_AWS_ECS_LAUNCHTYPE
  */
 exports.SEMRESATTRS_AWS_ECS_LAUNCHTYPE = TMP_AWS_ECS_LAUNCHTYPE;
 /**
  * The ARN of an [ECS task definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html).
+ *
+ * @deprecated use ATTR_AWS_ECS_TASK_ARN
  */
 exports.SEMRESATTRS_AWS_ECS_TASK_ARN = TMP_AWS_ECS_TASK_ARN;
 /**
  * The task definition family this task definition is a member of.
+ *
+ * @deprecated use ATTR_AWS_ECS_TASK_FAMILY
  */
 exports.SEMRESATTRS_AWS_ECS_TASK_FAMILY = TMP_AWS_ECS_TASK_FAMILY;
 /**
  * The revision for this task definition.
+ *
+ * @deprecated use ATTR_AWS_ECS_TASK_REVISION
  */
 exports.SEMRESATTRS_AWS_ECS_TASK_REVISION = TMP_AWS_ECS_TASK_REVISION;
 /**
  * The ARN of an EKS cluster.
+ *
+ * @deprecated use ATTR_AWS_EKS_CLUSTER_ARN
  */
 exports.SEMRESATTRS_AWS_EKS_CLUSTER_ARN = TMP_AWS_EKS_CLUSTER_ARN;
 /**
  * The name(s) of the AWS log group(s) an application is writing to.
  *
  * Note: Multiple log groups must be supported for cases like multi-container applications, where a single application has sidecar containers, and each write to their own log group.
+ *
+ * @deprecated use ATTR_AWS_LOG_GROUP_NAMES
  */
 exports.SEMRESATTRS_AWS_LOG_GROUP_NAMES = TMP_AWS_LOG_GROUP_NAMES;
 /**
  * The Amazon Resource Name(s) (ARN) of the AWS log group(s).
  *
  * Note: See the [log group ARN format documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/iam-access-control-overview-cwl.html#CWL_ARN_Format).
+ *
+ * @deprecated use ATTR_AWS_LOG_GROUP_ARNS
  */
 exports.SEMRESATTRS_AWS_LOG_GROUP_ARNS = TMP_AWS_LOG_GROUP_ARNS;
 /**
  * The name(s) of the AWS log stream(s) an application is writing to.
+ *
+ * @deprecated use ATTR_AWS_LOG_STREAM_NAMES
  */
 exports.SEMRESATTRS_AWS_LOG_STREAM_NAMES = TMP_AWS_LOG_STREAM_NAMES;
 /**
  * The ARN(s) of the AWS log stream(s).
  *
  * Note: See the [log stream ARN format documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/iam-access-control-overview-cwl.html#CWL_ARN_Format). One log group can contain several log streams, so these ARNs necessarily identify both a log group and a log stream.
+ *
+ * @deprecated use ATTR_AWS_LOG_STREAM_ARNS
  */
 exports.SEMRESATTRS_AWS_LOG_STREAM_ARNS = TMP_AWS_LOG_STREAM_ARNS;
 /**
  * Container name.
+ *
+ * @deprecated use ATTR_CONTAINER_NAME
  */
 exports.SEMRESATTRS_CONTAINER_NAME = TMP_CONTAINER_NAME;
 /**
  * Container ID. Usually a UUID, as for example used to [identify Docker containers](https://docs.docker.com/engine/reference/run/#container-identification). The UUID might be abbreviated.
+ *
+ * @deprecated use ATTR_CONTAINER_ID
  */
 exports.SEMRESATTRS_CONTAINER_ID = TMP_CONTAINER_ID;
 /**
  * The container runtime managing this container.
+ *
+ * @deprecated use ATTR_CONTAINER_RUNTIME
  */
 exports.SEMRESATTRS_CONTAINER_RUNTIME = TMP_CONTAINER_RUNTIME;
 /**
  * Name of the image the container was built on.
+ *
+ * @deprecated use ATTR_CONTAINER_IMAGE_NAME
  */
 exports.SEMRESATTRS_CONTAINER_IMAGE_NAME = TMP_CONTAINER_IMAGE_NAME;
 /**
  * Container image tag.
+ *
+ * @deprecated use ATTR_CONTAINER_IMAGE_TAG
  */
 exports.SEMRESATTRS_CONTAINER_IMAGE_TAG = TMP_CONTAINER_IMAGE_TAG;
 /**
  * Name of the [deployment environment](https://en.wikipedia.org/wiki/Deployment_environment) (aka deployment tier).
+ *
+ * @deprecated use ATTR_DEPLOYMENT_ENVIRONMENT
  */
 exports.SEMRESATTRS_DEPLOYMENT_ENVIRONMENT = TMP_DEPLOYMENT_ENVIRONMENT;
 /**
  * A unique identifier representing the device.
  *
  * Note: The device identifier MUST only be defined using the values outlined below. This value is not an advertising identifier and MUST NOT be used as such. On iOS (Swift or Objective-C), this value MUST be equal to the [vendor identifier](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor). On Android (Java or Kotlin), this value MUST be equal to the Firebase Installation ID or a globally unique UUID which is persisted across sessions in your application. More information can be found [here](https://developer.android.com/training/articles/user-data-ids) on best practices and exact implementation details. Caution should be taken when storing personal data or anything which can identify a user. GDPR and data protection laws may apply, ensure you do your own due diligence.
+ *
+ * @deprecated use ATTR_DEVICE_ID
  */
 exports.SEMRESATTRS_DEVICE_ID = TMP_DEVICE_ID;
 /**
  * The model identifier for the device.
  *
  * Note: It&#39;s recommended this value represents a machine readable version of the model identifier rather than the market or consumer-friendly name of the device.
+ *
+ * @deprecated use ATTR_DEVICE_MODEL_IDENTIFIER
  */
 exports.SEMRESATTRS_DEVICE_MODEL_IDENTIFIER = TMP_DEVICE_MODEL_IDENTIFIER;
 /**
  * The marketing name for the device model.
  *
  * Note: It&#39;s recommended this value represents a human readable version of the device model rather than a machine readable alternative.
+ *
+ * @deprecated use ATTR_DEVICE_MODEL_NAME
  */
 exports.SEMRESATTRS_DEVICE_MODEL_NAME = TMP_DEVICE_MODEL_NAME;
 /**
  * The name of the single function that this runtime instance executes.
  *
  * Note: This is the name of the function as configured/deployed on the FaaS platform and is usually different from the name of the callback function (which may be stored in the [`code.namespace`/`code.function`](../../trace/semantic_conventions/span-general.md#source-code-attributes) span attributes).
+ *
+ * @deprecated use ATTR_FAAS_NAME
  */
 exports.SEMRESATTRS_FAAS_NAME = TMP_FAAS_NAME;
 /**
@@ -26383,6 +35636,8 @@ which is why this field cannot be made required. For example, on AWS the account
 part of the ARN is not available without calling another AWS API
 which may be deemed too slow for a short-running lambda function.
 As an alternative, consider setting `faas.id` as a span attribute instead.
+*
+* @deprecated use ATTR_FAAS_ID
 */
 exports.SEMRESATTRS_FAAS_ID = TMP_FAAS_ID;
 /**
@@ -26397,228 +35652,336 @@ exports.SEMRESATTRS_FAAS_ID = TMP_FAAS_ID;
 * **Google Cloud Functions:** The value of the
   [`K_REVISION` environment variable](https://cloud.google.com/functions/docs/env-var#runtime_environment_variables_set_automatically).
 * **Azure Functions:** Not applicable. Do not set this attribute.
+*
+* @deprecated use ATTR_FAAS_VERSION
 */
 exports.SEMRESATTRS_FAAS_VERSION = TMP_FAAS_VERSION;
 /**
  * The execution environment ID as a string, that will be potentially reused for other invocations to the same function/function version.
  *
  * Note: * **AWS Lambda:** Use the (full) log stream name.
+ *
+ * @deprecated use ATTR_FAAS_INSTANCE
  */
 exports.SEMRESATTRS_FAAS_INSTANCE = TMP_FAAS_INSTANCE;
 /**
  * The amount of memory available to the serverless function in MiB.
  *
  * Note: It&#39;s recommended to set this attribute since e.g. too little memory can easily stop a Java AWS Lambda function from working correctly. On AWS Lambda, the environment variable `AWS_LAMBDA_FUNCTION_MEMORY_SIZE` provides this information.
+ *
+ * @deprecated use ATTR_FAAS_MAX_MEMORY
  */
 exports.SEMRESATTRS_FAAS_MAX_MEMORY = TMP_FAAS_MAX_MEMORY;
 /**
  * Unique host ID. For Cloud, this must be the instance_id assigned by the cloud provider.
+ *
+ * @deprecated use ATTR_HOST_ID
  */
 exports.SEMRESATTRS_HOST_ID = TMP_HOST_ID;
 /**
  * Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user.
+ *
+ * @deprecated use ATTR_HOST_NAME
  */
 exports.SEMRESATTRS_HOST_NAME = TMP_HOST_NAME;
 /**
  * Type of host. For Cloud, this must be the machine type.
+ *
+ * @deprecated use ATTR_HOST_TYPE
  */
 exports.SEMRESATTRS_HOST_TYPE = TMP_HOST_TYPE;
 /**
  * The CPU architecture the host system is running on.
+ *
+ * @deprecated use ATTR_HOST_ARCH
  */
 exports.SEMRESATTRS_HOST_ARCH = TMP_HOST_ARCH;
 /**
  * Name of the VM image or OS install the host was instantiated from.
+ *
+ * @deprecated use ATTR_HOST_IMAGE_NAME
  */
 exports.SEMRESATTRS_HOST_IMAGE_NAME = TMP_HOST_IMAGE_NAME;
 /**
  * VM image ID. For Cloud, this value is from the provider.
+ *
+ * @deprecated use ATTR_HOST_IMAGE_ID
  */
 exports.SEMRESATTRS_HOST_IMAGE_ID = TMP_HOST_IMAGE_ID;
 /**
  * The version string of the VM image as defined in [Version Attributes](README.md#version-attributes).
+ *
+ * @deprecated use ATTR_HOST_IMAGE_VERSION
  */
 exports.SEMRESATTRS_HOST_IMAGE_VERSION = TMP_HOST_IMAGE_VERSION;
 /**
  * The name of the cluster.
+ *
+ * @deprecated use ATTR_K8S_CLUSTER_NAME
  */
 exports.SEMRESATTRS_K8S_CLUSTER_NAME = TMP_K8S_CLUSTER_NAME;
 /**
  * The name of the Node.
+ *
+ * @deprecated use ATTR_K8S_NODE_NAME
  */
 exports.SEMRESATTRS_K8S_NODE_NAME = TMP_K8S_NODE_NAME;
 /**
  * The UID of the Node.
+ *
+ * @deprecated use ATTR_K8S_NODE_UID
  */
 exports.SEMRESATTRS_K8S_NODE_UID = TMP_K8S_NODE_UID;
 /**
  * The name of the namespace that the pod is running in.
+ *
+ * @deprecated use ATTR_K8S_NAMESPACE_NAME
  */
 exports.SEMRESATTRS_K8S_NAMESPACE_NAME = TMP_K8S_NAMESPACE_NAME;
 /**
  * The UID of the Pod.
+ *
+ * @deprecated use ATTR_K8S_POD_UID
  */
 exports.SEMRESATTRS_K8S_POD_UID = TMP_K8S_POD_UID;
 /**
  * The name of the Pod.
+ *
+ * @deprecated use ATTR_K8S_POD_NAME
  */
 exports.SEMRESATTRS_K8S_POD_NAME = TMP_K8S_POD_NAME;
 /**
  * The name of the Container in a Pod template.
+ *
+ * @deprecated use ATTR_K8S_CONTAINER_NAME
  */
 exports.SEMRESATTRS_K8S_CONTAINER_NAME = TMP_K8S_CONTAINER_NAME;
 /**
  * The UID of the ReplicaSet.
+ *
+ * @deprecated use ATTR_K8S_REPLICASET_UID
  */
 exports.SEMRESATTRS_K8S_REPLICASET_UID = TMP_K8S_REPLICASET_UID;
 /**
  * The name of the ReplicaSet.
+ *
+ * @deprecated use ATTR_K8S_REPLICASET_NAME
  */
 exports.SEMRESATTRS_K8S_REPLICASET_NAME = TMP_K8S_REPLICASET_NAME;
 /**
  * The UID of the Deployment.
+ *
+ * @deprecated use ATTR_K8S_DEPLOYMENT_UID
  */
 exports.SEMRESATTRS_K8S_DEPLOYMENT_UID = TMP_K8S_DEPLOYMENT_UID;
 /**
  * The name of the Deployment.
+ *
+ * @deprecated use ATTR_K8S_DEPLOYMENT_NAME
  */
 exports.SEMRESATTRS_K8S_DEPLOYMENT_NAME = TMP_K8S_DEPLOYMENT_NAME;
 /**
  * The UID of the StatefulSet.
+ *
+ * @deprecated use ATTR_K8S_STATEFULSET_UID
  */
 exports.SEMRESATTRS_K8S_STATEFULSET_UID = TMP_K8S_STATEFULSET_UID;
 /**
  * The name of the StatefulSet.
+ *
+ * @deprecated use ATTR_K8S_STATEFULSET_NAME
  */
 exports.SEMRESATTRS_K8S_STATEFULSET_NAME = TMP_K8S_STATEFULSET_NAME;
 /**
  * The UID of the DaemonSet.
+ *
+ * @deprecated use ATTR_K8S_DAEMONSET_UID
  */
 exports.SEMRESATTRS_K8S_DAEMONSET_UID = TMP_K8S_DAEMONSET_UID;
 /**
  * The name of the DaemonSet.
+ *
+ * @deprecated use ATTR_K8S_DAEMONSET_NAME
  */
 exports.SEMRESATTRS_K8S_DAEMONSET_NAME = TMP_K8S_DAEMONSET_NAME;
 /**
  * The UID of the Job.
+ *
+ * @deprecated use ATTR_K8S_JOB_UID
  */
 exports.SEMRESATTRS_K8S_JOB_UID = TMP_K8S_JOB_UID;
 /**
  * The name of the Job.
+ *
+ * @deprecated use ATTR_K8S_JOB_NAME
  */
 exports.SEMRESATTRS_K8S_JOB_NAME = TMP_K8S_JOB_NAME;
 /**
  * The UID of the CronJob.
+ *
+ * @deprecated use ATTR_K8S_CRONJOB_UID
  */
 exports.SEMRESATTRS_K8S_CRONJOB_UID = TMP_K8S_CRONJOB_UID;
 /**
  * The name of the CronJob.
+ *
+ * @deprecated use ATTR_K8S_CRONJOB_NAME
  */
 exports.SEMRESATTRS_K8S_CRONJOB_NAME = TMP_K8S_CRONJOB_NAME;
 /**
  * The operating system type.
+ *
+ * @deprecated use ATTR_OS_TYPE
  */
 exports.SEMRESATTRS_OS_TYPE = TMP_OS_TYPE;
 /**
  * Human readable (not intended to be parsed) OS version information, like e.g. reported by `ver` or `lsb_release -a` commands.
+ *
+ * @deprecated use ATTR_OS_DESCRIPTION
  */
 exports.SEMRESATTRS_OS_DESCRIPTION = TMP_OS_DESCRIPTION;
 /**
  * Human readable operating system name.
+ *
+ * @deprecated use ATTR_OS_NAME
  */
 exports.SEMRESATTRS_OS_NAME = TMP_OS_NAME;
 /**
  * The version string of the operating system as defined in [Version Attributes](../../resource/semantic_conventions/README.md#version-attributes).
+ *
+ * @deprecated use ATTR_OS_VERSION
  */
 exports.SEMRESATTRS_OS_VERSION = TMP_OS_VERSION;
 /**
  * Process identifier (PID).
+ *
+ * @deprecated use ATTR_PROCESS_PID
  */
 exports.SEMRESATTRS_PROCESS_PID = TMP_PROCESS_PID;
 /**
  * The name of the process executable. On Linux based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`.
+ *
+ * @deprecated use ATTR_PROCESS_EXECUTABLE_NAME
  */
 exports.SEMRESATTRS_PROCESS_EXECUTABLE_NAME = TMP_PROCESS_EXECUTABLE_NAME;
 /**
  * The full path to the process executable. On Linux based systems, can be set to the target of `proc/[pid]/exe`. On Windows, can be set to the result of `GetProcessImageFileNameW`.
+ *
+ * @deprecated use ATTR_PROCESS_EXECUTABLE_PATH
  */
 exports.SEMRESATTRS_PROCESS_EXECUTABLE_PATH = TMP_PROCESS_EXECUTABLE_PATH;
 /**
  * The command used to launch the process (i.e. the command name). On Linux based systems, can be set to the zeroth string in `proc/[pid]/cmdline`. On Windows, can be set to the first parameter extracted from `GetCommandLineW`.
+ *
+ * @deprecated use ATTR_PROCESS_COMMAND
  */
 exports.SEMRESATTRS_PROCESS_COMMAND = TMP_PROCESS_COMMAND;
 /**
  * The full command used to launch the process as a single string representing the full command. On Windows, can be set to the result of `GetCommandLineW`. Do not set this if you have to assemble it just for monitoring; use `process.command_args` instead.
+ *
+ * @deprecated use ATTR_PROCESS_COMMAND_LINE
  */
 exports.SEMRESATTRS_PROCESS_COMMAND_LINE = TMP_PROCESS_COMMAND_LINE;
 /**
  * All the command arguments (including the command/executable itself) as received by the process. On Linux-based systems (and some other Unixoid systems supporting procfs), can be set according to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. For libc-based executables, this would be the full argv vector passed to `main`.
+ *
+ * @deprecated use ATTR_PROCESS_COMMAND_ARGS
  */
 exports.SEMRESATTRS_PROCESS_COMMAND_ARGS = TMP_PROCESS_COMMAND_ARGS;
 /**
  * The username of the user that owns the process.
+ *
+ * @deprecated use ATTR_PROCESS_OWNER
  */
 exports.SEMRESATTRS_PROCESS_OWNER = TMP_PROCESS_OWNER;
 /**
  * The name of the runtime of this process. For compiled native binaries, this SHOULD be the name of the compiler.
+ *
+ * @deprecated use ATTR_PROCESS_RUNTIME_NAME
  */
 exports.SEMRESATTRS_PROCESS_RUNTIME_NAME = TMP_PROCESS_RUNTIME_NAME;
 /**
  * The version of the runtime of this process, as returned by the runtime without modification.
+ *
+ * @deprecated use ATTR_PROCESS_RUNTIME_VERSION
  */
 exports.SEMRESATTRS_PROCESS_RUNTIME_VERSION = TMP_PROCESS_RUNTIME_VERSION;
 /**
  * An additional description about the runtime of the process, for example a specific vendor customization of the runtime environment.
+ *
+ * @deprecated use ATTR_PROCESS_RUNTIME_DESCRIPTION
  */
 exports.SEMRESATTRS_PROCESS_RUNTIME_DESCRIPTION = TMP_PROCESS_RUNTIME_DESCRIPTION;
 /**
  * Logical name of the service.
  *
  * Note: MUST be the same for all instances of horizontally scaled services. If the value was not specified, SDKs MUST fallback to `unknown_service:` concatenated with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`. If `process.executable.name` is not available, the value MUST be set to `unknown_service`.
+ *
+ * @deprecated use ATTR_SERVICE_NAME
  */
 exports.SEMRESATTRS_SERVICE_NAME = TMP_SERVICE_NAME;
 /**
  * A namespace for `service.name`.
  *
  * Note: A string value having a meaning that helps to distinguish a group of services, for example the team name that owns a group of services. `service.name` is expected to be unique within the same namespace. If `service.namespace` is not specified in the Resource then `service.name` is expected to be unique for all services that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace.
+ *
+ * @deprecated use ATTR_SERVICE_NAMESPACE
  */
 exports.SEMRESATTRS_SERVICE_NAMESPACE = TMP_SERVICE_NAMESPACE;
 /**
  * The string ID of the service instance.
  *
  * Note: MUST be unique for each instance of the same `service.namespace,service.name` pair (in other words `service.namespace,service.name,service.instance.id` triplet MUST be globally unique). The ID helps to distinguish instances of the same service that exist at the same time (e.g. instances of a horizontally scaled service). It is preferable for the ID to be persistent and stay the same for the lifetime of the service instance, however it is acceptable that the ID is ephemeral and changes during important lifetime events for the service (e.g. service restarts). If the service has no inherent unique ID that can be used as the value of this attribute it is recommended to generate a random Version 1 or Version 4 RFC 4122 UUID (services aiming for reproducible UUIDs may also use Version 5, see RFC 4122 for more recommendations).
+ *
+ * @deprecated use ATTR_SERVICE_INSTANCE_ID
  */
 exports.SEMRESATTRS_SERVICE_INSTANCE_ID = TMP_SERVICE_INSTANCE_ID;
 /**
  * The version string of the service API or implementation.
+ *
+ * @deprecated use ATTR_SERVICE_VERSION
  */
 exports.SEMRESATTRS_SERVICE_VERSION = TMP_SERVICE_VERSION;
 /**
  * The name of the telemetry SDK as defined above.
+ *
+ * @deprecated use ATTR_TELEMETRY_SDK_NAME
  */
 exports.SEMRESATTRS_TELEMETRY_SDK_NAME = TMP_TELEMETRY_SDK_NAME;
 /**
  * The language of the telemetry SDK.
+ *
+ * @deprecated use ATTR_TELEMETRY_SDK_LANGUAGE
  */
 exports.SEMRESATTRS_TELEMETRY_SDK_LANGUAGE = TMP_TELEMETRY_SDK_LANGUAGE;
 /**
  * The version string of the telemetry SDK.
+ *
+ * @deprecated use ATTR_TELEMETRY_SDK_VERSION
  */
 exports.SEMRESATTRS_TELEMETRY_SDK_VERSION = TMP_TELEMETRY_SDK_VERSION;
 /**
  * The version string of the auto instrumentation agent, if used.
+ *
+ * @deprecated use ATTR_TELEMETRY_AUTO_VERSION
  */
 exports.SEMRESATTRS_TELEMETRY_AUTO_VERSION = TMP_TELEMETRY_AUTO_VERSION;
 /**
  * The name of the web engine.
+ *
+ * @deprecated use ATTR_WEBENGINE_NAME
  */
 exports.SEMRESATTRS_WEBENGINE_NAME = TMP_WEBENGINE_NAME;
 /**
  * The version of the web engine.
+ *
+ * @deprecated use ATTR_WEBENGINE_VERSION
  */
 exports.SEMRESATTRS_WEBENGINE_VERSION = TMP_WEBENGINE_VERSION;
 /**
  * Additional description of the web engine (e.g. detailed version and edition information).
+ *
+ * @deprecated use ATTR_WEBENGINE_DESCRIPTION
  */
 exports.SEMRESATTRS_WEBENGINE_DESCRIPTION = TMP_WEBENGINE_DESCRIPTION;
 /**
@@ -26715,25 +36078,33 @@ exports.SemanticResourceAttributes =
  * Name of the cloud provider.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_CLOUDPROVIDERVALUES_ALIBABA_CLOUD = 'alibaba_cloud';
 const TMP_CLOUDPROVIDERVALUES_AWS = 'aws';
 const TMP_CLOUDPROVIDERVALUES_AZURE = 'azure';
 const TMP_CLOUDPROVIDERVALUES_GCP = 'gcp';
 /**
  * Name of the cloud provider.
+ *
+ * @deprecated Use CLOUD_PROVIDER_VALUE_ALIBABA_CLOUD.
  */
 exports.CLOUDPROVIDERVALUES_ALIBABA_CLOUD = TMP_CLOUDPROVIDERVALUES_ALIBABA_CLOUD;
 /**
  * Name of the cloud provider.
+ *
+ * @deprecated Use CLOUD_PROVIDER_VALUE_AWS.
  */
 exports.CLOUDPROVIDERVALUES_AWS = TMP_CLOUDPROVIDERVALUES_AWS;
 /**
  * Name of the cloud provider.
+ *
+ * @deprecated Use CLOUD_PROVIDER_VALUE_AZURE.
  */
 exports.CLOUDPROVIDERVALUES_AZURE = TMP_CLOUDPROVIDERVALUES_AZURE;
 /**
  * Name of the cloud provider.
+ *
+ * @deprecated Use CLOUD_PROVIDER_VALUE_GCP.
  */
 exports.CLOUDPROVIDERVALUES_GCP = TMP_CLOUDPROVIDERVALUES_GCP;
 /**
@@ -26755,7 +36126,7 @@ exports.CloudProviderValues =
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_CLOUDPLATFORMVALUES_ALIBABA_CLOUD_ECS = 'alibaba_cloud_ecs';
 const TMP_CLOUDPLATFORMVALUES_ALIBABA_CLOUD_FC = 'alibaba_cloud_fc';
 const TMP_CLOUDPLATFORMVALUES_AWS_EC2 = 'aws_ec2';
@@ -26777,102 +36148,136 @@ const TMP_CLOUDPLATFORMVALUES_GCP_APP_ENGINE = 'gcp_app_engine';
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_ALIBABA_CLOUD_ECS.
  */
 exports.CLOUDPLATFORMVALUES_ALIBABA_CLOUD_ECS = TMP_CLOUDPLATFORMVALUES_ALIBABA_CLOUD_ECS;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_ALIBABA_CLOUD_FC.
  */
 exports.CLOUDPLATFORMVALUES_ALIBABA_CLOUD_FC = TMP_CLOUDPLATFORMVALUES_ALIBABA_CLOUD_FC;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_AWS_EC2.
  */
 exports.CLOUDPLATFORMVALUES_AWS_EC2 = TMP_CLOUDPLATFORMVALUES_AWS_EC2;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_AWS_ECS.
  */
 exports.CLOUDPLATFORMVALUES_AWS_ECS = TMP_CLOUDPLATFORMVALUES_AWS_ECS;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_AWS_EKS.
  */
 exports.CLOUDPLATFORMVALUES_AWS_EKS = TMP_CLOUDPLATFORMVALUES_AWS_EKS;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_AWS_LAMBDA.
  */
 exports.CLOUDPLATFORMVALUES_AWS_LAMBDA = TMP_CLOUDPLATFORMVALUES_AWS_LAMBDA;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_AWS_ELASTIC_BEANSTALK.
  */
 exports.CLOUDPLATFORMVALUES_AWS_ELASTIC_BEANSTALK = TMP_CLOUDPLATFORMVALUES_AWS_ELASTIC_BEANSTALK;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_AZURE_VM.
  */
 exports.CLOUDPLATFORMVALUES_AZURE_VM = TMP_CLOUDPLATFORMVALUES_AZURE_VM;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_AZURE_CONTAINER_INSTANCES.
  */
 exports.CLOUDPLATFORMVALUES_AZURE_CONTAINER_INSTANCES = TMP_CLOUDPLATFORMVALUES_AZURE_CONTAINER_INSTANCES;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_AZURE_AKS.
  */
 exports.CLOUDPLATFORMVALUES_AZURE_AKS = TMP_CLOUDPLATFORMVALUES_AZURE_AKS;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_AZURE_FUNCTIONS.
  */
 exports.CLOUDPLATFORMVALUES_AZURE_FUNCTIONS = TMP_CLOUDPLATFORMVALUES_AZURE_FUNCTIONS;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_AZURE_APP_SERVICE.
  */
 exports.CLOUDPLATFORMVALUES_AZURE_APP_SERVICE = TMP_CLOUDPLATFORMVALUES_AZURE_APP_SERVICE;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_GCP_COMPUTE_ENGINE.
  */
 exports.CLOUDPLATFORMVALUES_GCP_COMPUTE_ENGINE = TMP_CLOUDPLATFORMVALUES_GCP_COMPUTE_ENGINE;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_GCP_CLOUD_RUN.
  */
 exports.CLOUDPLATFORMVALUES_GCP_CLOUD_RUN = TMP_CLOUDPLATFORMVALUES_GCP_CLOUD_RUN;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_GCP_KUBERNETES_ENGINE.
  */
 exports.CLOUDPLATFORMVALUES_GCP_KUBERNETES_ENGINE = TMP_CLOUDPLATFORMVALUES_GCP_KUBERNETES_ENGINE;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_GCP_CLOUD_FUNCTIONS.
  */
 exports.CLOUDPLATFORMVALUES_GCP_CLOUD_FUNCTIONS = TMP_CLOUDPLATFORMVALUES_GCP_CLOUD_FUNCTIONS;
 /**
  * The cloud platform in use.
  *
  * Note: The prefix of the service SHOULD match the one specified in `cloud.provider`.
+ *
+ * @deprecated Use CLOUD_PLATFORM_VALUE_GCP_APP_ENGINE.
  */
 exports.CLOUDPLATFORMVALUES_GCP_APP_ENGINE = TMP_CLOUDPLATFORMVALUES_GCP_APP_ENGINE;
 /**
@@ -26905,15 +36310,19 @@ exports.CloudPlatformValues =
  * The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_AWSECSLAUNCHTYPEVALUES_EC2 = 'ec2';
 const TMP_AWSECSLAUNCHTYPEVALUES_FARGATE = 'fargate';
 /**
  * The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task.
+ *
+ * @deprecated Use AWS_ECS_LAUNCHTYPE_VALUE_EC2.
  */
 exports.AWSECSLAUNCHTYPEVALUES_EC2 = TMP_AWSECSLAUNCHTYPEVALUES_EC2;
 /**
  * The [launch type](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html) for an ECS task.
+ *
+ * @deprecated Use AWS_ECS_LAUNCHTYPE_VALUE_FARGATE.
  */
 exports.AWSECSLAUNCHTYPEVALUES_FARGATE = TMP_AWSECSLAUNCHTYPEVALUES_FARGATE;
 /**
@@ -26931,7 +36340,7 @@ exports.AwsEcsLaunchtypeValues =
  * The CPU architecture the host system is running on.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_HOSTARCHVALUES_AMD64 = 'amd64';
 const TMP_HOSTARCHVALUES_ARM32 = 'arm32';
 const TMP_HOSTARCHVALUES_ARM64 = 'arm64';
@@ -26941,30 +36350,44 @@ const TMP_HOSTARCHVALUES_PPC64 = 'ppc64';
 const TMP_HOSTARCHVALUES_X86 = 'x86';
 /**
  * The CPU architecture the host system is running on.
+ *
+ * @deprecated Use HOST_ARCH_VALUE_AMD64.
  */
 exports.HOSTARCHVALUES_AMD64 = TMP_HOSTARCHVALUES_AMD64;
 /**
  * The CPU architecture the host system is running on.
+ *
+ * @deprecated Use HOST_ARCH_VALUE_ARM32.
  */
 exports.HOSTARCHVALUES_ARM32 = TMP_HOSTARCHVALUES_ARM32;
 /**
  * The CPU architecture the host system is running on.
+ *
+ * @deprecated Use HOST_ARCH_VALUE_ARM64.
  */
 exports.HOSTARCHVALUES_ARM64 = TMP_HOSTARCHVALUES_ARM64;
 /**
  * The CPU architecture the host system is running on.
+ *
+ * @deprecated Use HOST_ARCH_VALUE_IA64.
  */
 exports.HOSTARCHVALUES_IA64 = TMP_HOSTARCHVALUES_IA64;
 /**
  * The CPU architecture the host system is running on.
+ *
+ * @deprecated Use HOST_ARCH_VALUE_PPC32.
  */
 exports.HOSTARCHVALUES_PPC32 = TMP_HOSTARCHVALUES_PPC32;
 /**
  * The CPU architecture the host system is running on.
+ *
+ * @deprecated Use HOST_ARCH_VALUE_PPC64.
  */
 exports.HOSTARCHVALUES_PPC64 = TMP_HOSTARCHVALUES_PPC64;
 /**
  * The CPU architecture the host system is running on.
+ *
+ * @deprecated Use HOST_ARCH_VALUE_X86.
  */
 exports.HOSTARCHVALUES_X86 = TMP_HOSTARCHVALUES_X86;
 /**
@@ -26987,7 +36410,7 @@ exports.HostArchValues =
  * The operating system type.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_OSTYPEVALUES_WINDOWS = 'windows';
 const TMP_OSTYPEVALUES_LINUX = 'linux';
 const TMP_OSTYPEVALUES_DARWIN = 'darwin';
@@ -27001,46 +36424,68 @@ const TMP_OSTYPEVALUES_SOLARIS = 'solaris';
 const TMP_OSTYPEVALUES_Z_OS = 'z_os';
 /**
  * The operating system type.
+ *
+ * @deprecated Use OS_TYPE_VALUE_WINDOWS.
  */
 exports.OSTYPEVALUES_WINDOWS = TMP_OSTYPEVALUES_WINDOWS;
 /**
  * The operating system type.
+ *
+ * @deprecated Use OS_TYPE_VALUE_LINUX.
  */
 exports.OSTYPEVALUES_LINUX = TMP_OSTYPEVALUES_LINUX;
 /**
  * The operating system type.
+ *
+ * @deprecated Use OS_TYPE_VALUE_DARWIN.
  */
 exports.OSTYPEVALUES_DARWIN = TMP_OSTYPEVALUES_DARWIN;
 /**
  * The operating system type.
+ *
+ * @deprecated Use OS_TYPE_VALUE_FREEBSD.
  */
 exports.OSTYPEVALUES_FREEBSD = TMP_OSTYPEVALUES_FREEBSD;
 /**
  * The operating system type.
+ *
+ * @deprecated Use OS_TYPE_VALUE_NETBSD.
  */
 exports.OSTYPEVALUES_NETBSD = TMP_OSTYPEVALUES_NETBSD;
 /**
  * The operating system type.
+ *
+ * @deprecated Use OS_TYPE_VALUE_OPENBSD.
  */
 exports.OSTYPEVALUES_OPENBSD = TMP_OSTYPEVALUES_OPENBSD;
 /**
  * The operating system type.
+ *
+ * @deprecated Use OS_TYPE_VALUE_DRAGONFLYBSD.
  */
 exports.OSTYPEVALUES_DRAGONFLYBSD = TMP_OSTYPEVALUES_DRAGONFLYBSD;
 /**
  * The operating system type.
+ *
+ * @deprecated Use OS_TYPE_VALUE_HPUX.
  */
 exports.OSTYPEVALUES_HPUX = TMP_OSTYPEVALUES_HPUX;
 /**
  * The operating system type.
+ *
+ * @deprecated Use OS_TYPE_VALUE_AIX.
  */
 exports.OSTYPEVALUES_AIX = TMP_OSTYPEVALUES_AIX;
 /**
  * The operating system type.
+ *
+ * @deprecated Use OS_TYPE_VALUE_SOLARIS.
  */
 exports.OSTYPEVALUES_SOLARIS = TMP_OSTYPEVALUES_SOLARIS;
 /**
  * The operating system type.
+ *
+ * @deprecated Use OS_TYPE_VALUE_Z_OS.
  */
 exports.OSTYPEVALUES_Z_OS = TMP_OSTYPEVALUES_Z_OS;
 /**
@@ -27067,7 +36512,7 @@ exports.OsTypeValues =
  * The language of the telemetry SDK.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_TELEMETRYSDKLANGUAGEVALUES_CPP = 'cpp';
 const TMP_TELEMETRYSDKLANGUAGEVALUES_DOTNET = 'dotnet';
 const TMP_TELEMETRYSDKLANGUAGEVALUES_ERLANG = 'erlang';
@@ -27080,42 +36525,62 @@ const TMP_TELEMETRYSDKLANGUAGEVALUES_RUBY = 'ruby';
 const TMP_TELEMETRYSDKLANGUAGEVALUES_WEBJS = 'webjs';
 /**
  * The language of the telemetry SDK.
+ *
+ * @deprecated Use TELEMETRY_SDK_LANGUAGE_VALUE_CPP.
  */
 exports.TELEMETRYSDKLANGUAGEVALUES_CPP = TMP_TELEMETRYSDKLANGUAGEVALUES_CPP;
 /**
  * The language of the telemetry SDK.
+ *
+ * @deprecated Use TELEMETRY_SDK_LANGUAGE_VALUE_DOTNET.
  */
 exports.TELEMETRYSDKLANGUAGEVALUES_DOTNET = TMP_TELEMETRYSDKLANGUAGEVALUES_DOTNET;
 /**
  * The language of the telemetry SDK.
+ *
+ * @deprecated Use TELEMETRY_SDK_LANGUAGE_VALUE_ERLANG.
  */
 exports.TELEMETRYSDKLANGUAGEVALUES_ERLANG = TMP_TELEMETRYSDKLANGUAGEVALUES_ERLANG;
 /**
  * The language of the telemetry SDK.
+ *
+ * @deprecated Use TELEMETRY_SDK_LANGUAGE_VALUE_GO.
  */
 exports.TELEMETRYSDKLANGUAGEVALUES_GO = TMP_TELEMETRYSDKLANGUAGEVALUES_GO;
 /**
  * The language of the telemetry SDK.
+ *
+ * @deprecated Use TELEMETRY_SDK_LANGUAGE_VALUE_JAVA.
  */
 exports.TELEMETRYSDKLANGUAGEVALUES_JAVA = TMP_TELEMETRYSDKLANGUAGEVALUES_JAVA;
 /**
  * The language of the telemetry SDK.
+ *
+ * @deprecated Use TELEMETRY_SDK_LANGUAGE_VALUE_NODEJS.
  */
 exports.TELEMETRYSDKLANGUAGEVALUES_NODEJS = TMP_TELEMETRYSDKLANGUAGEVALUES_NODEJS;
 /**
  * The language of the telemetry SDK.
+ *
+ * @deprecated Use TELEMETRY_SDK_LANGUAGE_VALUE_PHP.
  */
 exports.TELEMETRYSDKLANGUAGEVALUES_PHP = TMP_TELEMETRYSDKLANGUAGEVALUES_PHP;
 /**
  * The language of the telemetry SDK.
+ *
+ * @deprecated Use TELEMETRY_SDK_LANGUAGE_VALUE_PYTHON.
  */
 exports.TELEMETRYSDKLANGUAGEVALUES_PYTHON = TMP_TELEMETRYSDKLANGUAGEVALUES_PYTHON;
 /**
  * The language of the telemetry SDK.
+ *
+ * @deprecated Use TELEMETRY_SDK_LANGUAGE_VALUE_RUBY.
  */
 exports.TELEMETRYSDKLANGUAGEVALUES_RUBY = TMP_TELEMETRYSDKLANGUAGEVALUES_RUBY;
 /**
  * The language of the telemetry SDK.
+ *
+ * @deprecated Use TELEMETRY_SDK_LANGUAGE_VALUE_WEBJS.
  */
 exports.TELEMETRYSDKLANGUAGEVALUES_WEBJS = TMP_TELEMETRYSDKLANGUAGEVALUES_WEBJS;
 /**
@@ -27136,19 +36601,8 @@ exports.TelemetrySdkLanguageValues =
     TMP_TELEMETRYSDKLANGUAGEVALUES_WEBJS,
 ]);
 
-},{"../internal/utils":213}],215:[function(require,module,exports){
+},{"../internal/utils":511}],513:[function(require,module,exports){
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 /*
  * Copyright The OpenTelemetry Authors
  *
@@ -27164,9 +36618,978 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable no-restricted-syntax --
+ * These re-exports are only of constants, only one-level deep at this point,
+ * and should not cause problems for tree-shakers.
+ */
 __exportStar(require("./SemanticResourceAttributes"), exports);
 
-},{"./SemanticResourceAttributes":214}],216:[function(require,module,exports){
+},{"./SemanticResourceAttributes":512}],514:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HTTP_REQUEST_METHOD_VALUE_POST = exports.HTTP_REQUEST_METHOD_VALUE_PATCH = exports.HTTP_REQUEST_METHOD_VALUE_OPTIONS = exports.HTTP_REQUEST_METHOD_VALUE_HEAD = exports.HTTP_REQUEST_METHOD_VALUE_GET = exports.HTTP_REQUEST_METHOD_VALUE_DELETE = exports.HTTP_REQUEST_METHOD_VALUE_CONNECT = exports.HTTP_REQUEST_METHOD_VALUE_OTHER = exports.ATTR_HTTP_REQUEST_METHOD = exports.ATTR_HTTP_REQUEST_HEADER = exports.ATTR_EXCEPTION_TYPE = exports.ATTR_EXCEPTION_STACKTRACE = exports.ATTR_EXCEPTION_MESSAGE = exports.ATTR_EXCEPTION_ESCAPED = exports.ERROR_TYPE_VALUE_OTHER = exports.ATTR_ERROR_TYPE = exports.ATTR_CLIENT_PORT = exports.ATTR_CLIENT_ADDRESS = exports.ASPNETCORE_ROUTING_MATCH_STATUS_VALUE_SUCCESS = exports.ASPNETCORE_ROUTING_MATCH_STATUS_VALUE_FAILURE = exports.ATTR_ASPNETCORE_ROUTING_MATCH_STATUS = exports.ATTR_ASPNETCORE_ROUTING_IS_FALLBACK = exports.ATTR_ASPNETCORE_REQUEST_IS_UNHANDLED = exports.ATTR_ASPNETCORE_RATE_LIMITING_POLICY = exports.ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_VALUE_UNHANDLED = exports.ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_VALUE_SKIPPED = exports.ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_VALUE_HANDLED = exports.ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_VALUE_ABORTED = exports.ATTR_ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT = exports.ATTR_ASPNETCORE_DIAGNOSTICS_HANDLER_TYPE = exports.ATTR_TELEMETRY_SDK_VERSION = exports.ATTR_TELEMETRY_SDK_NAME = exports.TELEMETRY_SDK_LANGUAGE_VALUE_WEBJS = exports.TELEMETRY_SDK_LANGUAGE_VALUE_SWIFT = exports.TELEMETRY_SDK_LANGUAGE_VALUE_RUST = exports.TELEMETRY_SDK_LANGUAGE_VALUE_RUBY = exports.TELEMETRY_SDK_LANGUAGE_VALUE_PYTHON = exports.TELEMETRY_SDK_LANGUAGE_VALUE_PHP = exports.TELEMETRY_SDK_LANGUAGE_VALUE_NODEJS = exports.TELEMETRY_SDK_LANGUAGE_VALUE_JAVA = exports.TELEMETRY_SDK_LANGUAGE_VALUE_GO = exports.TELEMETRY_SDK_LANGUAGE_VALUE_ERLANG = exports.TELEMETRY_SDK_LANGUAGE_VALUE_DOTNET = exports.TELEMETRY_SDK_LANGUAGE_VALUE_CPP = exports.ATTR_TELEMETRY_SDK_LANGUAGE = exports.ASPNETCORE_RATE_LIMITING_RESULT_VALUE_REQUEST_CANCELED = exports.ASPNETCORE_RATE_LIMITING_RESULT_VALUE_GLOBAL_LIMITER = exports.ASPNETCORE_RATE_LIMITING_RESULT_VALUE_ENDPOINT_LIMITER = exports.ASPNETCORE_RATE_LIMITING_RESULT_VALUE_ACQUIRED = exports.ATTR_ASPNETCORE_RATE_LIMITING_RESULT = void 0;
+exports.SIGNALR_CONNECTION_STATUS_VALUE_TIMEOUT = exports.SIGNALR_CONNECTION_STATUS_VALUE_NORMAL_CLOSURE = exports.SIGNALR_CONNECTION_STATUS_VALUE_APP_SHUTDOWN = exports.ATTR_SIGNALR_CONNECTION_STATUS = exports.ATTR_SERVICE_VERSION = exports.ATTR_SERVICE_NAME = exports.ATTR_SERVER_PORT = exports.ATTR_SERVER_ADDRESS = exports.ATTR_OTEL_STATUS_DESCRIPTION = exports.OTEL_STATUS_CODE_VALUE_OK = exports.OTEL_STATUS_CODE_VALUE_ERROR = exports.ATTR_OTEL_STATUS_CODE = exports.ATTR_OTEL_SCOPE_VERSION = exports.ATTR_OTEL_SCOPE_NAME = exports.NETWORK_TYPE_VALUE_IPV6 = exports.NETWORK_TYPE_VALUE_IPV4 = exports.ATTR_NETWORK_TYPE = exports.NETWORK_TRANSPORT_VALUE_UNIX = exports.NETWORK_TRANSPORT_VALUE_UDP = exports.NETWORK_TRANSPORT_VALUE_TCP = exports.NETWORK_TRANSPORT_VALUE_QUIC = exports.NETWORK_TRANSPORT_VALUE_PIPE = exports.ATTR_NETWORK_TRANSPORT = exports.ATTR_NETWORK_PROTOCOL_VERSION = exports.ATTR_NETWORK_PROTOCOL_NAME = exports.ATTR_NETWORK_PEER_PORT = exports.ATTR_NETWORK_PEER_ADDRESS = exports.ATTR_NETWORK_LOCAL_PORT = exports.ATTR_NETWORK_LOCAL_ADDRESS = exports.JVM_THREAD_STATE_VALUE_WAITING = exports.JVM_THREAD_STATE_VALUE_TIMED_WAITING = exports.JVM_THREAD_STATE_VALUE_TERMINATED = exports.JVM_THREAD_STATE_VALUE_RUNNABLE = exports.JVM_THREAD_STATE_VALUE_NEW = exports.JVM_THREAD_STATE_VALUE_BLOCKED = exports.ATTR_JVM_THREAD_STATE = exports.ATTR_JVM_THREAD_DAEMON = exports.JVM_MEMORY_TYPE_VALUE_NON_HEAP = exports.JVM_MEMORY_TYPE_VALUE_HEAP = exports.ATTR_JVM_MEMORY_TYPE = exports.ATTR_JVM_MEMORY_POOL_NAME = exports.ATTR_JVM_GC_NAME = exports.ATTR_JVM_GC_ACTION = exports.ATTR_HTTP_ROUTE = exports.ATTR_HTTP_RESPONSE_STATUS_CODE = exports.ATTR_HTTP_RESPONSE_HEADER = exports.ATTR_HTTP_REQUEST_RESEND_COUNT = exports.ATTR_HTTP_REQUEST_METHOD_ORIGINAL = exports.HTTP_REQUEST_METHOD_VALUE_TRACE = exports.HTTP_REQUEST_METHOD_VALUE_PUT = void 0;
+exports.ATTR_USER_AGENT_ORIGINAL = exports.ATTR_URL_SCHEME = exports.ATTR_URL_QUERY = exports.ATTR_URL_PATH = exports.ATTR_URL_FULL = exports.ATTR_URL_FRAGMENT = exports.SIGNALR_TRANSPORT_VALUE_WEB_SOCKETS = exports.SIGNALR_TRANSPORT_VALUE_SERVER_SENT_EVENTS = exports.SIGNALR_TRANSPORT_VALUE_LONG_POLLING = exports.ATTR_SIGNALR_TRANSPORT = void 0;
+//----------------------------------------------------------------------------------------------------------
+// DO NOT EDIT, this is an Auto-generated file from scripts/semconv/templates/registry/stable/attributes.ts.j2
+//----------------------------------------------------------------------------------------------------------
+/**
+ * Rate-limiting result, shows whether the lease was acquired or contains a rejection reason
+ *
+ * @example acquired
+ *
+ * @example request_canceled
+ */
+exports.ATTR_ASPNETCORE_RATE_LIMITING_RESULT = 'aspnetcore.rate_limiting.result';
+/**
+  * Enum value "acquired" for attribute {@link ATTR_ASPNETCORE_RATE_LIMITING_RESULT}.
+  */
+exports.ASPNETCORE_RATE_LIMITING_RESULT_VALUE_ACQUIRED = "acquired";
+/**
+  * Enum value "endpoint_limiter" for attribute {@link ATTR_ASPNETCORE_RATE_LIMITING_RESULT}.
+  */
+exports.ASPNETCORE_RATE_LIMITING_RESULT_VALUE_ENDPOINT_LIMITER = "endpoint_limiter";
+/**
+  * Enum value "global_limiter" for attribute {@link ATTR_ASPNETCORE_RATE_LIMITING_RESULT}.
+  */
+exports.ASPNETCORE_RATE_LIMITING_RESULT_VALUE_GLOBAL_LIMITER = "global_limiter";
+/**
+  * Enum value "request_canceled" for attribute {@link ATTR_ASPNETCORE_RATE_LIMITING_RESULT}.
+  */
+exports.ASPNETCORE_RATE_LIMITING_RESULT_VALUE_REQUEST_CANCELED = "request_canceled";
+/**
+ * The language of the telemetry SDK.
+ */
+exports.ATTR_TELEMETRY_SDK_LANGUAGE = 'telemetry.sdk.language';
+/**
+  * Enum value "cpp" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_CPP = "cpp";
+/**
+  * Enum value "dotnet" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_DOTNET = "dotnet";
+/**
+  * Enum value "erlang" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_ERLANG = "erlang";
+/**
+  * Enum value "go" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_GO = "go";
+/**
+  * Enum value "java" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_JAVA = "java";
+/**
+  * Enum value "nodejs" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_NODEJS = "nodejs";
+/**
+  * Enum value "php" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_PHP = "php";
+/**
+  * Enum value "python" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_PYTHON = "python";
+/**
+  * Enum value "ruby" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_RUBY = "ruby";
+/**
+  * Enum value "rust" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_RUST = "rust";
+/**
+  * Enum value "swift" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_SWIFT = "swift";
+/**
+  * Enum value "webjs" for attribute {@link ATTR_TELEMETRY_SDK_LANGUAGE}.
+  */
+exports.TELEMETRY_SDK_LANGUAGE_VALUE_WEBJS = "webjs";
+/**
+ * The name of the telemetry SDK as defined above.
+ *
+ * @example opentelemetry
+ *
+ * @note The OpenTelemetry SDK **MUST** set the `telemetry.sdk.name` attribute to `opentelemetry`.
+ * If another SDK, like a fork or a vendor-provided implementation, is used, this SDK **MUST** set the
+ * `telemetry.sdk.name` attribute to the fully-qualified class or module name of this SDK's main entry point
+ * or another suitable identifier depending on the language.
+ * The identifier `opentelemetry` is reserved and **MUST** **NOT** be used in this case.
+ * All custom identifiers **SHOULD** be stable across different versions of an implementation.
+ */
+exports.ATTR_TELEMETRY_SDK_NAME = 'telemetry.sdk.name';
+/**
+ * The version string of the telemetry SDK.
+ *
+ * @example 1.2.3
+ */
+exports.ATTR_TELEMETRY_SDK_VERSION = 'telemetry.sdk.version';
+/**
+ * Full type name of the [`IExceptionHandler`](https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.diagnostics.iexceptionhandler) implementation that handled the exception.
+ *
+ * @example Contoso.MyHandler
+ */
+exports.ATTR_ASPNETCORE_DIAGNOSTICS_HANDLER_TYPE = 'aspnetcore.diagnostics.handler.type';
+/**
+ * ASP.NET Core exception middleware handling result
+ *
+ * @example handled
+ *
+ * @example unhandled
+ */
+exports.ATTR_ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT = 'aspnetcore.diagnostics.exception.result';
+/**
+  * Enum value "aborted" for attribute {@link ATTR_ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT}.
+  */
+exports.ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_VALUE_ABORTED = "aborted";
+/**
+  * Enum value "handled" for attribute {@link ATTR_ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT}.
+  */
+exports.ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_VALUE_HANDLED = "handled";
+/**
+  * Enum value "skipped" for attribute {@link ATTR_ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT}.
+  */
+exports.ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_VALUE_SKIPPED = "skipped";
+/**
+  * Enum value "unhandled" for attribute {@link ATTR_ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT}.
+  */
+exports.ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_VALUE_UNHANDLED = "unhandled";
+/**
+ * Rate limiting policy name.
+ *
+ * @example fixed
+ *
+ * @example sliding
+ *
+ * @example token
+ */
+exports.ATTR_ASPNETCORE_RATE_LIMITING_POLICY = 'aspnetcore.rate_limiting.policy';
+/**
+ * Flag indicating if request was handled by the application pipeline.
+ *
+ * @example true
+ */
+exports.ATTR_ASPNETCORE_REQUEST_IS_UNHANDLED = 'aspnetcore.request.is_unhandled';
+/**
+ * A value that indicates whether the matched route is a fallback route.
+ *
+ * @example true
+ */
+exports.ATTR_ASPNETCORE_ROUTING_IS_FALLBACK = 'aspnetcore.routing.is_fallback';
+/**
+ * Match result - success or failure
+ *
+ * @example success
+ *
+ * @example failure
+ */
+exports.ATTR_ASPNETCORE_ROUTING_MATCH_STATUS = 'aspnetcore.routing.match_status';
+/**
+  * Enum value "failure" for attribute {@link ATTR_ASPNETCORE_ROUTING_MATCH_STATUS}.
+  */
+exports.ASPNETCORE_ROUTING_MATCH_STATUS_VALUE_FAILURE = "failure";
+/**
+  * Enum value "success" for attribute {@link ATTR_ASPNETCORE_ROUTING_MATCH_STATUS}.
+  */
+exports.ASPNETCORE_ROUTING_MATCH_STATUS_VALUE_SUCCESS = "success";
+/**
+ * Client address - domain name if available without reverse DNS lookup; otherwise, IP address or Unix domain socket name.
+ *
+ * @example client.example.com
+ *
+ * @example 10.1.2.80
+ *
+ * @example /tmp/my.sock
+ *
+ * @note When observed from the server side, and when communicating through an intermediary, `client.address` **SHOULD** represent the client address behind any intermediaries,  for example proxies, if it's available.
+ */
+exports.ATTR_CLIENT_ADDRESS = 'client.address';
+/**
+ * Client port number.
+ *
+ * @example 65123
+ *
+ * @note When observed from the server side, and when communicating through an intermediary, `client.port` **SHOULD** represent the client port behind any intermediaries,  for example proxies, if it's available.
+ */
+exports.ATTR_CLIENT_PORT = 'client.port';
+/**
+ * Describes a class of error the operation ended with.
+ *
+ * @example timeout
+ *
+ * @example java.net.UnknownHostException
+ *
+ * @example server_certificate_invalid
+ *
+ * @example 500
+ *
+ * @note The `error.type` **SHOULD** be predictable, and **SHOULD** have low cardinality.
+ *
+ * When `error.type` is set to a type (e.g., an exception type), its
+ * canonical class name identifying the type within the artifact **SHOULD** be used.
+ *
+ * Instrumentations **SHOULD** document the list of errors they report.
+ *
+ * The cardinality of `error.type` within one instrumentation library **SHOULD** be low.
+ * Telemetry consumers that aggregate data from multiple instrumentation libraries and applications
+ * should be prepared for `error.type` to have high cardinality at query time when no
+ * additional filters are applied.
+ *
+ * If the operation has completed successfully, instrumentations **SHOULD** **NOT** set `error.type`.
+ *
+ * If a specific domain defines its own set of error identifiers (such as HTTP or gRPC status codes),
+ * it's RECOMMENDED to:
+ *
+ * * Use a domain-specific attribute
+ * * Set `error.type` to capture all errors, regardless of whether they are defined within the domain-specific set or not.
+ */
+exports.ATTR_ERROR_TYPE = 'error.type';
+/**
+  * Enum value "_OTHER" for attribute {@link ATTR_ERROR_TYPE}.
+  */
+exports.ERROR_TYPE_VALUE_OTHER = "_OTHER";
+/**
+ * **SHOULD** be set to true if the exception event is recorded at a point where it is known that the exception is escaping the scope of the span.
+ *
+ * @note An exception is considered to have escaped (or left) the scope of a span,
+ * if that span is ended while the exception is still logically "in flight".
+ * This may be actually "in flight" in some languages (e.g. if the exception
+ * is passed to a Context manager's `__exit__` method in Python) but will
+ * usually be caught at the point of recording the exception in most languages.
+ *
+ * It is usually not possible to determine at the point where an exception is thrown
+ * whether it will escape the scope of a span.
+ * However, it is trivial to know that an exception
+ * will escape, if one checks for an active exception just before ending the span,
+ * as done in the [example for recording span exceptions](https://opentelemetry.io/docs/specs/semconv/exceptions/exceptions-spans/#recording-an-exception).
+ *
+ * It follows that an exception may still escape the scope of the span
+ * even if the `exception.escaped` attribute was not set or set to false,
+ * since the event might have been recorded at a time where it was not
+ * clear whether the exception will escape.
+ */
+exports.ATTR_EXCEPTION_ESCAPED = 'exception.escaped';
+/**
+ * The exception message.
+ *
+ * @example Division by zero
+ *
+ * @example Can't convert 'int' object to str implicitly
+ */
+exports.ATTR_EXCEPTION_MESSAGE = 'exception.message';
+/**
+ * A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG.
+ *
+ * @example "Exception in thread \"main\" java.lang.RuntimeException: Test exception\\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\\n at com.example.GenerateTrace.main(GenerateTrace.java:5)"
+ */
+exports.ATTR_EXCEPTION_STACKTRACE = 'exception.stacktrace';
+/**
+ * The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it.
+ *
+ * @example java.net.ConnectException
+ *
+ * @example OSError
+ */
+exports.ATTR_EXCEPTION_TYPE = 'exception.type';
+/**
+ * HTTP request headers, `<key>` being the normalized HTTP Header name (lowercase), the value being the header values.
+ *
+ * @example http.request.header.content-type=["application/json"]
+ *
+ * @example http.request.header.x-forwarded-for=["1.2.3.4", "1.2.3.5"]
+ *
+ * @note Instrumentations **SHOULD** require an explicit configuration of which headers are to be captured. Including all request headers can be a security risk - explicit configuration helps avoid leaking sensitive information.
+ * The `User-Agent` header is already captured in the `user_agent.original` attribute. Users **MAY** explicitly configure instrumentations to capture them even though it is not recommended.
+ * The attribute value **MUST** consist of either multiple header values as an array of strings or a single-item array containing a possibly comma-concatenated string, depending on the way the HTTP library provides access to headers.
+ */
+const ATTR_HTTP_REQUEST_HEADER = (key) => `http.request.header.${key}`;
+exports.ATTR_HTTP_REQUEST_HEADER = ATTR_HTTP_REQUEST_HEADER;
+/**
+ * HTTP request method.
+ *
+ * @example GET
+ *
+ * @example POST
+ *
+ * @example HEAD
+ *
+ * @note HTTP request method value **SHOULD** be "known" to the instrumentation.
+ * By default, this convention defines "known" methods as the ones listed in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods)
+ * and the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
+ *
+ * If the HTTP request method is not known to instrumentation, it **MUST** set the `http.request.method` attribute to `_OTHER`.
+ *
+ * If the HTTP instrumentation could end up converting valid HTTP request methods to `_OTHER`, then it **MUST** provide a way to override
+ * the list of known HTTP methods. If this override is done via environment variable, then the environment variable **MUST** be named
+ * OTEL_INSTRUMENTATION_HTTP_KNOWN_METHODS and support a comma-separated list of case-sensitive known HTTP methods
+ * (this list **MUST** be a full override of the default known method, it is not a list of known methods in addition to the defaults).
+ *
+ * HTTP method names are case-sensitive and `http.request.method` attribute value **MUST** match a known HTTP method name exactly.
+ * Instrumentations for specific web frameworks that consider HTTP methods to be case insensitive, **SHOULD** populate a canonical equivalent.
+ * Tracing instrumentations that do so, **MUST** also set `http.request.method_original` to the original value.
+ */
+exports.ATTR_HTTP_REQUEST_METHOD = 'http.request.method';
+/**
+  * Enum value "_OTHER" for attribute {@link ATTR_HTTP_REQUEST_METHOD}.
+  */
+exports.HTTP_REQUEST_METHOD_VALUE_OTHER = "_OTHER";
+/**
+  * Enum value "CONNECT" for attribute {@link ATTR_HTTP_REQUEST_METHOD}.
+  */
+exports.HTTP_REQUEST_METHOD_VALUE_CONNECT = "CONNECT";
+/**
+  * Enum value "DELETE" for attribute {@link ATTR_HTTP_REQUEST_METHOD}.
+  */
+exports.HTTP_REQUEST_METHOD_VALUE_DELETE = "DELETE";
+/**
+  * Enum value "GET" for attribute {@link ATTR_HTTP_REQUEST_METHOD}.
+  */
+exports.HTTP_REQUEST_METHOD_VALUE_GET = "GET";
+/**
+  * Enum value "HEAD" for attribute {@link ATTR_HTTP_REQUEST_METHOD}.
+  */
+exports.HTTP_REQUEST_METHOD_VALUE_HEAD = "HEAD";
+/**
+  * Enum value "OPTIONS" for attribute {@link ATTR_HTTP_REQUEST_METHOD}.
+  */
+exports.HTTP_REQUEST_METHOD_VALUE_OPTIONS = "OPTIONS";
+/**
+  * Enum value "PATCH" for attribute {@link ATTR_HTTP_REQUEST_METHOD}.
+  */
+exports.HTTP_REQUEST_METHOD_VALUE_PATCH = "PATCH";
+/**
+  * Enum value "POST" for attribute {@link ATTR_HTTP_REQUEST_METHOD}.
+  */
+exports.HTTP_REQUEST_METHOD_VALUE_POST = "POST";
+/**
+  * Enum value "PUT" for attribute {@link ATTR_HTTP_REQUEST_METHOD}.
+  */
+exports.HTTP_REQUEST_METHOD_VALUE_PUT = "PUT";
+/**
+  * Enum value "TRACE" for attribute {@link ATTR_HTTP_REQUEST_METHOD}.
+  */
+exports.HTTP_REQUEST_METHOD_VALUE_TRACE = "TRACE";
+/**
+ * Original HTTP method sent by the client in the request line.
+ *
+ * @example GeT
+ *
+ * @example ACL
+ *
+ * @example foo
+ */
+exports.ATTR_HTTP_REQUEST_METHOD_ORIGINAL = 'http.request.method_original';
+/**
+ * The ordinal number of request resending attempt (for any reason, including redirects).
+ *
+ * @example 3
+ *
+ * @note The resend count **SHOULD** be updated each time an HTTP request gets resent by the client, regardless of what was the cause of the resending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues, or any other).
+ */
+exports.ATTR_HTTP_REQUEST_RESEND_COUNT = 'http.request.resend_count';
+/**
+ * HTTP response headers, `<key>` being the normalized HTTP Header name (lowercase), the value being the header values.
+ *
+ * @example http.response.header.content-type=["application/json"]
+ *
+ * @example http.response.header.my-custom-header=["abc", "def"]
+ *
+ * @note Instrumentations **SHOULD** require an explicit configuration of which headers are to be captured. Including all response headers can be a security risk - explicit configuration helps avoid leaking sensitive information.
+ * Users **MAY** explicitly configure instrumentations to capture them even though it is not recommended.
+ * The attribute value **MUST** consist of either multiple header values as an array of strings or a single-item array containing a possibly comma-concatenated string, depending on the way the HTTP library provides access to headers.
+ */
+const ATTR_HTTP_RESPONSE_HEADER = (key) => `http.response.header.${key}`;
+exports.ATTR_HTTP_RESPONSE_HEADER = ATTR_HTTP_RESPONSE_HEADER;
+/**
+ * [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).
+ *
+ * @example 200
+ */
+exports.ATTR_HTTP_RESPONSE_STATUS_CODE = 'http.response.status_code';
+/**
+ * The matched route, that is, the path template in the format used by the respective server framework.
+ *
+ * @example /users/:userID?
+ *
+ * @example {controller}/{action}/{id?}
+ *
+ * @note MUST **NOT** be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can **NOT** substitute it.
+ * SHOULD include the [application root](/docs/http/http-spans.md#http-server-definitions) if there is one.
+ */
+exports.ATTR_HTTP_ROUTE = 'http.route';
+/**
+ * Name of the garbage collector action.
+ *
+ * @example end of minor GC
+ *
+ * @example end of major GC
+ *
+ * @note Garbage collector action is generally obtained via [GarbageCollectionNotificationInfo#getGcAction()](https://docs.oracle.com/en/java/javase/11/docs/api/jdk.management/com/sun/management/GarbageCollectionNotificationInfo.html#getGcAction()).
+ */
+exports.ATTR_JVM_GC_ACTION = 'jvm.gc.action';
+/**
+ * Name of the garbage collector.
+ *
+ * @example G1 Young Generation
+ *
+ * @example G1 Old Generation
+ *
+ * @note Garbage collector name is generally obtained via [GarbageCollectionNotificationInfo#getGcName()](https://docs.oracle.com/en/java/javase/11/docs/api/jdk.management/com/sun/management/GarbageCollectionNotificationInfo.html#getGcName()).
+ */
+exports.ATTR_JVM_GC_NAME = 'jvm.gc.name';
+/**
+ * Name of the memory pool.
+ *
+ * @example G1 Old Gen
+ *
+ * @example G1 Eden space
+ *
+ * @example G1 Survivor Space
+ *
+ * @note Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
+ */
+exports.ATTR_JVM_MEMORY_POOL_NAME = 'jvm.memory.pool.name';
+/**
+ * The type of memory.
+ *
+ * @example heap
+ *
+ * @example non_heap
+ */
+exports.ATTR_JVM_MEMORY_TYPE = 'jvm.memory.type';
+/**
+  * Enum value "heap" for attribute {@link ATTR_JVM_MEMORY_TYPE}.
+  */
+exports.JVM_MEMORY_TYPE_VALUE_HEAP = "heap";
+/**
+  * Enum value "non_heap" for attribute {@link ATTR_JVM_MEMORY_TYPE}.
+  */
+exports.JVM_MEMORY_TYPE_VALUE_NON_HEAP = "non_heap";
+/**
+ * Whether the thread is daemon or not.
+ */
+exports.ATTR_JVM_THREAD_DAEMON = 'jvm.thread.daemon';
+/**
+ * State of the thread.
+ *
+ * @example runnable
+ *
+ * @example blocked
+ */
+exports.ATTR_JVM_THREAD_STATE = 'jvm.thread.state';
+/**
+  * Enum value "blocked" for attribute {@link ATTR_JVM_THREAD_STATE}.
+  */
+exports.JVM_THREAD_STATE_VALUE_BLOCKED = "blocked";
+/**
+  * Enum value "new" for attribute {@link ATTR_JVM_THREAD_STATE}.
+  */
+exports.JVM_THREAD_STATE_VALUE_NEW = "new";
+/**
+  * Enum value "runnable" for attribute {@link ATTR_JVM_THREAD_STATE}.
+  */
+exports.JVM_THREAD_STATE_VALUE_RUNNABLE = "runnable";
+/**
+  * Enum value "terminated" for attribute {@link ATTR_JVM_THREAD_STATE}.
+  */
+exports.JVM_THREAD_STATE_VALUE_TERMINATED = "terminated";
+/**
+  * Enum value "timed_waiting" for attribute {@link ATTR_JVM_THREAD_STATE}.
+  */
+exports.JVM_THREAD_STATE_VALUE_TIMED_WAITING = "timed_waiting";
+/**
+  * Enum value "waiting" for attribute {@link ATTR_JVM_THREAD_STATE}.
+  */
+exports.JVM_THREAD_STATE_VALUE_WAITING = "waiting";
+/**
+ * Local address of the network connection - IP address or Unix domain socket name.
+ *
+ * @example 10.1.2.80
+ *
+ * @example /tmp/my.sock
+ */
+exports.ATTR_NETWORK_LOCAL_ADDRESS = 'network.local.address';
+/**
+ * Local port number of the network connection.
+ *
+ * @example 65123
+ */
+exports.ATTR_NETWORK_LOCAL_PORT = 'network.local.port';
+/**
+ * Peer address of the network connection - IP address or Unix domain socket name.
+ *
+ * @example 10.1.2.80
+ *
+ * @example /tmp/my.sock
+ */
+exports.ATTR_NETWORK_PEER_ADDRESS = 'network.peer.address';
+/**
+ * Peer port number of the network connection.
+ *
+ * @example 65123
+ */
+exports.ATTR_NETWORK_PEER_PORT = 'network.peer.port';
+/**
+ * [OSI application layer](https://osi-model.com/application-layer/) or non-OSI equivalent.
+ *
+ * @example amqp
+ *
+ * @example http
+ *
+ * @example mqtt
+ *
+ * @note The value **SHOULD** be normalized to lowercase.
+ */
+exports.ATTR_NETWORK_PROTOCOL_NAME = 'network.protocol.name';
+/**
+ * The actual version of the protocol used for network communication.
+ *
+ * @example 1.1
+ *
+ * @example 2
+ *
+ * @note If protocol version is subject to negotiation (for example using [ALPN](https://www.rfc-editor.org/rfc/rfc7301.html)), this attribute **SHOULD** be set to the negotiated version. If the actual protocol version is not known, this attribute **SHOULD** **NOT** be set.
+ */
+exports.ATTR_NETWORK_PROTOCOL_VERSION = 'network.protocol.version';
+/**
+ * [OSI transport layer](https://osi-model.com/transport-layer/) or [inter-process communication method](https://wikipedia.org/wiki/Inter-process_communication).
+ *
+ * @example tcp
+ *
+ * @example udp
+ *
+ * @note The value **SHOULD** be normalized to lowercase.
+ *
+ * Consider always setting the transport when setting a port number, since
+ * a port number is ambiguous without knowing the transport. For example
+ * different processes could be listening on TCP port 12345 and UDP port 12345.
+ */
+exports.ATTR_NETWORK_TRANSPORT = 'network.transport';
+/**
+  * Enum value "pipe" for attribute {@link ATTR_NETWORK_TRANSPORT}.
+  */
+exports.NETWORK_TRANSPORT_VALUE_PIPE = "pipe";
+/**
+  * Enum value "quic" for attribute {@link ATTR_NETWORK_TRANSPORT}.
+  */
+exports.NETWORK_TRANSPORT_VALUE_QUIC = "quic";
+/**
+  * Enum value "tcp" for attribute {@link ATTR_NETWORK_TRANSPORT}.
+  */
+exports.NETWORK_TRANSPORT_VALUE_TCP = "tcp";
+/**
+  * Enum value "udp" for attribute {@link ATTR_NETWORK_TRANSPORT}.
+  */
+exports.NETWORK_TRANSPORT_VALUE_UDP = "udp";
+/**
+  * Enum value "unix" for attribute {@link ATTR_NETWORK_TRANSPORT}.
+  */
+exports.NETWORK_TRANSPORT_VALUE_UNIX = "unix";
+/**
+ * [OSI network layer](https://osi-model.com/network-layer/) or non-OSI equivalent.
+ *
+ * @example ipv4
+ *
+ * @example ipv6
+ *
+ * @note The value **SHOULD** be normalized to lowercase.
+ */
+exports.ATTR_NETWORK_TYPE = 'network.type';
+/**
+  * Enum value "ipv4" for attribute {@link ATTR_NETWORK_TYPE}.
+  */
+exports.NETWORK_TYPE_VALUE_IPV4 = "ipv4";
+/**
+  * Enum value "ipv6" for attribute {@link ATTR_NETWORK_TYPE}.
+  */
+exports.NETWORK_TYPE_VALUE_IPV6 = "ipv6";
+/**
+ * The name of the instrumentation scope - (`InstrumentationScope.Name` in OTLP).
+ *
+ * @example io.opentelemetry.contrib.mongodb
+ */
+exports.ATTR_OTEL_SCOPE_NAME = 'otel.scope.name';
+/**
+ * The version of the instrumentation scope - (`InstrumentationScope.Version` in OTLP).
+ *
+ * @example 1.0.0
+ */
+exports.ATTR_OTEL_SCOPE_VERSION = 'otel.scope.version';
+/**
+ * Name of the code, either "OK" or "ERROR". **MUST** **NOT** be set if the status code is UNSET.
+ */
+exports.ATTR_OTEL_STATUS_CODE = 'otel.status_code';
+/**
+  * Enum value "ERROR" for attribute {@link ATTR_OTEL_STATUS_CODE}.
+  */
+exports.OTEL_STATUS_CODE_VALUE_ERROR = "ERROR";
+/**
+  * Enum value "OK" for attribute {@link ATTR_OTEL_STATUS_CODE}.
+  */
+exports.OTEL_STATUS_CODE_VALUE_OK = "OK";
+/**
+ * Description of the Status if it has a value, otherwise not set.
+ *
+ * @example resource not found
+ */
+exports.ATTR_OTEL_STATUS_DESCRIPTION = 'otel.status_description';
+/**
+ * Server domain name if available without reverse DNS lookup; otherwise, IP address or Unix domain socket name.
+ *
+ * @example example.com
+ *
+ * @example 10.1.2.80
+ *
+ * @example /tmp/my.sock
+ *
+ * @note When observed from the client side, and when communicating through an intermediary, `server.address` **SHOULD** represent the server address behind any intermediaries, for example proxies, if it's available.
+ */
+exports.ATTR_SERVER_ADDRESS = 'server.address';
+/**
+ * Server port number.
+ *
+ * @example 80
+ *
+ * @example 8080
+ *
+ * @example 443
+ *
+ * @note When observed from the client side, and when communicating through an intermediary, `server.port` **SHOULD** represent the server port behind any intermediaries, for example proxies, if it's available.
+ */
+exports.ATTR_SERVER_PORT = 'server.port';
+/**
+ * Logical name of the service.
+ *
+ * @example shoppingcart
+ *
+ * @note MUST be the same for all instances of horizontally scaled services. If the value was not specified, SDKs **MUST** fallback to `unknown_service:` concatenated with [`process.executable.name`](process.md), e.g. `unknown_service:bash`. If `process.executable.name` is not available, the value **MUST** be set to `unknown_service`.
+ */
+exports.ATTR_SERVICE_NAME = 'service.name';
+/**
+ * The version string of the service API or implementation. The format is not defined by these conventions.
+ *
+ * @example 2.0.0
+ *
+ * @example a01dbef8a
+ */
+exports.ATTR_SERVICE_VERSION = 'service.version';
+/**
+ * SignalR HTTP connection closure status.
+ *
+ * @example app_shutdown
+ *
+ * @example timeout
+ */
+exports.ATTR_SIGNALR_CONNECTION_STATUS = 'signalr.connection.status';
+/**
+  * Enum value "app_shutdown" for attribute {@link ATTR_SIGNALR_CONNECTION_STATUS}.
+  */
+exports.SIGNALR_CONNECTION_STATUS_VALUE_APP_SHUTDOWN = "app_shutdown";
+/**
+  * Enum value "normal_closure" for attribute {@link ATTR_SIGNALR_CONNECTION_STATUS}.
+  */
+exports.SIGNALR_CONNECTION_STATUS_VALUE_NORMAL_CLOSURE = "normal_closure";
+/**
+  * Enum value "timeout" for attribute {@link ATTR_SIGNALR_CONNECTION_STATUS}.
+  */
+exports.SIGNALR_CONNECTION_STATUS_VALUE_TIMEOUT = "timeout";
+/**
+ * [SignalR transport type](https://github.com/dotnet/aspnetcore/blob/main/src/SignalR/docs/specs/TransportProtocols.md)
+ *
+ * @example web_sockets
+ *
+ * @example long_polling
+ */
+exports.ATTR_SIGNALR_TRANSPORT = 'signalr.transport';
+/**
+  * Enum value "long_polling" for attribute {@link ATTR_SIGNALR_TRANSPORT}.
+  */
+exports.SIGNALR_TRANSPORT_VALUE_LONG_POLLING = "long_polling";
+/**
+  * Enum value "server_sent_events" for attribute {@link ATTR_SIGNALR_TRANSPORT}.
+  */
+exports.SIGNALR_TRANSPORT_VALUE_SERVER_SENT_EVENTS = "server_sent_events";
+/**
+  * Enum value "web_sockets" for attribute {@link ATTR_SIGNALR_TRANSPORT}.
+  */
+exports.SIGNALR_TRANSPORT_VALUE_WEB_SOCKETS = "web_sockets";
+/**
+ * The [URI fragment](https://www.rfc-editor.org/rfc/rfc3986#section-3.5) component
+ *
+ * @example SemConv
+ */
+exports.ATTR_URL_FRAGMENT = 'url.fragment';
+/**
+ * Absolute URL describing a network resource according to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986)
+ *
+ * @example https://www.foo.bar/search?q=OpenTelemetry#SemConv
+ *
+ * @example //localhost
+ *
+ * @note For network calls, URL usually has `scheme://host[:port][path][?query][#fragment]` format, where the fragment is not transmitted over HTTP, but if it is known, it **SHOULD** be included nevertheless.
+ * `url.full` **MUST** **NOT** contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case username and password **SHOULD** be redacted and attribute's value **SHOULD** be `https://REDACTED:REDACTED@www.example.com/`.
+ * `url.full` **SHOULD** capture the absolute URL when it is available (or can be reconstructed). Sensitive content provided in `url.full` **SHOULD** be scrubbed when instrumentations can identify it.
+ */
+exports.ATTR_URL_FULL = 'url.full';
+/**
+ * The [URI path](https://www.rfc-editor.org/rfc/rfc3986#section-3.3) component
+ *
+ * @example /search
+ *
+ * @note Sensitive content provided in `url.path` **SHOULD** be scrubbed when instrumentations can identify it.
+ */
+exports.ATTR_URL_PATH = 'url.path';
+/**
+ * The [URI query](https://www.rfc-editor.org/rfc/rfc3986#section-3.4) component
+ *
+ * @example q=OpenTelemetry
+ *
+ * @note Sensitive content provided in `url.query` **SHOULD** be scrubbed when instrumentations can identify it.
+ */
+exports.ATTR_URL_QUERY = 'url.query';
+/**
+ * The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol.
+ *
+ * @example https
+ *
+ * @example ftp
+ *
+ * @example telnet
+ */
+exports.ATTR_URL_SCHEME = 'url.scheme';
+/**
+ * Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client.
+ *
+ * @example CERN-LineMode/2.15 libwww/2.17b3
+ *
+ * @example Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1
+ *
+ * @example YourApp/1.0.0 grpc-java-okhttp/1.27.2
+ */
+exports.ATTR_USER_AGENT_ORIGINAL = 'user_agent.original';
+
+},{}],515:[function(require,module,exports){
+"use strict";
+/*
+ * Copyright The OpenTelemetry Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.METRIC_SIGNALR_SERVER_CONNECTION_DURATION = exports.METRIC_SIGNALR_SERVER_ACTIVE_CONNECTIONS = exports.METRIC_KESTREL_UPGRADED_CONNECTIONS = exports.METRIC_KESTREL_TLS_HANDSHAKE_DURATION = exports.METRIC_KESTREL_REJECTED_CONNECTIONS = exports.METRIC_KESTREL_QUEUED_REQUESTS = exports.METRIC_KESTREL_QUEUED_CONNECTIONS = exports.METRIC_KESTREL_CONNECTION_DURATION = exports.METRIC_KESTREL_ACTIVE_TLS_HANDSHAKES = exports.METRIC_KESTREL_ACTIVE_CONNECTIONS = exports.METRIC_JVM_THREAD_COUNT = exports.METRIC_JVM_MEMORY_USED_AFTER_LAST_GC = exports.METRIC_JVM_MEMORY_USED = exports.METRIC_JVM_MEMORY_LIMIT = exports.METRIC_JVM_MEMORY_COMMITTED = exports.METRIC_JVM_GC_DURATION = exports.METRIC_JVM_CPU_TIME = exports.METRIC_JVM_CPU_RECENT_UTILIZATION = exports.METRIC_JVM_CPU_COUNT = exports.METRIC_JVM_CLASS_UNLOADED = exports.METRIC_JVM_CLASS_LOADED = exports.METRIC_JVM_CLASS_COUNT = exports.METRIC_HTTP_SERVER_REQUEST_DURATION = exports.METRIC_HTTP_CLIENT_REQUEST_DURATION = exports.METRIC_ASPNETCORE_ROUTING_MATCH_ATTEMPTS = exports.METRIC_ASPNETCORE_RATE_LIMITING_REQUESTS = exports.METRIC_ASPNETCORE_RATE_LIMITING_REQUEST_LEASE_DURATION = exports.METRIC_ASPNETCORE_RATE_LIMITING_REQUEST_TIME_IN_QUEUE = exports.METRIC_ASPNETCORE_RATE_LIMITING_QUEUED_REQUESTS = exports.METRIC_ASPNETCORE_RATE_LIMITING_ACTIVE_REQUEST_LEASES = exports.METRIC_ASPNETCORE_DIAGNOSTICS_EXCEPTIONS = void 0;
+//----------------------------------------------------------------------------------------------------------
+// DO NOT EDIT, this is an Auto-generated file from scripts/semconv/templates/register/stable/metrics.ts.j2
+//----------------------------------------------------------------------------------------------------------
+/**
+ * Number of exceptions caught by exception handling middleware.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.Diagnostics`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_ASPNETCORE_DIAGNOSTICS_EXCEPTIONS = 'aspnetcore.diagnostics.exceptions';
+/**
+ * Number of requests that are currently active on the server that hold a rate limiting lease.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.RateLimiting`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_ASPNETCORE_RATE_LIMITING_ACTIVE_REQUEST_LEASES = 'aspnetcore.rate_limiting.active_request_leases';
+/**
+ * Number of requests that are currently queued, waiting to acquire a rate limiting lease.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.RateLimiting`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_ASPNETCORE_RATE_LIMITING_QUEUED_REQUESTS = 'aspnetcore.rate_limiting.queued_requests';
+/**
+ * The time the request spent in a queue waiting to acquire a rate limiting lease.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.RateLimiting`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_ASPNETCORE_RATE_LIMITING_REQUEST_TIME_IN_QUEUE = 'aspnetcore.rate_limiting.request.time_in_queue';
+/**
+ * The duration of rate limiting lease held by requests on the server.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.RateLimiting`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_ASPNETCORE_RATE_LIMITING_REQUEST_LEASE_DURATION = 'aspnetcore.rate_limiting.request_lease.duration';
+/**
+ * Number of requests that tried to acquire a rate limiting lease.
+ *
+ * @note Requests could be:
+ *
+ * * Rejected by global or endpoint rate limiting policies
+ * * Canceled while waiting for the lease.
+ *
+ * Meter name: `Microsoft.AspNetCore.RateLimiting`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_ASPNETCORE_RATE_LIMITING_REQUESTS = 'aspnetcore.rate_limiting.requests';
+/**
+ * Number of requests that were attempted to be matched to an endpoint.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.Routing`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_ASPNETCORE_ROUTING_MATCH_ATTEMPTS = 'aspnetcore.routing.match_attempts';
+/**
+ * Duration of HTTP client requests.
+ */
+exports.METRIC_HTTP_CLIENT_REQUEST_DURATION = 'http.client.request.duration';
+/**
+ * Duration of HTTP server requests.
+ */
+exports.METRIC_HTTP_SERVER_REQUEST_DURATION = 'http.server.request.duration';
+/**
+ * Number of classes currently loaded.
+ */
+exports.METRIC_JVM_CLASS_COUNT = 'jvm.class.count';
+/**
+ * Number of classes loaded since JVM start.
+ */
+exports.METRIC_JVM_CLASS_LOADED = 'jvm.class.loaded';
+/**
+ * Number of classes unloaded since JVM start.
+ */
+exports.METRIC_JVM_CLASS_UNLOADED = 'jvm.class.unloaded';
+/**
+ * Number of processors available to the Java virtual machine.
+ */
+exports.METRIC_JVM_CPU_COUNT = 'jvm.cpu.count';
+/**
+ * Recent CPU utilization for the process as reported by the JVM.
+ *
+ * @note The value range is [0.0,1.0]. This utilization is not defined as being for the specific interval since last measurement (unlike `system.cpu.utilization`). [Reference](https://docs.oracle.com/en/java/javase/17/docs/api/jdk.management/com/sun/management/OperatingSystemMXBean.html#getProcessCpuLoad()).
+ */
+exports.METRIC_JVM_CPU_RECENT_UTILIZATION = 'jvm.cpu.recent_utilization';
+/**
+ * CPU time used by the process as reported by the JVM.
+ */
+exports.METRIC_JVM_CPU_TIME = 'jvm.cpu.time';
+/**
+ * Duration of JVM garbage collection actions.
+ */
+exports.METRIC_JVM_GC_DURATION = 'jvm.gc.duration';
+/**
+ * Measure of memory committed.
+ */
+exports.METRIC_JVM_MEMORY_COMMITTED = 'jvm.memory.committed';
+/**
+ * Measure of max obtainable memory.
+ */
+exports.METRIC_JVM_MEMORY_LIMIT = 'jvm.memory.limit';
+/**
+ * Measure of memory used.
+ */
+exports.METRIC_JVM_MEMORY_USED = 'jvm.memory.used';
+/**
+ * Measure of memory used, as measured after the most recent garbage collection event on this pool.
+ */
+exports.METRIC_JVM_MEMORY_USED_AFTER_LAST_GC = 'jvm.memory.used_after_last_gc';
+/**
+ * Number of executing platform threads.
+ */
+exports.METRIC_JVM_THREAD_COUNT = 'jvm.thread.count';
+/**
+ * Number of connections that are currently active on the server.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.Server.Kestrel`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_KESTREL_ACTIVE_CONNECTIONS = 'kestrel.active_connections';
+/**
+ * Number of TLS handshakes that are currently in progress on the server.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.Server.Kestrel`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_KESTREL_ACTIVE_TLS_HANDSHAKES = 'kestrel.active_tls_handshakes';
+/**
+ * The duration of connections on the server.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.Server.Kestrel`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_KESTREL_CONNECTION_DURATION = 'kestrel.connection.duration';
+/**
+ * Number of connections that are currently queued and are waiting to start.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.Server.Kestrel`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_KESTREL_QUEUED_CONNECTIONS = 'kestrel.queued_connections';
+/**
+ * Number of HTTP requests on multiplexed connections (HTTP/2 and HTTP/3) that are currently queued and are waiting to start.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.Server.Kestrel`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_KESTREL_QUEUED_REQUESTS = 'kestrel.queued_requests';
+/**
+ * Number of connections rejected by the server.
+ *
+ * @note Connections are rejected when the currently active count exceeds the value configured with `MaxConcurrentConnections`.
+ * Meter name: `Microsoft.AspNetCore.Server.Kestrel`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_KESTREL_REJECTED_CONNECTIONS = 'kestrel.rejected_connections';
+/**
+ * The duration of TLS handshakes on the server.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.Server.Kestrel`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_KESTREL_TLS_HANDSHAKE_DURATION = 'kestrel.tls_handshake.duration';
+/**
+ * Number of connections that are currently upgraded (WebSockets). .
+ *
+ * @note The counter only tracks HTTP/1.1 connections.
+ *
+ * Meter name: `Microsoft.AspNetCore.Server.Kestrel`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_KESTREL_UPGRADED_CONNECTIONS = 'kestrel.upgraded_connections';
+/**
+ * Number of connections that are currently active on the server.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.Http.Connections`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_SIGNALR_SERVER_ACTIVE_CONNECTIONS = 'signalr.server.active_connections';
+/**
+ * The duration of connections on the server.
+ *
+ * @note Meter name: `Microsoft.AspNetCore.Http.Connections`; Added in: ASP.NET Core 8.0
+ */
+exports.METRIC_SIGNALR_SERVER_CONNECTION_DURATION = 'signalr.server.connection.duration';
+
+},{}],516:[function(require,module,exports){
 "use strict";
 /*
  * Copyright The OpenTelemetry Authors
@@ -27198,7 +37621,7 @@ const utils_1 = require("../internal/utils");
 // Constant values for SemanticAttributes
 //----------------------------------------------------------------------------------------------------------
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_AWS_LAMBDA_INVOKED_ARN = 'aws.lambda.invoked_arn';
 const TMP_DB_SYSTEM = 'db.system';
 const TMP_DB_CONNECTION_STRING = 'db.connection_string';
@@ -27331,110 +37754,158 @@ const TMP_MESSAGE_UNCOMPRESSED_SIZE = 'message.uncompressed_size';
  * The full invoked ARN as provided on the `Context` passed to the function (`Lambda-Runtime-Invoked-Function-Arn` header on the `/runtime/invocation/next` applicable).
  *
  * Note: This may be different from `faas.id` if an alias is involved.
+ *
+ * @deprecated use ATTR_AWS_LAMBDA_INVOKED_ARN
  */
 exports.SEMATTRS_AWS_LAMBDA_INVOKED_ARN = TMP_AWS_LAMBDA_INVOKED_ARN;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated use ATTR_DB_SYSTEM
  */
 exports.SEMATTRS_DB_SYSTEM = TMP_DB_SYSTEM;
 /**
  * The connection string used to connect to the database. It is recommended to remove embedded credentials.
+ *
+ * @deprecated use ATTR_DB_CONNECTION_STRING
  */
 exports.SEMATTRS_DB_CONNECTION_STRING = TMP_DB_CONNECTION_STRING;
 /**
  * Username for accessing the database.
+ *
+ * @deprecated use ATTR_DB_USER
  */
 exports.SEMATTRS_DB_USER = TMP_DB_USER;
 /**
  * The fully-qualified class name of the [Java Database Connectivity (JDBC)](https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/) driver used to connect.
+ *
+ * @deprecated use ATTR_DB_JDBC_DRIVER_CLASSNAME
  */
 exports.SEMATTRS_DB_JDBC_DRIVER_CLASSNAME = TMP_DB_JDBC_DRIVER_CLASSNAME;
 /**
  * If no [tech-specific attribute](#call-level-attributes-for-specific-technologies) is defined, this attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails).
  *
  * Note: In some SQL databases, the database name to be used is called &#34;schema name&#34;.
+ *
+ * @deprecated use ATTR_DB_NAME
  */
 exports.SEMATTRS_DB_NAME = TMP_DB_NAME;
 /**
  * The database statement being executed.
  *
  * Note: The value may be sanitized to exclude sensitive information.
+ *
+ * @deprecated use ATTR_DB_STATEMENT
  */
 exports.SEMATTRS_DB_STATEMENT = TMP_DB_STATEMENT;
 /**
  * The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword.
  *
  * Note: When setting this to an SQL keyword, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the SQL statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
+ *
+ * @deprecated use ATTR_DB_OPERATION
  */
 exports.SEMATTRS_DB_OPERATION = TMP_DB_OPERATION;
 /**
  * The Microsoft SQL Server [instance name](https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15) connecting to. This name is used to determine the port of a named instance.
  *
  * Note: If setting a `db.mssql.instance_name`, `net.peer.port` is no longer required (but still recommended if non-standard).
+ *
+ * @deprecated use ATTR_DB_MSSQL_INSTANCE_NAME
  */
 exports.SEMATTRS_DB_MSSQL_INSTANCE_NAME = TMP_DB_MSSQL_INSTANCE_NAME;
 /**
  * The name of the keyspace being accessed. To be used instead of the generic `db.name` attribute.
+ *
+ * @deprecated use ATTR_DB_CASSANDRA_KEYSPACE
  */
 exports.SEMATTRS_DB_CASSANDRA_KEYSPACE = TMP_DB_CASSANDRA_KEYSPACE;
 /**
  * The fetch size used for paging, i.e. how many rows will be returned at once.
+ *
+ * @deprecated use ATTR_DB_CASSANDRA_PAGE_SIZE
  */
 exports.SEMATTRS_DB_CASSANDRA_PAGE_SIZE = TMP_DB_CASSANDRA_PAGE_SIZE;
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated use ATTR_DB_CASSANDRA_CONSISTENCY_LEVEL
  */
 exports.SEMATTRS_DB_CASSANDRA_CONSISTENCY_LEVEL = TMP_DB_CASSANDRA_CONSISTENCY_LEVEL;
 /**
  * The name of the primary table that the operation is acting upon, including the schema name (if applicable).
  *
  * Note: This mirrors the db.sql.table attribute but references cassandra rather than sql. It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
+ *
+ * @deprecated use ATTR_DB_CASSANDRA_TABLE
  */
 exports.SEMATTRS_DB_CASSANDRA_TABLE = TMP_DB_CASSANDRA_TABLE;
 /**
  * Whether or not the query is idempotent.
+ *
+ * @deprecated use ATTR_DB_CASSANDRA_IDEMPOTENCE
  */
 exports.SEMATTRS_DB_CASSANDRA_IDEMPOTENCE = TMP_DB_CASSANDRA_IDEMPOTENCE;
 /**
  * The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively.
+ *
+ * @deprecated use ATTR_DB_CASSANDRA_SPECULATIVE_EXECUTION_COUNT
  */
 exports.SEMATTRS_DB_CASSANDRA_SPECULATIVE_EXECUTION_COUNT = TMP_DB_CASSANDRA_SPECULATIVE_EXECUTION_COUNT;
 /**
  * The ID of the coordinating node for a query.
+ *
+ * @deprecated use ATTR_DB_CASSANDRA_COORDINATOR_ID
  */
 exports.SEMATTRS_DB_CASSANDRA_COORDINATOR_ID = TMP_DB_CASSANDRA_COORDINATOR_ID;
 /**
  * The data center of the coordinating node for a query.
+ *
+ * @deprecated use ATTR_DB_CASSANDRA_COORDINATOR_DC
  */
 exports.SEMATTRS_DB_CASSANDRA_COORDINATOR_DC = TMP_DB_CASSANDRA_COORDINATOR_DC;
 /**
  * The [HBase namespace](https://hbase.apache.org/book.html#_namespace) being accessed. To be used instead of the generic `db.name` attribute.
+ *
+ * @deprecated use ATTR_DB_HBASE_NAMESPACE
  */
 exports.SEMATTRS_DB_HBASE_NAMESPACE = TMP_DB_HBASE_NAMESPACE;
 /**
  * The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute.
+ *
+ * @deprecated use ATTR_DB_REDIS_DATABASE_INDEX
  */
 exports.SEMATTRS_DB_REDIS_DATABASE_INDEX = TMP_DB_REDIS_DATABASE_INDEX;
 /**
  * The collection being accessed within the database stated in `db.name`.
+ *
+ * @deprecated use ATTR_DB_MONGODB_COLLECTION
  */
 exports.SEMATTRS_DB_MONGODB_COLLECTION = TMP_DB_MONGODB_COLLECTION;
 /**
  * The name of the primary table that the operation is acting upon, including the schema name (if applicable).
  *
  * Note: It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
+ *
+ * @deprecated use ATTR_DB_SQL_TABLE
  */
 exports.SEMATTRS_DB_SQL_TABLE = TMP_DB_SQL_TABLE;
 /**
  * The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it.
+ *
+ * @deprecated use ATTR_EXCEPTION_TYPE
  */
 exports.SEMATTRS_EXCEPTION_TYPE = TMP_EXCEPTION_TYPE;
 /**
  * The exception message.
+ *
+ * @deprecated use ATTR_EXCEPTION_MESSAGE
  */
 exports.SEMATTRS_EXCEPTION_MESSAGE = TMP_EXCEPTION_MESSAGE;
 /**
  * A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG.
+ *
+ * @deprecated use ATTR_EXCEPTION_STACKTRACE
  */
 exports.SEMATTRS_EXCEPTION_STACKTRACE = TMP_EXCEPTION_STACKTRACE;
 /**
@@ -27456,216 +37927,316 @@ It follows that an exception may still escape the scope of the span
 even if the `exception.escaped` attribute was not set or set to false,
 since the event might have been recorded at a time where it was not
 clear whether the exception will escape.
+*
+* @deprecated use ATTR_EXCEPTION_ESCAPED
 */
 exports.SEMATTRS_EXCEPTION_ESCAPED = TMP_EXCEPTION_ESCAPED;
 /**
  * Type of the trigger on which the function is executed.
+ *
+ * @deprecated use ATTR_FAAS_TRIGGER
  */
 exports.SEMATTRS_FAAS_TRIGGER = TMP_FAAS_TRIGGER;
 /**
  * The execution ID of the current function execution.
+ *
+ * @deprecated use ATTR_FAAS_EXECUTION
  */
 exports.SEMATTRS_FAAS_EXECUTION = TMP_FAAS_EXECUTION;
 /**
  * The name of the source on which the triggering operation was performed. For example, in Cloud Storage or S3 corresponds to the bucket name, and in Cosmos DB to the database name.
+ *
+ * @deprecated use ATTR_FAAS_DOCUMENT_COLLECTION
  */
 exports.SEMATTRS_FAAS_DOCUMENT_COLLECTION = TMP_FAAS_DOCUMENT_COLLECTION;
 /**
  * Describes the type of the operation that was performed on the data.
+ *
+ * @deprecated use ATTR_FAAS_DOCUMENT_OPERATION
  */
 exports.SEMATTRS_FAAS_DOCUMENT_OPERATION = TMP_FAAS_DOCUMENT_OPERATION;
 /**
  * A string containing the time when the data was accessed in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format expressed in [UTC](https://www.w3.org/TR/NOTE-datetime).
+ *
+ * @deprecated use ATTR_FAAS_DOCUMENT_TIME
  */
 exports.SEMATTRS_FAAS_DOCUMENT_TIME = TMP_FAAS_DOCUMENT_TIME;
 /**
  * The document name/table subjected to the operation. For example, in Cloud Storage or S3 is the name of the file, and in Cosmos DB the table name.
+ *
+ * @deprecated use ATTR_FAAS_DOCUMENT_NAME
  */
 exports.SEMATTRS_FAAS_DOCUMENT_NAME = TMP_FAAS_DOCUMENT_NAME;
 /**
  * A string containing the function invocation time in the [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format expressed in [UTC](https://www.w3.org/TR/NOTE-datetime).
+ *
+ * @deprecated use ATTR_FAAS_TIME
  */
 exports.SEMATTRS_FAAS_TIME = TMP_FAAS_TIME;
 /**
  * A string containing the schedule period as [Cron Expression](https://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm).
+ *
+ * @deprecated use ATTR_FAAS_CRON
  */
 exports.SEMATTRS_FAAS_CRON = TMP_FAAS_CRON;
 /**
  * A boolean that is true if the serverless function is executed for the first time (aka cold-start).
+ *
+ * @deprecated use ATTR_FAAS_COLDSTART
  */
 exports.SEMATTRS_FAAS_COLDSTART = TMP_FAAS_COLDSTART;
 /**
  * The name of the invoked function.
  *
  * Note: SHOULD be equal to the `faas.name` resource attribute of the invoked function.
+ *
+ * @deprecated use ATTR_FAAS_INVOKED_NAME
  */
 exports.SEMATTRS_FAAS_INVOKED_NAME = TMP_FAAS_INVOKED_NAME;
 /**
  * The cloud provider of the invoked function.
  *
  * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+ *
+ * @deprecated use ATTR_FAAS_INVOKED_PROVIDER
  */
 exports.SEMATTRS_FAAS_INVOKED_PROVIDER = TMP_FAAS_INVOKED_PROVIDER;
 /**
  * The cloud region of the invoked function.
  *
  * Note: SHOULD be equal to the `cloud.region` resource attribute of the invoked function.
+ *
+ * @deprecated use ATTR_FAAS_INVOKED_REGION
  */
 exports.SEMATTRS_FAAS_INVOKED_REGION = TMP_FAAS_INVOKED_REGION;
 /**
  * Transport protocol used. See note below.
+ *
+ * @deprecated use ATTR_NET_TRANSPORT
  */
 exports.SEMATTRS_NET_TRANSPORT = TMP_NET_TRANSPORT;
 /**
  * Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6).
+ *
+ * @deprecated use ATTR_NET_PEER_IP
  */
 exports.SEMATTRS_NET_PEER_IP = TMP_NET_PEER_IP;
 /**
  * Remote port number.
+ *
+ * @deprecated use ATTR_NET_PEER_PORT
  */
 exports.SEMATTRS_NET_PEER_PORT = TMP_NET_PEER_PORT;
 /**
  * Remote hostname or similar, see note below.
+ *
+ * @deprecated use ATTR_NET_PEER_NAME
  */
 exports.SEMATTRS_NET_PEER_NAME = TMP_NET_PEER_NAME;
 /**
  * Like `net.peer.ip` but for the host IP. Useful in case of a multi-IP host.
+ *
+ * @deprecated use ATTR_NET_HOST_IP
  */
 exports.SEMATTRS_NET_HOST_IP = TMP_NET_HOST_IP;
 /**
  * Like `net.peer.port` but for the host port.
+ *
+ * @deprecated use ATTR_NET_HOST_PORT
  */
 exports.SEMATTRS_NET_HOST_PORT = TMP_NET_HOST_PORT;
 /**
  * Local hostname or similar, see note below.
+ *
+ * @deprecated use ATTR_NET_HOST_NAME
  */
 exports.SEMATTRS_NET_HOST_NAME = TMP_NET_HOST_NAME;
 /**
  * The internet connection type currently being used by the host.
+ *
+ * @deprecated use ATTR_NET_HOST_CONNECTION_TYPE
  */
 exports.SEMATTRS_NET_HOST_CONNECTION_TYPE = TMP_NET_HOST_CONNECTION_TYPE;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated use ATTR_NET_HOST_CONNECTION_SUBTYPE
  */
 exports.SEMATTRS_NET_HOST_CONNECTION_SUBTYPE = TMP_NET_HOST_CONNECTION_SUBTYPE;
 /**
  * The name of the mobile carrier.
+ *
+ * @deprecated use ATTR_NET_HOST_CARRIER_NAME
  */
 exports.SEMATTRS_NET_HOST_CARRIER_NAME = TMP_NET_HOST_CARRIER_NAME;
 /**
  * The mobile carrier country code.
+ *
+ * @deprecated use ATTR_NET_HOST_CARRIER_MCC
  */
 exports.SEMATTRS_NET_HOST_CARRIER_MCC = TMP_NET_HOST_CARRIER_MCC;
 /**
  * The mobile carrier network code.
+ *
+ * @deprecated use ATTR_NET_HOST_CARRIER_MNC
  */
 exports.SEMATTRS_NET_HOST_CARRIER_MNC = TMP_NET_HOST_CARRIER_MNC;
 /**
  * The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network.
+ *
+ * @deprecated use ATTR_NET_HOST_CARRIER_ICC
  */
 exports.SEMATTRS_NET_HOST_CARRIER_ICC = TMP_NET_HOST_CARRIER_ICC;
 /**
  * The [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any.
+ *
+ * @deprecated use ATTR_PEER_SERVICE
  */
 exports.SEMATTRS_PEER_SERVICE = TMP_PEER_SERVICE;
 /**
  * Username or client_id extracted from the access token or [Authorization](https://tools.ietf.org/html/rfc7235#section-4.2) header in the inbound request from outside the system.
+ *
+ * @deprecated use ATTR_ENDUSER_ID
  */
 exports.SEMATTRS_ENDUSER_ID = TMP_ENDUSER_ID;
 /**
  * Actual/assumed role the client is making the request under extracted from token or application security context.
+ *
+ * @deprecated use ATTR_ENDUSER_ROLE
  */
 exports.SEMATTRS_ENDUSER_ROLE = TMP_ENDUSER_ROLE;
 /**
  * Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token](https://tools.ietf.org/html/rfc6749#section-3.3) or an attribute value in a [SAML 2.0 Assertion](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html).
+ *
+ * @deprecated use ATTR_ENDUSER_SCOPE
  */
 exports.SEMATTRS_ENDUSER_SCOPE = TMP_ENDUSER_SCOPE;
 /**
  * Current &#34;managed&#34; thread ID (as opposed to OS thread ID).
+ *
+ * @deprecated use ATTR_THREAD_ID
  */
 exports.SEMATTRS_THREAD_ID = TMP_THREAD_ID;
 /**
  * Current thread name.
+ *
+ * @deprecated use ATTR_THREAD_NAME
  */
 exports.SEMATTRS_THREAD_NAME = TMP_THREAD_NAME;
 /**
  * The method or function name, or equivalent (usually rightmost part of the code unit&#39;s name).
+ *
+ * @deprecated use ATTR_CODE_FUNCTION
  */
 exports.SEMATTRS_CODE_FUNCTION = TMP_CODE_FUNCTION;
 /**
  * The &#34;namespace&#34; within which `code.function` is defined. Usually the qualified class or module name, such that `code.namespace` + some separator + `code.function` form a unique identifier for the code unit.
+ *
+ * @deprecated use ATTR_CODE_NAMESPACE
  */
 exports.SEMATTRS_CODE_NAMESPACE = TMP_CODE_NAMESPACE;
 /**
  * The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path).
+ *
+ * @deprecated use ATTR_CODE_FILEPATH
  */
 exports.SEMATTRS_CODE_FILEPATH = TMP_CODE_FILEPATH;
 /**
  * The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`.
+ *
+ * @deprecated use ATTR_CODE_LINENO
  */
 exports.SEMATTRS_CODE_LINENO = TMP_CODE_LINENO;
 /**
  * HTTP request method.
+ *
+ * @deprecated use ATTR_HTTP_METHOD
  */
 exports.SEMATTRS_HTTP_METHOD = TMP_HTTP_METHOD;
 /**
  * Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
  *
  * Note: `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute&#39;s value should be `https://www.example.com/`.
+ *
+ * @deprecated use ATTR_HTTP_URL
  */
 exports.SEMATTRS_HTTP_URL = TMP_HTTP_URL;
 /**
  * The full request target as passed in a HTTP request line or equivalent.
+ *
+ * @deprecated use ATTR_HTTP_TARGET
  */
 exports.SEMATTRS_HTTP_TARGET = TMP_HTTP_TARGET;
 /**
  * The value of the [HTTP host header](https://tools.ietf.org/html/rfc7230#section-5.4). An empty Host header should also be reported, see note.
  *
  * Note: When the header is present but empty the attribute SHOULD be set to the empty string. Note that this is a valid situation that is expected in certain cases, according the aforementioned [section of RFC 7230](https://tools.ietf.org/html/rfc7230#section-5.4). When the header is not set the attribute MUST NOT be set.
+ *
+ * @deprecated use ATTR_HTTP_HOST
  */
 exports.SEMATTRS_HTTP_HOST = TMP_HTTP_HOST;
 /**
  * The URI scheme identifying the used protocol.
+ *
+ * @deprecated use ATTR_HTTP_SCHEME
  */
 exports.SEMATTRS_HTTP_SCHEME = TMP_HTTP_SCHEME;
 /**
  * [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).
+ *
+ * @deprecated use ATTR_HTTP_STATUS_CODE
  */
 exports.SEMATTRS_HTTP_STATUS_CODE = TMP_HTTP_STATUS_CODE;
 /**
  * Kind of HTTP protocol used.
  *
  * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ *
+ * @deprecated use ATTR_HTTP_FLAVOR
  */
 exports.SEMATTRS_HTTP_FLAVOR = TMP_HTTP_FLAVOR;
 /**
  * Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client.
+ *
+ * @deprecated use ATTR_HTTP_USER_AGENT
  */
 exports.SEMATTRS_HTTP_USER_AGENT = TMP_HTTP_USER_AGENT;
 /**
  * The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size.
+ *
+ * @deprecated use ATTR_HTTP_REQUEST_CONTENT_LENGTH
  */
 exports.SEMATTRS_HTTP_REQUEST_CONTENT_LENGTH = TMP_HTTP_REQUEST_CONTENT_LENGTH;
 /**
  * The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used.
+ *
+ * @deprecated use ATTR_HTTP_REQUEST_CONTENT_LENGTH_UNCOMPRESSED
  */
 exports.SEMATTRS_HTTP_REQUEST_CONTENT_LENGTH_UNCOMPRESSED = TMP_HTTP_REQUEST_CONTENT_LENGTH_UNCOMPRESSED;
 /**
  * The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size.
+ *
+ * @deprecated use ATTR_HTTP_RESPONSE_CONTENT_LENGTH
  */
 exports.SEMATTRS_HTTP_RESPONSE_CONTENT_LENGTH = TMP_HTTP_RESPONSE_CONTENT_LENGTH;
 /**
  * The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used.
+ *
+ * @deprecated use ATTR_HTTP_RESPONSE_CONTENT_LENGTH_UNCOMPRESSED
  */
 exports.SEMATTRS_HTTP_RESPONSE_CONTENT_LENGTH_UNCOMPRESSED = TMP_HTTP_RESPONSE_CONTENT_LENGTH_UNCOMPRESSED;
 /**
  * The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead).
  *
  * Note: `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. open-telemetry/opentelemetry-python/pull/148). It is thus preferred to supply the raw data that is available.
+ *
+ * @deprecated use ATTR_HTTP_SERVER_NAME
  */
 exports.SEMATTRS_HTTP_SERVER_NAME = TMP_HTTP_SERVER_NAME;
 /**
  * The matched route (path template).
+ *
+ * @deprecated use ATTR_HTTP_ROUTE
  */
 exports.SEMATTRS_HTTP_ROUTE = TMP_HTTP_ROUTE;
 /**
@@ -27682,226 +38253,334 @@ comes from a proxy, reverse proxy, or the actual client. Setting
 `http.client_ip` when it&#39;s the same as `net.peer.ip` means that
 one is at least somewhat confident that the address is not that of
 the closest proxy.
+*
+* @deprecated use ATTR_HTTP_CLIENT_IP
 */
 exports.SEMATTRS_HTTP_CLIENT_IP = TMP_HTTP_CLIENT_IP;
 /**
  * The keys in the `RequestItems` object field.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_TABLE_NAMES
  */
 exports.SEMATTRS_AWS_DYNAMODB_TABLE_NAMES = TMP_AWS_DYNAMODB_TABLE_NAMES;
 /**
  * The JSON-serialized value of each item in the `ConsumedCapacity` response field.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_CONSUMED_CAPACITY
  */
 exports.SEMATTRS_AWS_DYNAMODB_CONSUMED_CAPACITY = TMP_AWS_DYNAMODB_CONSUMED_CAPACITY;
 /**
  * The JSON-serialized value of the `ItemCollectionMetrics` response field.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_ITEM_COLLECTION_METRICS
  */
 exports.SEMATTRS_AWS_DYNAMODB_ITEM_COLLECTION_METRICS = TMP_AWS_DYNAMODB_ITEM_COLLECTION_METRICS;
 /**
  * The value of the `ProvisionedThroughput.ReadCapacityUnits` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_PROVISIONED_READ_CAPACITY
  */
 exports.SEMATTRS_AWS_DYNAMODB_PROVISIONED_READ_CAPACITY = TMP_AWS_DYNAMODB_PROVISIONED_READ_CAPACITY;
 /**
  * The value of the `ProvisionedThroughput.WriteCapacityUnits` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_PROVISIONED_WRITE_CAPACITY
  */
 exports.SEMATTRS_AWS_DYNAMODB_PROVISIONED_WRITE_CAPACITY = TMP_AWS_DYNAMODB_PROVISIONED_WRITE_CAPACITY;
 /**
  * The value of the `ConsistentRead` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_CONSISTENT_READ
  */
 exports.SEMATTRS_AWS_DYNAMODB_CONSISTENT_READ = TMP_AWS_DYNAMODB_CONSISTENT_READ;
 /**
  * The value of the `ProjectionExpression` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_PROJECTION
  */
 exports.SEMATTRS_AWS_DYNAMODB_PROJECTION = TMP_AWS_DYNAMODB_PROJECTION;
 /**
  * The value of the `Limit` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_LIMIT
  */
 exports.SEMATTRS_AWS_DYNAMODB_LIMIT = TMP_AWS_DYNAMODB_LIMIT;
 /**
  * The value of the `AttributesToGet` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_ATTRIBUTES_TO_GET
  */
 exports.SEMATTRS_AWS_DYNAMODB_ATTRIBUTES_TO_GET = TMP_AWS_DYNAMODB_ATTRIBUTES_TO_GET;
 /**
  * The value of the `IndexName` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_INDEX_NAME
  */
 exports.SEMATTRS_AWS_DYNAMODB_INDEX_NAME = TMP_AWS_DYNAMODB_INDEX_NAME;
 /**
  * The value of the `Select` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_SELECT
  */
 exports.SEMATTRS_AWS_DYNAMODB_SELECT = TMP_AWS_DYNAMODB_SELECT;
 /**
  * The JSON-serialized value of each item of the `GlobalSecondaryIndexes` request field.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEXES
  */
 exports.SEMATTRS_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEXES = TMP_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEXES;
 /**
  * The JSON-serialized value of each item of the `LocalSecondaryIndexes` request field.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_LOCAL_SECONDARY_INDEXES
  */
 exports.SEMATTRS_AWS_DYNAMODB_LOCAL_SECONDARY_INDEXES = TMP_AWS_DYNAMODB_LOCAL_SECONDARY_INDEXES;
 /**
  * The value of the `ExclusiveStartTableName` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_EXCLUSIVE_START_TABLE
  */
 exports.SEMATTRS_AWS_DYNAMODB_EXCLUSIVE_START_TABLE = TMP_AWS_DYNAMODB_EXCLUSIVE_START_TABLE;
 /**
  * The the number of items in the `TableNames` response parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_TABLE_COUNT
  */
 exports.SEMATTRS_AWS_DYNAMODB_TABLE_COUNT = TMP_AWS_DYNAMODB_TABLE_COUNT;
 /**
  * The value of the `ScanIndexForward` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_SCAN_FORWARD
  */
 exports.SEMATTRS_AWS_DYNAMODB_SCAN_FORWARD = TMP_AWS_DYNAMODB_SCAN_FORWARD;
 /**
  * The value of the `Segment` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_SEGMENT
  */
 exports.SEMATTRS_AWS_DYNAMODB_SEGMENT = TMP_AWS_DYNAMODB_SEGMENT;
 /**
  * The value of the `TotalSegments` request parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_TOTAL_SEGMENTS
  */
 exports.SEMATTRS_AWS_DYNAMODB_TOTAL_SEGMENTS = TMP_AWS_DYNAMODB_TOTAL_SEGMENTS;
 /**
  * The value of the `Count` response parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_COUNT
  */
 exports.SEMATTRS_AWS_DYNAMODB_COUNT = TMP_AWS_DYNAMODB_COUNT;
 /**
  * The value of the `ScannedCount` response parameter.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_SCANNED_COUNT
  */
 exports.SEMATTRS_AWS_DYNAMODB_SCANNED_COUNT = TMP_AWS_DYNAMODB_SCANNED_COUNT;
 /**
  * The JSON-serialized value of each item in the `AttributeDefinitions` request field.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_ATTRIBUTE_DEFINITIONS
  */
 exports.SEMATTRS_AWS_DYNAMODB_ATTRIBUTE_DEFINITIONS = TMP_AWS_DYNAMODB_ATTRIBUTE_DEFINITIONS;
 /**
  * The JSON-serialized value of each item in the the `GlobalSecondaryIndexUpdates` request field.
+ *
+ * @deprecated use ATTR_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEX_UPDATES
  */
 exports.SEMATTRS_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEX_UPDATES = TMP_AWS_DYNAMODB_GLOBAL_SECONDARY_INDEX_UPDATES;
 /**
  * A string identifying the messaging system.
+ *
+ * @deprecated use ATTR_MESSAGING_SYSTEM
  */
 exports.SEMATTRS_MESSAGING_SYSTEM = TMP_MESSAGING_SYSTEM;
 /**
  * The message destination name. This might be equal to the span name but is required nevertheless.
+ *
+ * @deprecated use ATTR_MESSAGING_DESTINATION
  */
 exports.SEMATTRS_MESSAGING_DESTINATION = TMP_MESSAGING_DESTINATION;
 /**
  * The kind of message destination.
+ *
+ * @deprecated use ATTR_MESSAGING_DESTINATION_KIND
  */
 exports.SEMATTRS_MESSAGING_DESTINATION_KIND = TMP_MESSAGING_DESTINATION_KIND;
 /**
  * A boolean that is true if the message destination is temporary.
+ *
+ * @deprecated use ATTR_MESSAGING_TEMP_DESTINATION
  */
 exports.SEMATTRS_MESSAGING_TEMP_DESTINATION = TMP_MESSAGING_TEMP_DESTINATION;
 /**
  * The name of the transport protocol.
+ *
+ * @deprecated use ATTR_MESSAGING_PROTOCOL
  */
 exports.SEMATTRS_MESSAGING_PROTOCOL = TMP_MESSAGING_PROTOCOL;
 /**
  * The version of the transport protocol.
+ *
+ * @deprecated use ATTR_MESSAGING_PROTOCOL_VERSION
  */
 exports.SEMATTRS_MESSAGING_PROTOCOL_VERSION = TMP_MESSAGING_PROTOCOL_VERSION;
 /**
  * Connection string.
+ *
+ * @deprecated use ATTR_MESSAGING_URL
  */
 exports.SEMATTRS_MESSAGING_URL = TMP_MESSAGING_URL;
 /**
  * A value used by the messaging system as an identifier for the message, represented as a string.
+ *
+ * @deprecated use ATTR_MESSAGING_MESSAGE_ID
  */
 exports.SEMATTRS_MESSAGING_MESSAGE_ID = TMP_MESSAGING_MESSAGE_ID;
 /**
  * The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called &#34;Correlation ID&#34;.
+ *
+ * @deprecated use ATTR_MESSAGING_CONVERSATION_ID
  */
 exports.SEMATTRS_MESSAGING_CONVERSATION_ID = TMP_MESSAGING_CONVERSATION_ID;
 /**
  * The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported.
+ *
+ * @deprecated use ATTR_MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES
  */
 exports.SEMATTRS_MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES = TMP_MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES;
 /**
  * The compressed size of the message payload in bytes.
+ *
+ * @deprecated use ATTR_MESSAGING_MESSAGE_PAYLOAD_COMPRESSED_SIZE_BYTES
  */
 exports.SEMATTRS_MESSAGING_MESSAGE_PAYLOAD_COMPRESSED_SIZE_BYTES = TMP_MESSAGING_MESSAGE_PAYLOAD_COMPRESSED_SIZE_BYTES;
 /**
  * A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is &#34;send&#34;, this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case.
+ *
+ * @deprecated use ATTR_MESSAGING_OPERATION
  */
 exports.SEMATTRS_MESSAGING_OPERATION = TMP_MESSAGING_OPERATION;
 /**
  * The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer_group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message.
+ *
+ * @deprecated use ATTR_MESSAGING_CONSUMER_ID
  */
 exports.SEMATTRS_MESSAGING_CONSUMER_ID = TMP_MESSAGING_CONSUMER_ID;
 /**
  * RabbitMQ message routing key.
+ *
+ * @deprecated use ATTR_MESSAGING_RABBITMQ_ROUTING_KEY
  */
 exports.SEMATTRS_MESSAGING_RABBITMQ_ROUTING_KEY = TMP_MESSAGING_RABBITMQ_ROUTING_KEY;
 /**
  * Message keys in Kafka are used for grouping alike messages to ensure they&#39;re processed on the same partition. They differ from `messaging.message_id` in that they&#39;re not unique. If the key is `null`, the attribute MUST NOT be set.
  *
  * Note: If the key type is not string, it&#39;s string representation has to be supplied for the attribute. If the key has no unambiguous, canonical string form, don&#39;t include its value.
+ *
+ * @deprecated use ATTR_MESSAGING_KAFKA_MESSAGE_KEY
  */
 exports.SEMATTRS_MESSAGING_KAFKA_MESSAGE_KEY = TMP_MESSAGING_KAFKA_MESSAGE_KEY;
 /**
  * Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers.
+ *
+ * @deprecated use ATTR_MESSAGING_KAFKA_CONSUMER_GROUP
  */
 exports.SEMATTRS_MESSAGING_KAFKA_CONSUMER_GROUP = TMP_MESSAGING_KAFKA_CONSUMER_GROUP;
 /**
  * Client Id for the Consumer or Producer that is handling the message.
+ *
+ * @deprecated use ATTR_MESSAGING_KAFKA_CLIENT_ID
  */
 exports.SEMATTRS_MESSAGING_KAFKA_CLIENT_ID = TMP_MESSAGING_KAFKA_CLIENT_ID;
 /**
  * Partition the message is sent to.
+ *
+ * @deprecated use ATTR_MESSAGING_KAFKA_PARTITION
  */
 exports.SEMATTRS_MESSAGING_KAFKA_PARTITION = TMP_MESSAGING_KAFKA_PARTITION;
 /**
  * A boolean that is true if the message is a tombstone.
+ *
+ * @deprecated use ATTR_MESSAGING_KAFKA_TOMBSTONE
  */
 exports.SEMATTRS_MESSAGING_KAFKA_TOMBSTONE = TMP_MESSAGING_KAFKA_TOMBSTONE;
 /**
  * A string identifying the remoting system.
+ *
+ * @deprecated use ATTR_RPC_SYSTEM
  */
 exports.SEMATTRS_RPC_SYSTEM = TMP_RPC_SYSTEM;
 /**
  * The full (logical) name of the service being called, including its package name, if applicable.
  *
  * Note: This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
+ *
+ * @deprecated use ATTR_RPC_SERVICE
  */
 exports.SEMATTRS_RPC_SERVICE = TMP_RPC_SERVICE;
 /**
  * The name of the (logical) method being called, must be equal to the $method part in the span name.
  *
  * Note: This is the logical name of the method from the RPC interface perspective, which can be different from the name of any implementing method/function. The `code.function` attribute may be used to store the latter (e.g., method actually executing the call on the server side, RPC client stub method on the client side).
+ *
+ * @deprecated use ATTR_RPC_METHOD
  */
 exports.SEMATTRS_RPC_METHOD = TMP_RPC_METHOD;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated use ATTR_RPC_GRPC_STATUS_CODE
  */
 exports.SEMATTRS_RPC_GRPC_STATUS_CODE = TMP_RPC_GRPC_STATUS_CODE;
 /**
  * Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted.
+ *
+ * @deprecated use ATTR_RPC_JSONRPC_VERSION
  */
 exports.SEMATTRS_RPC_JSONRPC_VERSION = TMP_RPC_JSONRPC_VERSION;
 /**
  * `id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Use empty string in case of `null` value. Omit entirely if this is a notification.
+ *
+ * @deprecated use ATTR_RPC_JSONRPC_REQUEST_ID
  */
 exports.SEMATTRS_RPC_JSONRPC_REQUEST_ID = TMP_RPC_JSONRPC_REQUEST_ID;
 /**
  * `error.code` property of response if it is an error response.
+ *
+ * @deprecated use ATTR_RPC_JSONRPC_ERROR_CODE
  */
 exports.SEMATTRS_RPC_JSONRPC_ERROR_CODE = TMP_RPC_JSONRPC_ERROR_CODE;
 /**
  * `error.message` property of response if it is an error response.
+ *
+ * @deprecated use ATTR_RPC_JSONRPC_ERROR_MESSAGE
  */
 exports.SEMATTRS_RPC_JSONRPC_ERROR_MESSAGE = TMP_RPC_JSONRPC_ERROR_MESSAGE;
 /**
  * Whether this is a received or sent message.
+ *
+ * @deprecated use ATTR_MESSAGE_TYPE
  */
 exports.SEMATTRS_MESSAGE_TYPE = TMP_MESSAGE_TYPE;
 /**
  * MUST be calculated as two different counters starting from `1` one for sent messages and one for received message.
  *
  * Note: This way we guarantee that the values will be consistent between different implementations.
+ *
+ * @deprecated use ATTR_MESSAGE_ID
  */
 exports.SEMATTRS_MESSAGE_ID = TMP_MESSAGE_ID;
 /**
  * Compressed size of the message in bytes.
+ *
+ * @deprecated use ATTR_MESSAGE_COMPRESSED_SIZE
  */
 exports.SEMATTRS_MESSAGE_COMPRESSED_SIZE = TMP_MESSAGE_COMPRESSED_SIZE;
 /**
  * Uncompressed size of the message in bytes.
+ *
+ * @deprecated use ATTR_MESSAGE_UNCOMPRESSED_SIZE
  */
 exports.SEMATTRS_MESSAGE_UNCOMPRESSED_SIZE = TMP_MESSAGE_UNCOMPRESSED_SIZE;
 /**
@@ -28045,7 +38724,7 @@ exports.SemanticAttributes =
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_DBSYSTEMVALUES_OTHER_SQL = 'other_sql';
 const TMP_DBSYSTEMVALUES_MSSQL = 'mssql';
 const TMP_DBSYSTEMVALUES_MYSQL = 'mysql';
@@ -28095,190 +38774,284 @@ const TMP_DBSYSTEMVALUES_MEMCACHED = 'memcached';
 const TMP_DBSYSTEMVALUES_COCKROACHDB = 'cockroachdb';
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_OTHER_SQL.
  */
 exports.DBSYSTEMVALUES_OTHER_SQL = TMP_DBSYSTEMVALUES_OTHER_SQL;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_MSSQL.
  */
 exports.DBSYSTEMVALUES_MSSQL = TMP_DBSYSTEMVALUES_MSSQL;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_MYSQL.
  */
 exports.DBSYSTEMVALUES_MYSQL = TMP_DBSYSTEMVALUES_MYSQL;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_ORACLE.
  */
 exports.DBSYSTEMVALUES_ORACLE = TMP_DBSYSTEMVALUES_ORACLE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_DB2.
  */
 exports.DBSYSTEMVALUES_DB2 = TMP_DBSYSTEMVALUES_DB2;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_POSTGRESQL.
  */
 exports.DBSYSTEMVALUES_POSTGRESQL = TMP_DBSYSTEMVALUES_POSTGRESQL;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_REDSHIFT.
  */
 exports.DBSYSTEMVALUES_REDSHIFT = TMP_DBSYSTEMVALUES_REDSHIFT;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_HIVE.
  */
 exports.DBSYSTEMVALUES_HIVE = TMP_DBSYSTEMVALUES_HIVE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_CLOUDSCAPE.
  */
 exports.DBSYSTEMVALUES_CLOUDSCAPE = TMP_DBSYSTEMVALUES_CLOUDSCAPE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_HSQLDB.
  */
 exports.DBSYSTEMVALUES_HSQLDB = TMP_DBSYSTEMVALUES_HSQLDB;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_PROGRESS.
  */
 exports.DBSYSTEMVALUES_PROGRESS = TMP_DBSYSTEMVALUES_PROGRESS;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_MAXDB.
  */
 exports.DBSYSTEMVALUES_MAXDB = TMP_DBSYSTEMVALUES_MAXDB;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_HANADB.
  */
 exports.DBSYSTEMVALUES_HANADB = TMP_DBSYSTEMVALUES_HANADB;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_INGRES.
  */
 exports.DBSYSTEMVALUES_INGRES = TMP_DBSYSTEMVALUES_INGRES;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_FIRSTSQL.
  */
 exports.DBSYSTEMVALUES_FIRSTSQL = TMP_DBSYSTEMVALUES_FIRSTSQL;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_EDB.
  */
 exports.DBSYSTEMVALUES_EDB = TMP_DBSYSTEMVALUES_EDB;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_CACHE.
  */
 exports.DBSYSTEMVALUES_CACHE = TMP_DBSYSTEMVALUES_CACHE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_ADABAS.
  */
 exports.DBSYSTEMVALUES_ADABAS = TMP_DBSYSTEMVALUES_ADABAS;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_FIREBIRD.
  */
 exports.DBSYSTEMVALUES_FIREBIRD = TMP_DBSYSTEMVALUES_FIREBIRD;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_DERBY.
  */
 exports.DBSYSTEMVALUES_DERBY = TMP_DBSYSTEMVALUES_DERBY;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_FILEMAKER.
  */
 exports.DBSYSTEMVALUES_FILEMAKER = TMP_DBSYSTEMVALUES_FILEMAKER;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_INFORMIX.
  */
 exports.DBSYSTEMVALUES_INFORMIX = TMP_DBSYSTEMVALUES_INFORMIX;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_INSTANTDB.
  */
 exports.DBSYSTEMVALUES_INSTANTDB = TMP_DBSYSTEMVALUES_INSTANTDB;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_INTERBASE.
  */
 exports.DBSYSTEMVALUES_INTERBASE = TMP_DBSYSTEMVALUES_INTERBASE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_MARIADB.
  */
 exports.DBSYSTEMVALUES_MARIADB = TMP_DBSYSTEMVALUES_MARIADB;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_NETEZZA.
  */
 exports.DBSYSTEMVALUES_NETEZZA = TMP_DBSYSTEMVALUES_NETEZZA;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_PERVASIVE.
  */
 exports.DBSYSTEMVALUES_PERVASIVE = TMP_DBSYSTEMVALUES_PERVASIVE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_POINTBASE.
  */
 exports.DBSYSTEMVALUES_POINTBASE = TMP_DBSYSTEMVALUES_POINTBASE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_SQLITE.
  */
 exports.DBSYSTEMVALUES_SQLITE = TMP_DBSYSTEMVALUES_SQLITE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_SYBASE.
  */
 exports.DBSYSTEMVALUES_SYBASE = TMP_DBSYSTEMVALUES_SYBASE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_TERADATA.
  */
 exports.DBSYSTEMVALUES_TERADATA = TMP_DBSYSTEMVALUES_TERADATA;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_VERTICA.
  */
 exports.DBSYSTEMVALUES_VERTICA = TMP_DBSYSTEMVALUES_VERTICA;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_H2.
  */
 exports.DBSYSTEMVALUES_H2 = TMP_DBSYSTEMVALUES_H2;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_COLDFUSION.
  */
 exports.DBSYSTEMVALUES_COLDFUSION = TMP_DBSYSTEMVALUES_COLDFUSION;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_CASSANDRA.
  */
 exports.DBSYSTEMVALUES_CASSANDRA = TMP_DBSYSTEMVALUES_CASSANDRA;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_HBASE.
  */
 exports.DBSYSTEMVALUES_HBASE = TMP_DBSYSTEMVALUES_HBASE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_MONGODB.
  */
 exports.DBSYSTEMVALUES_MONGODB = TMP_DBSYSTEMVALUES_MONGODB;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_REDIS.
  */
 exports.DBSYSTEMVALUES_REDIS = TMP_DBSYSTEMVALUES_REDIS;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_COUCHBASE.
  */
 exports.DBSYSTEMVALUES_COUCHBASE = TMP_DBSYSTEMVALUES_COUCHBASE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_COUCHDB.
  */
 exports.DBSYSTEMVALUES_COUCHDB = TMP_DBSYSTEMVALUES_COUCHDB;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_COSMOSDB.
  */
 exports.DBSYSTEMVALUES_COSMOSDB = TMP_DBSYSTEMVALUES_COSMOSDB;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_DYNAMODB.
  */
 exports.DBSYSTEMVALUES_DYNAMODB = TMP_DBSYSTEMVALUES_DYNAMODB;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_NEO4J.
  */
 exports.DBSYSTEMVALUES_NEO4J = TMP_DBSYSTEMVALUES_NEO4J;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_GEODE.
  */
 exports.DBSYSTEMVALUES_GEODE = TMP_DBSYSTEMVALUES_GEODE;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_ELASTICSEARCH.
  */
 exports.DBSYSTEMVALUES_ELASTICSEARCH = TMP_DBSYSTEMVALUES_ELASTICSEARCH;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_MEMCACHED.
  */
 exports.DBSYSTEMVALUES_MEMCACHED = TMP_DBSYSTEMVALUES_MEMCACHED;
 /**
  * An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers.
+ *
+ * @deprecated Use DB_SYSTEM_VALUE_COCKROACHDB.
  */
 exports.DBSYSTEMVALUES_COCKROACHDB = TMP_DBSYSTEMVALUES_COCKROACHDB;
 /**
@@ -28341,7 +39114,7 @@ exports.DbSystemValues =
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ALL = 'all';
 const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_EACH_QUORUM = 'each_quorum';
 const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_QUORUM = 'quorum';
@@ -28355,46 +39128,68 @@ const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_SERIAL = 'serial';
 const TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_SERIAL = 'local_serial';
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated Use DB_CASSANDRA_CONSISTENCY_LEVEL_VALUE_ALL.
  */
 exports.DBCASSANDRACONSISTENCYLEVELVALUES_ALL = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ALL;
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated Use DB_CASSANDRA_CONSISTENCY_LEVEL_VALUE_EACH_QUORUM.
  */
 exports.DBCASSANDRACONSISTENCYLEVELVALUES_EACH_QUORUM = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_EACH_QUORUM;
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated Use DB_CASSANDRA_CONSISTENCY_LEVEL_VALUE_QUORUM.
  */
 exports.DBCASSANDRACONSISTENCYLEVELVALUES_QUORUM = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_QUORUM;
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated Use DB_CASSANDRA_CONSISTENCY_LEVEL_VALUE_LOCAL_QUORUM.
  */
 exports.DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_QUORUM = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_QUORUM;
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated Use DB_CASSANDRA_CONSISTENCY_LEVEL_VALUE_ONE.
  */
 exports.DBCASSANDRACONSISTENCYLEVELVALUES_ONE = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ONE;
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated Use DB_CASSANDRA_CONSISTENCY_LEVEL_VALUE_TWO.
  */
 exports.DBCASSANDRACONSISTENCYLEVELVALUES_TWO = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_TWO;
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated Use DB_CASSANDRA_CONSISTENCY_LEVEL_VALUE_THREE.
  */
 exports.DBCASSANDRACONSISTENCYLEVELVALUES_THREE = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_THREE;
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated Use DB_CASSANDRA_CONSISTENCY_LEVEL_VALUE_LOCAL_ONE.
  */
 exports.DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_ONE = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_ONE;
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated Use DB_CASSANDRA_CONSISTENCY_LEVEL_VALUE_ANY.
  */
 exports.DBCASSANDRACONSISTENCYLEVELVALUES_ANY = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_ANY;
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated Use DB_CASSANDRA_CONSISTENCY_LEVEL_VALUE_SERIAL.
  */
 exports.DBCASSANDRACONSISTENCYLEVELVALUES_SERIAL = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_SERIAL;
 /**
  * The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html).
+ *
+ * @deprecated Use DB_CASSANDRA_CONSISTENCY_LEVEL_VALUE_LOCAL_SERIAL.
  */
 exports.DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_SERIAL = TMP_DBCASSANDRACONSISTENCYLEVELVALUES_LOCAL_SERIAL;
 /**
@@ -28421,7 +39216,7 @@ exports.DbCassandraConsistencyLevelValues =
  * Type of the trigger on which the function is executed.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_FAASTRIGGERVALUES_DATASOURCE = 'datasource';
 const TMP_FAASTRIGGERVALUES_HTTP = 'http';
 const TMP_FAASTRIGGERVALUES_PUBSUB = 'pubsub';
@@ -28429,22 +39224,32 @@ const TMP_FAASTRIGGERVALUES_TIMER = 'timer';
 const TMP_FAASTRIGGERVALUES_OTHER = 'other';
 /**
  * Type of the trigger on which the function is executed.
+ *
+ * @deprecated Use FAAS_TRIGGER_VALUE_DATASOURCE.
  */
 exports.FAASTRIGGERVALUES_DATASOURCE = TMP_FAASTRIGGERVALUES_DATASOURCE;
 /**
  * Type of the trigger on which the function is executed.
+ *
+ * @deprecated Use FAAS_TRIGGER_VALUE_HTTP.
  */
 exports.FAASTRIGGERVALUES_HTTP = TMP_FAASTRIGGERVALUES_HTTP;
 /**
  * Type of the trigger on which the function is executed.
+ *
+ * @deprecated Use FAAS_TRIGGER_VALUE_PUBSUB.
  */
 exports.FAASTRIGGERVALUES_PUBSUB = TMP_FAASTRIGGERVALUES_PUBSUB;
 /**
  * Type of the trigger on which the function is executed.
+ *
+ * @deprecated Use FAAS_TRIGGER_VALUE_TIMER.
  */
 exports.FAASTRIGGERVALUES_TIMER = TMP_FAASTRIGGERVALUES_TIMER;
 /**
  * Type of the trigger on which the function is executed.
+ *
+ * @deprecated Use FAAS_TRIGGER_VALUE_OTHER.
  */
 exports.FAASTRIGGERVALUES_OTHER = TMP_FAASTRIGGERVALUES_OTHER;
 /**
@@ -28465,20 +39270,26 @@ exports.FaasTriggerValues =
  * Describes the type of the operation that was performed on the data.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_FAASDOCUMENTOPERATIONVALUES_INSERT = 'insert';
 const TMP_FAASDOCUMENTOPERATIONVALUES_EDIT = 'edit';
 const TMP_FAASDOCUMENTOPERATIONVALUES_DELETE = 'delete';
 /**
  * Describes the type of the operation that was performed on the data.
+ *
+ * @deprecated Use FAAS_DOCUMENT_OPERATION_VALUE_INSERT.
  */
 exports.FAASDOCUMENTOPERATIONVALUES_INSERT = TMP_FAASDOCUMENTOPERATIONVALUES_INSERT;
 /**
  * Describes the type of the operation that was performed on the data.
+ *
+ * @deprecated Use FAAS_DOCUMENT_OPERATION_VALUE_EDIT.
  */
 exports.FAASDOCUMENTOPERATIONVALUES_EDIT = TMP_FAASDOCUMENTOPERATIONVALUES_EDIT;
 /**
  * Describes the type of the operation that was performed on the data.
+ *
+ * @deprecated Use FAAS_DOCUMENT_OPERATION_VALUE_DELETE.
  */
 exports.FAASDOCUMENTOPERATIONVALUES_DELETE = TMP_FAASDOCUMENTOPERATIONVALUES_DELETE;
 /**
@@ -28499,7 +39310,7 @@ exports.FaasDocumentOperationValues =
  * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_FAASINVOKEDPROVIDERVALUES_ALIBABA_CLOUD = 'alibaba_cloud';
 const TMP_FAASINVOKEDPROVIDERVALUES_AWS = 'aws';
 const TMP_FAASINVOKEDPROVIDERVALUES_AZURE = 'azure';
@@ -28508,24 +39319,32 @@ const TMP_FAASINVOKEDPROVIDERVALUES_GCP = 'gcp';
  * The cloud provider of the invoked function.
  *
  * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+ *
+ * @deprecated Use FAAS_INVOKED_PROVIDER_VALUE_ALIBABA_CLOUD.
  */
 exports.FAASINVOKEDPROVIDERVALUES_ALIBABA_CLOUD = TMP_FAASINVOKEDPROVIDERVALUES_ALIBABA_CLOUD;
 /**
  * The cloud provider of the invoked function.
  *
  * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+ *
+ * @deprecated Use FAAS_INVOKED_PROVIDER_VALUE_AWS.
  */
 exports.FAASINVOKEDPROVIDERVALUES_AWS = TMP_FAASINVOKEDPROVIDERVALUES_AWS;
 /**
  * The cloud provider of the invoked function.
  *
  * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+ *
+ * @deprecated Use FAAS_INVOKED_PROVIDER_VALUE_AZURE.
  */
 exports.FAASINVOKEDPROVIDERVALUES_AZURE = TMP_FAASINVOKEDPROVIDERVALUES_AZURE;
 /**
  * The cloud provider of the invoked function.
  *
  * Note: SHOULD be equal to the `cloud.provider` resource attribute of the invoked function.
+ *
+ * @deprecated Use FAAS_INVOKED_PROVIDER_VALUE_GCP.
  */
 exports.FAASINVOKEDPROVIDERVALUES_GCP = TMP_FAASINVOKEDPROVIDERVALUES_GCP;
 /**
@@ -28545,7 +39364,7 @@ exports.FaasInvokedProviderValues =
  * Transport protocol used. See note below.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_NETTRANSPORTVALUES_IP_TCP = 'ip_tcp';
 const TMP_NETTRANSPORTVALUES_IP_UDP = 'ip_udp';
 const TMP_NETTRANSPORTVALUES_IP = 'ip';
@@ -28555,30 +39374,44 @@ const TMP_NETTRANSPORTVALUES_INPROC = 'inproc';
 const TMP_NETTRANSPORTVALUES_OTHER = 'other';
 /**
  * Transport protocol used. See note below.
+ *
+ * @deprecated Use NET_TRANSPORT_VALUE_IP_TCP.
  */
 exports.NETTRANSPORTVALUES_IP_TCP = TMP_NETTRANSPORTVALUES_IP_TCP;
 /**
  * Transport protocol used. See note below.
+ *
+ * @deprecated Use NET_TRANSPORT_VALUE_IP_UDP.
  */
 exports.NETTRANSPORTVALUES_IP_UDP = TMP_NETTRANSPORTVALUES_IP_UDP;
 /**
  * Transport protocol used. See note below.
+ *
+ * @deprecated Use NET_TRANSPORT_VALUE_IP.
  */
 exports.NETTRANSPORTVALUES_IP = TMP_NETTRANSPORTVALUES_IP;
 /**
  * Transport protocol used. See note below.
+ *
+ * @deprecated Use NET_TRANSPORT_VALUE_UNIX.
  */
 exports.NETTRANSPORTVALUES_UNIX = TMP_NETTRANSPORTVALUES_UNIX;
 /**
  * Transport protocol used. See note below.
+ *
+ * @deprecated Use NET_TRANSPORT_VALUE_PIPE.
  */
 exports.NETTRANSPORTVALUES_PIPE = TMP_NETTRANSPORTVALUES_PIPE;
 /**
  * Transport protocol used. See note below.
+ *
+ * @deprecated Use NET_TRANSPORT_VALUE_INPROC.
  */
 exports.NETTRANSPORTVALUES_INPROC = TMP_NETTRANSPORTVALUES_INPROC;
 /**
  * Transport protocol used. See note below.
+ *
+ * @deprecated Use NET_TRANSPORT_VALUE_OTHER.
  */
 exports.NETTRANSPORTVALUES_OTHER = TMP_NETTRANSPORTVALUES_OTHER;
 /**
@@ -28601,7 +39434,7 @@ exports.NetTransportValues =
  * The internet connection type currently being used by the host.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_NETHOSTCONNECTIONTYPEVALUES_WIFI = 'wifi';
 const TMP_NETHOSTCONNECTIONTYPEVALUES_WIRED = 'wired';
 const TMP_NETHOSTCONNECTIONTYPEVALUES_CELL = 'cell';
@@ -28609,22 +39442,32 @@ const TMP_NETHOSTCONNECTIONTYPEVALUES_UNAVAILABLE = 'unavailable';
 const TMP_NETHOSTCONNECTIONTYPEVALUES_UNKNOWN = 'unknown';
 /**
  * The internet connection type currently being used by the host.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_TYPE_VALUE_WIFI.
  */
 exports.NETHOSTCONNECTIONTYPEVALUES_WIFI = TMP_NETHOSTCONNECTIONTYPEVALUES_WIFI;
 /**
  * The internet connection type currently being used by the host.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_TYPE_VALUE_WIRED.
  */
 exports.NETHOSTCONNECTIONTYPEVALUES_WIRED = TMP_NETHOSTCONNECTIONTYPEVALUES_WIRED;
 /**
  * The internet connection type currently being used by the host.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_TYPE_VALUE_CELL.
  */
 exports.NETHOSTCONNECTIONTYPEVALUES_CELL = TMP_NETHOSTCONNECTIONTYPEVALUES_CELL;
 /**
  * The internet connection type currently being used by the host.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_TYPE_VALUE_UNAVAILABLE.
  */
 exports.NETHOSTCONNECTIONTYPEVALUES_UNAVAILABLE = TMP_NETHOSTCONNECTIONTYPEVALUES_UNAVAILABLE;
 /**
  * The internet connection type currently being used by the host.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_TYPE_VALUE_UNKNOWN.
  */
 exports.NETHOSTCONNECTIONTYPEVALUES_UNKNOWN = TMP_NETHOSTCONNECTIONTYPEVALUES_UNKNOWN;
 /**
@@ -28645,7 +39488,7 @@ exports.NetHostConnectionTypeValues =
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_GPRS = 'gprs';
 const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EDGE = 'edge';
 const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_UMTS = 'umts';
@@ -28669,86 +39512,128 @@ const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_NRNSA = 'nrnsa';
 const TMP_NETHOSTCONNECTIONSUBTYPEVALUES_LTE_CA = 'lte_ca';
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_GPRS.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_GPRS = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_GPRS;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_EDGE.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_EDGE = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EDGE;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_UMTS.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_UMTS = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_UMTS;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_CDMA.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_CDMA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_CDMA;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_EVDO_0.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_0 = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_0;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_EVDO_A.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_A = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_A;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_CDMA2000_1XRTT.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_CDMA2000_1XRTT = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_CDMA2000_1XRTT;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_HSDPA.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSDPA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSDPA;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_HSUPA.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSUPA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSUPA;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_HSPA.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSPA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSPA;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_IDEN.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_IDEN = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_IDEN;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_EVDO_B.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_B = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EVDO_B;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_LTE.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_LTE = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_LTE;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_EHRPD.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_EHRPD = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_EHRPD;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_HSPAP.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_HSPAP = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_HSPAP;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_GSM.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_GSM = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_GSM;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_TD_SCDMA.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_TD_SCDMA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_TD_SCDMA;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_IWLAN.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_IWLAN = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_IWLAN;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_NR.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_NR = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_NR;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_NRNSA.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_NRNSA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_NRNSA;
 /**
  * This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection.
+ *
+ * @deprecated Use NET_HOST_CONNECTION_SUBTYPE_VALUE_LTE_CA.
  */
 exports.NETHOSTCONNECTIONSUBTYPEVALUES_LTE_CA = TMP_NETHOSTCONNECTIONSUBTYPEVALUES_LTE_CA;
 /**
@@ -28787,7 +39672,7 @@ exports.NetHostConnectionSubtypeValues =
  * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_HTTPFLAVORVALUES_HTTP_1_0 = '1.0';
 const TMP_HTTPFLAVORVALUES_HTTP_1_1 = '1.1';
 const TMP_HTTPFLAVORVALUES_HTTP_2_0 = '2.0';
@@ -28797,30 +39682,40 @@ const TMP_HTTPFLAVORVALUES_QUIC = 'QUIC';
  * Kind of HTTP protocol used.
  *
  * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ *
+ * @deprecated Use HTTP_FLAVOR_VALUE_HTTP_1_0.
  */
 exports.HTTPFLAVORVALUES_HTTP_1_0 = TMP_HTTPFLAVORVALUES_HTTP_1_0;
 /**
  * Kind of HTTP protocol used.
  *
  * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ *
+ * @deprecated Use HTTP_FLAVOR_VALUE_HTTP_1_1.
  */
 exports.HTTPFLAVORVALUES_HTTP_1_1 = TMP_HTTPFLAVORVALUES_HTTP_1_1;
 /**
  * Kind of HTTP protocol used.
  *
  * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ *
+ * @deprecated Use HTTP_FLAVOR_VALUE_HTTP_2_0.
  */
 exports.HTTPFLAVORVALUES_HTTP_2_0 = TMP_HTTPFLAVORVALUES_HTTP_2_0;
 /**
  * Kind of HTTP protocol used.
  *
  * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ *
+ * @deprecated Use HTTP_FLAVOR_VALUE_SPDY.
  */
 exports.HTTPFLAVORVALUES_SPDY = TMP_HTTPFLAVORVALUES_SPDY;
 /**
  * Kind of HTTP protocol used.
  *
  * Note: If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+ *
+ * @deprecated Use HTTP_FLAVOR_VALUE_QUIC.
  */
 exports.HTTPFLAVORVALUES_QUIC = TMP_HTTPFLAVORVALUES_QUIC;
 /**
@@ -28840,15 +39735,19 @@ exports.HttpFlavorValues = {
  * The kind of message destination.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_MESSAGINGDESTINATIONKINDVALUES_QUEUE = 'queue';
 const TMP_MESSAGINGDESTINATIONKINDVALUES_TOPIC = 'topic';
 /**
  * The kind of message destination.
+ *
+ * @deprecated Use MESSAGING_DESTINATION_KIND_VALUE_QUEUE.
  */
 exports.MESSAGINGDESTINATIONKINDVALUES_QUEUE = TMP_MESSAGINGDESTINATIONKINDVALUES_QUEUE;
 /**
  * The kind of message destination.
+ *
+ * @deprecated Use MESSAGING_DESTINATION_KIND_VALUE_TOPIC.
  */
 exports.MESSAGINGDESTINATIONKINDVALUES_TOPIC = TMP_MESSAGINGDESTINATIONKINDVALUES_TOPIC;
 /**
@@ -28866,15 +39765,19 @@ exports.MessagingDestinationKindValues =
  * A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is &#34;send&#34;, this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_MESSAGINGOPERATIONVALUES_RECEIVE = 'receive';
 const TMP_MESSAGINGOPERATIONVALUES_PROCESS = 'process';
 /**
  * A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is &#34;send&#34;, this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case.
+ *
+ * @deprecated Use MESSAGING_OPERATION_VALUE_RECEIVE.
  */
 exports.MESSAGINGOPERATIONVALUES_RECEIVE = TMP_MESSAGINGOPERATIONVALUES_RECEIVE;
 /**
  * A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is &#34;send&#34;, this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case.
+ *
+ * @deprecated Use MESSAGING_OPERATION_VALUE_PROCESS.
  */
 exports.MESSAGINGOPERATIONVALUES_PROCESS = TMP_MESSAGINGOPERATIONVALUES_PROCESS;
 /**
@@ -28892,7 +39795,7 @@ exports.MessagingOperationValues =
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_RPCGRPCSTATUSCODEVALUES_OK = 0;
 const TMP_RPCGRPCSTATUSCODEVALUES_CANCELLED = 1;
 const TMP_RPCGRPCSTATUSCODEVALUES_UNKNOWN = 2;
@@ -28912,70 +39815,104 @@ const TMP_RPCGRPCSTATUSCODEVALUES_DATA_LOSS = 15;
 const TMP_RPCGRPCSTATUSCODEVALUES_UNAUTHENTICATED = 16;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_OK.
  */
 exports.RPCGRPCSTATUSCODEVALUES_OK = TMP_RPCGRPCSTATUSCODEVALUES_OK;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_CANCELLED.
  */
 exports.RPCGRPCSTATUSCODEVALUES_CANCELLED = TMP_RPCGRPCSTATUSCODEVALUES_CANCELLED;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_UNKNOWN.
  */
 exports.RPCGRPCSTATUSCODEVALUES_UNKNOWN = TMP_RPCGRPCSTATUSCODEVALUES_UNKNOWN;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_INVALID_ARGUMENT.
  */
 exports.RPCGRPCSTATUSCODEVALUES_INVALID_ARGUMENT = TMP_RPCGRPCSTATUSCODEVALUES_INVALID_ARGUMENT;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_DEADLINE_EXCEEDED.
  */
 exports.RPCGRPCSTATUSCODEVALUES_DEADLINE_EXCEEDED = TMP_RPCGRPCSTATUSCODEVALUES_DEADLINE_EXCEEDED;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_NOT_FOUND.
  */
 exports.RPCGRPCSTATUSCODEVALUES_NOT_FOUND = TMP_RPCGRPCSTATUSCODEVALUES_NOT_FOUND;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_ALREADY_EXISTS.
  */
 exports.RPCGRPCSTATUSCODEVALUES_ALREADY_EXISTS = TMP_RPCGRPCSTATUSCODEVALUES_ALREADY_EXISTS;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_PERMISSION_DENIED.
  */
 exports.RPCGRPCSTATUSCODEVALUES_PERMISSION_DENIED = TMP_RPCGRPCSTATUSCODEVALUES_PERMISSION_DENIED;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_RESOURCE_EXHAUSTED.
  */
 exports.RPCGRPCSTATUSCODEVALUES_RESOURCE_EXHAUSTED = TMP_RPCGRPCSTATUSCODEVALUES_RESOURCE_EXHAUSTED;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_FAILED_PRECONDITION.
  */
 exports.RPCGRPCSTATUSCODEVALUES_FAILED_PRECONDITION = TMP_RPCGRPCSTATUSCODEVALUES_FAILED_PRECONDITION;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_ABORTED.
  */
 exports.RPCGRPCSTATUSCODEVALUES_ABORTED = TMP_RPCGRPCSTATUSCODEVALUES_ABORTED;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_OUT_OF_RANGE.
  */
 exports.RPCGRPCSTATUSCODEVALUES_OUT_OF_RANGE = TMP_RPCGRPCSTATUSCODEVALUES_OUT_OF_RANGE;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_UNIMPLEMENTED.
  */
 exports.RPCGRPCSTATUSCODEVALUES_UNIMPLEMENTED = TMP_RPCGRPCSTATUSCODEVALUES_UNIMPLEMENTED;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_INTERNAL.
  */
 exports.RPCGRPCSTATUSCODEVALUES_INTERNAL = TMP_RPCGRPCSTATUSCODEVALUES_INTERNAL;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_UNAVAILABLE.
  */
 exports.RPCGRPCSTATUSCODEVALUES_UNAVAILABLE = TMP_RPCGRPCSTATUSCODEVALUES_UNAVAILABLE;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_DATA_LOSS.
  */
 exports.RPCGRPCSTATUSCODEVALUES_DATA_LOSS = TMP_RPCGRPCSTATUSCODEVALUES_DATA_LOSS;
 /**
  * The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request.
+ *
+ * @deprecated Use RPC_GRPC_STATUS_CODE_VALUE_UNAUTHENTICATED.
  */
 exports.RPCGRPCSTATUSCODEVALUES_UNAUTHENTICATED = TMP_RPCGRPCSTATUSCODEVALUES_UNAUTHENTICATED;
 /**
@@ -29007,15 +39944,19 @@ exports.RpcGrpcStatusCodeValues = {
  * Whether this is a received or sent message.
  * ---------------------------------------------------------------------------------------------------------- */
 // Temporary local constants to assign to the individual exports and the namespaced version
-// Required to avoid the namespace exports using the unminifable export names for some package types
+// Required to avoid the namespace exports using the unminifiable export names for some package types
 const TMP_MESSAGETYPEVALUES_SENT = 'SENT';
 const TMP_MESSAGETYPEVALUES_RECEIVED = 'RECEIVED';
 /**
  * Whether this is a received or sent message.
+ *
+ * @deprecated Use MESSAGE_TYPE_VALUE_SENT.
  */
 exports.MESSAGETYPEVALUES_SENT = TMP_MESSAGETYPEVALUES_SENT;
 /**
  * Whether this is a received or sent message.
+ *
+ * @deprecated Use MESSAGE_TYPE_VALUE_RECEIVED.
  */
 exports.MESSAGETYPEVALUES_RECEIVED = TMP_MESSAGETYPEVALUES_RECEIVED;
 /**
@@ -29028,19 +39969,8 @@ exports.MessageTypeValues =
     TMP_MESSAGETYPEVALUES_RECEIVED,
 ]);
 
-},{"../internal/utils":213}],217:[function(require,module,exports){
+},{"../internal/utils":511}],517:[function(require,module,exports){
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 /*
  * Copyright The OpenTelemetry Authors
  *
@@ -29056,9 +39986,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable no-restricted-syntax --
+ * These re-exports are only of constants, only one-level deep at this point,
+ * and should not cause problems for tree-shakers.
+ */
 __exportStar(require("./SemanticAttributes"), exports);
 
-},{"./SemanticAttributes":216}],218:[function(require,module,exports){
+},{"./SemanticAttributes":516}],518:[function(require,module,exports){
 "use strict";
 module.exports = asPromise;
 
@@ -29112,7 +40057,7 @@ function asPromise(fn, ctx/*, varargs */) {
     });
 }
 
-},{}],219:[function(require,module,exports){
+},{}],519:[function(require,module,exports){
 "use strict";
 
 /**
@@ -29253,7 +40198,7 @@ base64.test = function test(string) {
     return /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(string);
 };
 
-},{}],220:[function(require,module,exports){
+},{}],520:[function(require,module,exports){
 "use strict";
 module.exports = EventEmitter;
 
@@ -29331,7 +40276,7 @@ EventEmitter.prototype.emit = function emit(evt) {
     return this;
 };
 
-},{}],221:[function(require,module,exports){
+},{}],521:[function(require,module,exports){
 "use strict";
 
 module.exports = factory(factory);
@@ -29668,7 +40613,7 @@ function readUintBE(buf, pos) {
           | buf[pos + 3]) >>> 0;
 }
 
-},{}],222:[function(require,module,exports){
+},{}],522:[function(require,module,exports){
 "use strict";
 module.exports = inquire;
 
@@ -29687,7 +40632,7 @@ function inquire(moduleName) {
     return null;
 }
 
-},{}],223:[function(require,module,exports){
+},{}],523:[function(require,module,exports){
 "use strict";
 module.exports = pool;
 
@@ -29737,7 +40682,7 @@ function pool(alloc, slice, size) {
     };
 }
 
-},{}],224:[function(require,module,exports){
+},{}],524:[function(require,module,exports){
 "use strict";
 
 /**
@@ -29844,13 +40789,13 @@ utf8.write = function utf8_write(string, buffer, offset) {
     return offset - start;
 };
 
-},{}],225:[function(require,module,exports){
+},{}],525:[function(require,module,exports){
 // minimal library entry point.
 
 "use strict";
 module.exports = require("./src/index-minimal");
 
-},{"./src/index-minimal":226}],226:[function(require,module,exports){
+},{"./src/index-minimal":526}],526:[function(require,module,exports){
 "use strict";
 var protobuf = exports;
 
@@ -29888,7 +40833,7 @@ function configure() {
 // Set up buffer utility according to the environment
 configure();
 
-},{"./reader":227,"./reader_buffer":228,"./roots":229,"./rpc":230,"./util/minimal":233,"./writer":234,"./writer_buffer":235}],227:[function(require,module,exports){
+},{"./reader":527,"./reader_buffer":528,"./roots":529,"./rpc":530,"./util/minimal":533,"./writer":534,"./writer_buffer":535}],527:[function(require,module,exports){
 "use strict";
 module.exports = Reader;
 
@@ -30306,7 +41251,7 @@ Reader._configure = function(BufferReader_) {
     });
 };
 
-},{"./util/minimal":233}],228:[function(require,module,exports){
+},{"./util/minimal":533}],528:[function(require,module,exports){
 "use strict";
 module.exports = BufferReader;
 
@@ -30359,7 +41304,7 @@ BufferReader.prototype.string = function read_string_buffer() {
 
 BufferReader._configure();
 
-},{"./reader":227,"./util/minimal":233}],229:[function(require,module,exports){
+},{"./reader":527,"./util/minimal":533}],529:[function(require,module,exports){
 "use strict";
 module.exports = {};
 
@@ -30379,7 +41324,7 @@ module.exports = {};
  * var root = protobuf.roots["myroot"];
  */
 
-},{}],230:[function(require,module,exports){
+},{}],530:[function(require,module,exports){
 "use strict";
 
 /**
@@ -30417,7 +41362,7 @@ var rpc = exports;
 
 rpc.Service = require("./rpc/service");
 
-},{"./rpc/service":231}],231:[function(require,module,exports){
+},{"./rpc/service":531}],531:[function(require,module,exports){
 "use strict";
 module.exports = Service;
 
@@ -30561,7 +41506,7 @@ Service.prototype.end = function end(endedByRPC) {
     return this;
 };
 
-},{"../util/minimal":233}],232:[function(require,module,exports){
+},{"../util/minimal":533}],532:[function(require,module,exports){
 "use strict";
 module.exports = LongBits;
 
@@ -30763,7 +41708,7 @@ LongBits.prototype.length = function length() {
          : part2 < 128 ? 9 : 10;
 };
 
-},{"../util/minimal":233}],233:[function(require,module,exports){
+},{"../util/minimal":533}],533:[function(require,module,exports){
 (function (global){(function (){
 "use strict";
 var util = exports;
@@ -31205,7 +42150,7 @@ util._configure = function() {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./longbits":232,"@protobufjs/aspromise":218,"@protobufjs/base64":219,"@protobufjs/eventemitter":220,"@protobufjs/float":221,"@protobufjs/inquire":222,"@protobufjs/pool":223,"@protobufjs/utf8":224}],234:[function(require,module,exports){
+},{"./longbits":532,"@protobufjs/aspromise":518,"@protobufjs/base64":519,"@protobufjs/eventemitter":520,"@protobufjs/float":521,"@protobufjs/inquire":522,"@protobufjs/pool":523,"@protobufjs/utf8":524}],534:[function(require,module,exports){
 "use strict";
 module.exports = Writer;
 
@@ -31672,7 +42617,7 @@ Writer._configure = function(BufferWriter_) {
     BufferWriter._configure();
 };
 
-},{"./util/minimal":233}],235:[function(require,module,exports){
+},{"./util/minimal":533}],535:[function(require,module,exports){
 "use strict";
 module.exports = BufferWriter;
 
@@ -31759,4 +42704,191 @@ BufferWriter.prototype.string = function write_string_buffer(value) {
 
 BufferWriter._configure();
 
-},{"./util/minimal":233,"./writer":234}]},{},[4]);
+},{"./util/minimal":533,"./writer":534}],536:[function(require,module,exports){
+'use strict'
+
+function isFunction (funktion) {
+  return typeof funktion === 'function'
+}
+
+// Default to complaining loudly when things don't go according to plan.
+var logger = console.error.bind(console)
+
+// Sets a property on an object, preserving its enumerability.
+// This function assumes that the property is already writable.
+function defineProperty (obj, name, value) {
+  var enumerable = !!obj[name] && obj.propertyIsEnumerable(name)
+  Object.defineProperty(obj, name, {
+    configurable: true,
+    enumerable: enumerable,
+    writable: true,
+    value: value
+  })
+}
+
+// Keep initialization idempotent.
+function shimmer (options) {
+  if (options && options.logger) {
+    if (!isFunction(options.logger)) logger("new logger isn't a function, not replacing")
+    else logger = options.logger
+  }
+}
+
+function wrap (nodule, name, wrapper) {
+  if (!nodule || !nodule[name]) {
+    logger('no original function ' + name + ' to wrap')
+    return
+  }
+
+  if (!wrapper) {
+    logger('no wrapper function')
+    logger((new Error()).stack)
+    return
+  }
+
+  if (!isFunction(nodule[name]) || !isFunction(wrapper)) {
+    logger('original object and wrapper must be functions')
+    return
+  }
+
+  var original = nodule[name]
+  var wrapped = wrapper(original, name)
+
+  defineProperty(wrapped, '__original', original)
+  defineProperty(wrapped, '__unwrap', function () {
+    if (nodule[name] === wrapped) defineProperty(nodule, name, original)
+  })
+  defineProperty(wrapped, '__wrapped', true)
+
+  defineProperty(nodule, name, wrapped)
+  return wrapped
+}
+
+function massWrap (nodules, names, wrapper) {
+  if (!nodules) {
+    logger('must provide one or more modules to patch')
+    logger((new Error()).stack)
+    return
+  } else if (!Array.isArray(nodules)) {
+    nodules = [nodules]
+  }
+
+  if (!(names && Array.isArray(names))) {
+    logger('must provide one or more functions to wrap on modules')
+    return
+  }
+
+  nodules.forEach(function (nodule) {
+    names.forEach(function (name) {
+      wrap(nodule, name, wrapper)
+    })
+  })
+}
+
+function unwrap (nodule, name) {
+  if (!nodule || !nodule[name]) {
+    logger('no function to unwrap.')
+    logger((new Error()).stack)
+    return
+  }
+
+  if (!nodule[name].__unwrap) {
+    logger('no original to unwrap to -- has ' + name + ' already been unwrapped?')
+  } else {
+    return nodule[name].__unwrap()
+  }
+}
+
+function massUnwrap (nodules, names) {
+  if (!nodules) {
+    logger('must provide one or more modules to patch')
+    logger((new Error()).stack)
+    return
+  } else if (!Array.isArray(nodules)) {
+    nodules = [nodules]
+  }
+
+  if (!(names && Array.isArray(names))) {
+    logger('must provide one or more functions to unwrap on modules')
+    return
+  }
+
+  nodules.forEach(function (nodule) {
+    names.forEach(function (name) {
+      unwrap(nodule, name)
+    })
+  })
+}
+
+shimmer.wrap = wrap
+shimmer.massWrap = massWrap
+shimmer.unwrap = unwrap
+shimmer.massUnwrap = massUnwrap
+
+module.exports = shimmer
+
+},{}],537:[function(require,module,exports){
+"use strict";
+
+var _sdkTraceWeb = require("@opentelemetry/sdk-trace-web");
+var _sdkTraceBase = require("@opentelemetry/sdk-trace-base");
+var _instrumentation = require("@opentelemetry/instrumentation");
+var _instrumentationFetch = require("@opentelemetry/instrumentation-fetch");
+var _instrumentationXmlHttpRequest = require("@opentelemetry/instrumentation-xml-http-request");
+var _instrumentationDocumentLoad = require("@opentelemetry/instrumentation-document-load");
+var _exporterTraceOtlpHttp = require("@opentelemetry/exporter-trace-otlp-http");
+var _resources = require("@opentelemetry/resources");
+var _semanticConventions = require("@opentelemetry/semantic-conventions");
+var _instrumentationUserInteraction = require("@opentelemetry/instrumentation-user-interaction");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); } // Import OpenTelemetry packages
+var provider = new _sdkTraceWeb.WebTracerProvider({
+  resource: new _resources.Resource(_defineProperty(_defineProperty({}, _semanticConventions.SEMRESATTRS_SERVICE_NAME, "famwebclient"), _semanticConventions.SEMRESATTRS_SERVICE_NAMESPACE, "famwebclient"))
+});
+var environment = {
+  production: false,
+  OTEL_TRACE_URL: "https://devtelemetry.cchaxcess.com/v1/traces",
+  OTEL_LOGS_URL: "https://devtelemetry.cchaxcess.com/v1/logs",
+  OTEL_HEADER: {
+    Authorization: "Basic YWRtaW46YWRtaW4="
+  }
+};
+var otlpExporter = new _exporterTraceOtlpHttp.OTLPTraceExporter({
+  url: environment.OTEL_TRACE_URL,
+  headers: environment.OTEL_HEADER,
+  timeoutMillis: 10000
+});
+provider.addSpanProcessor(new _sdkTraceBase.SimpleSpanProcessor(otlpExporter));
+provider.register();
+(0, _instrumentation.registerInstrumentations)({
+  instrumentations: [new _instrumentationFetch.FetchInstrumentation(), new _instrumentationXmlHttpRequest.XMLHttpRequestInstrumentation(), new _instrumentationDocumentLoad.DocumentLoadInstrumentation(), new _instrumentationUserInteraction.UserInteractionInstrumentation({
+    eventNames: ["click", "submit"]
+  })]
+});
+window.onerror = function (message, source, lineno, colno, error) {
+  var tracer = provider.getTracer("error-tracer");
+  var span = tracer.startSpan("error", {
+    attributes: {
+      "error.message": message,
+      "error.source": source,
+      "error.lineno": lineno,
+      "error.colno": colno,
+      "error.stack": error ? error.stack : ""
+    }
+  });
+  span.end();
+};
+window.addEventListener("unhandledrejection", function (event) {
+  var tracer = provider.getTracer("unhandled-rejection-tracer");
+  var span = tracer.startSpan("unhandled-rejection", {
+    attributes: {
+      "error.message": event.reason ? event.reason.message : "unknown",
+      "error.stack": event.reason ? event.reason.stack : ""
+    }
+  });
+  span.end();
+});
+
+},{"@opentelemetry/exporter-trace-otlp-http":115,"@opentelemetry/instrumentation":183,"@opentelemetry/instrumentation-document-load":120,"@opentelemetry/instrumentation-fetch":127,"@opentelemetry/instrumentation-user-interaction":142,"@opentelemetry/instrumentation-xml-http-request":166,"@opentelemetry/resources":230,"@opentelemetry/sdk-trace-base":407,"@opentelemetry/sdk-trace-web":447,"@opentelemetry/semantic-conventions":510}]},{},[4]);

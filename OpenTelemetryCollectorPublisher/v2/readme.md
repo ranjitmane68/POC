@@ -6,4 +6,4 @@
 
 # step 2
 
-# browserify main1.js -o bundle1.js
+# browserify main.js -o bundle.js
