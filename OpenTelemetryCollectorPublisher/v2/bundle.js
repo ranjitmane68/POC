@@ -341,6 +341,7 @@ module.exports = {
 var logger = require("./app-babel");
 var tracer = require("./tracer-babel");
 window.logData = logger.logData;
+window.tracer = tracer.getTracer("test-tracer");
 
 },{"./app-babel":3,"./tracer-babel":537}],5:[function(require,module,exports){
 "use strict";
@@ -42890,5 +42891,26 @@ window.addEventListener("unhandledrejection", function (event) {
   });
   span.end();
 });
+customTracer: _sdkTraceWeb.Tracer;
+customSpan: _sdkTraceWeb.Span;
+function getCustomTracer(tracerName) {
+  this.customTracer = provider.getTracer(tracerName);
+}
+function startSpan(spanName) {
+  this.customSpan = this.customTracer.startSpan(spanName);
+  return this.customSpan;
+}
+function endSpan() {
+  this.customSpan.end();
+}
+function setAttribute(attr, value) {
+  this.customSpan.setAttribute(attr, value);
+}
+module.exports = {
+  getTracer: getCustomTracer,
+  startSpan: startSpan,
+  endSpan: endSpan,
+  setAttribute: setAttribute
+};
 
 },{"@opentelemetry/exporter-trace-otlp-http":115,"@opentelemetry/instrumentation":183,"@opentelemetry/instrumentation-document-load":120,"@opentelemetry/instrumentation-fetch":127,"@opentelemetry/instrumentation-user-interaction":142,"@opentelemetry/instrumentation-xml-http-request":166,"@opentelemetry/resources":230,"@opentelemetry/sdk-trace-base":407,"@opentelemetry/sdk-trace-web":447,"@opentelemetry/semantic-conventions":510}]},{},[4]);

@@ -1,5 +1,5 @@
 // Import OpenTelemetry packages
-import { WebTracerProvider } from "@opentelemetry/sdk-trace-web";
+import { Span, Tracer, WebTracerProvider } from "@opentelemetry/sdk-trace-web";
 import { SimpleSpanProcessor } from "@opentelemetry/sdk-trace-base";
 import { ConsoleSpanExporter } from "@opentelemetry/sdk-trace-base";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
@@ -77,3 +77,28 @@ window.addEventListener("unhandledrejection", function (event) {
 
   span.end();
 });
+
+customTracer: Tracer;
+customSpan: Span;
+
+function getCustomTracer(tracerName) {
+  this.customTracer = provider.getTracer(tracerName);
+}
+function startSpan(spanName) {
+  this.customSpan = this.customTracer.startSpan(spanName);
+  return this.customSpan;
+}
+function endSpan() {
+  this.customSpan.end();
+}
+
+function setAttribute(attr, value) {
+  this.customSpan.setAttribute(attr, value);
+}
+
+module.exports = {
+  getTracer: getCustomTracer,
+  startSpan: startSpan,
+  endSpan: endSpan,
+  setAttribute: setAttribute,
+};

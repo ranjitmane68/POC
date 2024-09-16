@@ -60,3 +60,24 @@ window.addEventListener("unhandledrejection", function (event) {
   });
   span.end();
 });
+customTracer: _sdkTraceWeb.Tracer;
+customSpan: _sdkTraceWeb.Span;
+function getCustomTracer(tracerName) {
+  this.customTracer = provider.getTracer(tracerName);
+}
+function startSpan(spanName) {
+  this.customSpan = this.customTracer.startSpan(spanName);
+  return this.customSpan;
+}
+function endSpan() {
+  this.customSpan.end();
+}
+function setAttribute(attr, value) {
+  this.customSpan.setAttribute(attr, value);
+}
+module.exports = {
+  getTracer: getCustomTracer,
+  startSpan: startSpan,
+  endSpan: endSpan,
+  setAttribute: setAttribute
+};
