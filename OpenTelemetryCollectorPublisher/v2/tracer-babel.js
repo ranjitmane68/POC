@@ -60,39 +60,7 @@ window.addEventListener("unhandledrejection", function (event) {
   });
   span.end();
 });
-var customTracer;
-var customSpan;
-function getCustomTracer(tracerName) {
-  customTracer = provider.getTracer(tracerName);
-  return customTracer;
-}
-function startSpan(spanName) {
-  customSpan = customTracer.startSpan(spanName);
-  return customSpan;
-}
-function endSpan() {
-  customSpan.end();
-}
-function setAttribute(attr, value) {
-  customSpan.setAttribute(attr, value);
-}
-
-// Custom logger that includes trace and span context
-function logWithTraceContext(tracerName, message) {
-  // Get the active tracer and span
-  var span = provider.getTracer(tracerName).getCurrentSpan();
-  if (span) {
-    var traceId = span.spanContext().traceId;
-    var spanId = span.spanContext().spanId;
-    console.log("[TraceID: ".concat(traceId, "] [SpanID: ").concat(spanId, "] ").concat(message));
-  } else {
-    console.log(message);
-  }
-}
+var tracer = provider.getTracer("famwebclient");
 module.exports = {
-  getTracer: getCustomTracer,
-  startSpan: startSpan,
-  endSpan: endSpan,
-  setAttribute: setAttribute,
-  logWithTraceContext: logWithTraceContext
+  tracer: tracer
 };

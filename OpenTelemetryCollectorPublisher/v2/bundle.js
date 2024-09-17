@@ -341,11 +341,9 @@ module.exports = {
 var logger = require("./app-babel");
 var tracer = require("./tracer-babel");
 window.logData = logger.logData;
-window.getTracer = tracer.getTracer;
-window.startSpan = tracer.startSpan;
-window.endSpan = tracer.endSpan;
-window.setAttribute = tracer.setAttribute;
-window.logWithTraceContext = tracer.logWithTraceContext;
+window.tracer = tracer.tracer;
+// window.startSpan = tracer.startSpan;
+// window.endSpan = tracer.endSpan;
 
 },{"./app-babel":3,"./tracer-babel":564}],5:[function(require,module,exports){
 "use strict";
@@ -42949,41 +42947,9 @@ window.addEventListener("unhandledrejection", function (event) {
   });
   span.end();
 });
-var customTracer;
-var customSpan;
-function getCustomTracer(tracerName) {
-  customTracer = provider.getTracer(tracerName);
-  return customTracer;
-}
-function startSpan(spanName) {
-  customSpan = customTracer.startSpan(spanName);
-  return customSpan;
-}
-function endSpan() {
-  customSpan.end();
-}
-function setAttribute(attr, value) {
-  customSpan.setAttribute(attr, value);
-}
-
-// Custom logger that includes trace and span context
-function logWithTraceContext(tracerName, message) {
-  // Get the active tracer and span
-  var span = provider.getTracer(tracerName).getCurrentSpan();
-  if (span) {
-    var traceId = span.spanContext().traceId;
-    var spanId = span.spanContext().spanId;
-    console.log("[TraceID: ".concat(traceId, "] [SpanID: ").concat(spanId, "] ").concat(message));
-  } else {
-    console.log(message);
-  }
-}
+var tracer = provider.getTracer("famwebclient");
 module.exports = {
-  getTracer: getCustomTracer,
-  startSpan: startSpan,
-  endSpan: endSpan,
-  setAttribute: setAttribute,
-  logWithTraceContext: logWithTraceContext
+  tracer: tracer
 };
 
 },{"@opentelemetry/exporter-trace-otlp-http":115,"@opentelemetry/instrumentation":183,"@opentelemetry/instrumentation-document-load":120,"@opentelemetry/instrumentation-fetch":127,"@opentelemetry/instrumentation-user-interaction":142,"@opentelemetry/instrumentation-xml-http-request":166,"@opentelemetry/resources":230,"@opentelemetry/sdk-trace-base":407,"@opentelemetry/sdk-trace-web":447,"@opentelemetry/semantic-conventions":539}]},{},[4]);

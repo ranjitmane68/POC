@@ -1,7 +1,6 @@
 // Import OpenTelemetry packages
 import { Span, Tracer, WebTracerProvider } from "@opentelemetry/sdk-trace-web";
 import { SimpleSpanProcessor } from "@opentelemetry/sdk-trace-base";
-import { ConsoleSpanExporter } from "@opentelemetry/sdk-trace-base";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
 import { FetchInstrumentation } from "@opentelemetry/instrumentation-fetch";
 import { XMLHttpRequestInstrumentation } from "@opentelemetry/instrumentation-xml-http-request";
@@ -78,44 +77,8 @@ window.addEventListener("unhandledrejection", function (event) {
   span.end();
 });
 
-var customTracer;
-var customSpan;
-
-function getCustomTracer(tracerName) {
-  customTracer = provider.getTracer(tracerName);
-  return customTracer;
-}
-function startSpan(spanName) {
-  customSpan = customTracer.startSpan(spanName);
-  return customSpan;
-}
-function endSpan() {
-  customSpan.end();
-}
-
-function setAttribute(attr, value) {
-  customSpan.setAttribute(attr, value);
-}
-
-// Custom logger that includes trace and span context
-function logWithTraceContext(tracerName, message) {
-  // Get the active tracer and span
-  const span = provider.getTracer(tracerName).getCurrentSpan();
-
-  if (span) {
-    const traceId = span.spanContext().traceId;
-    const spanId = span.spanContext().spanId;
-
-    console.log(`[TraceID: ${traceId}] [SpanID: ${spanId}] ${message}`);
-  } else {
-    console.log(message);
-  }
-}
+var tracer = provider.getTracer("famwebclient");
 
 module.exports = {
-  getTracer: getCustomTracer,
-  startSpan: startSpan,
-  endSpan: endSpan,
-  setAttribute: setAttribute,
-  logWithTraceContext: logWithTraceContext,
+  tracer: tracer,
 };
