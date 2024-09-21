@@ -9,9 +9,13 @@ import * as logsAPI from "@opentelemetry/api-logs";
 import { OTLPLogExporter } from "@opentelemetry/exporter-logs-otlp-http";
 import { Resource } from "@opentelemetry/resources";
 import {
+  HOSTARCHVALUES_ARM64,
+  SEMRESATTRS_HOST_ID,
+  SEMRESATTRS_HOST_NAME,
   SEMRESATTRS_SERVICE_NAME,
-  SEMRESATTRS_SERVICE_NAMESPACE,
+  SEMRESATTRS_SERVICE_NAMESPACE
 } from "@opentelemetry/semantic-conventions";
+import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 
 var environment = {
   production: false,
@@ -20,11 +24,27 @@ var environment = {
   OTEL_HEADER: { Authorization: "Basic YWRtaW46YWRtaW4=" },
 };
 
-var loggerProvider = new LoggerProvider({
-  resource: new Resource({
-    [SEMRESATTRS_SERVICE_NAME]: "famwebclient",
-    [SEMRESATTRS_SERVICE_NAMESPACE]: "famwebclient",
-  }),
+const loggerProvider = new LoggerProvider({
+   resource: new Resource({   
+    'service.name': 'famwebclient',
+    'service.instance.id': '627cc493-f310-47de-96bd-71410b7dec09',
+      source: 'web-app',
+    'host.name': 'HP-Pavilion-Laptop-14-dv1xxx', 
+    'host.arch':'amd64',
+    'host.type': 'n1-standard-1',
+    'os.name': 'linux',
+    'os.version': '6.0' ,
+    'process.pid': 1,
+    'process.executable.name': 'node',
+    'process.command': '/usr/src/app/app.js',
+    'process.command_line': '/usr/local/bin/node /usr/src/app/app.js',
+    'process.runtime.version': '18.9.0',
+    'process.runtime.name': 'nodejs',
+    'process.runtime.description': 'Node.js',
+    [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: 'development',
+    [SemanticResourceAttributes.SERVICE_INSTANCE_ID]: '123',
+
+  })
 });
 
 loggerProvider.addLogRecordProcessor(
@@ -36,14 +56,14 @@ loggerProvider.addLogRecordProcessor(
     new OTLPLogExporter({
       url: environment.OTEL_LOGS_URL,
       headers: environment.OTEL_HEADER,
-      timeoutMillis: 10000,
+      timeoutMillis: 10000
     })
   )
 );
 
 logs.setGlobalLoggerProvider(loggerProvider);
 
-var logger = loggerProvider.getLogger("default", "1.0.0");
+var logger = loggerProvider.getLogger("famwebclientlogger", "1.0.0");
 
 var severity = {
   UNSPECIFIED: 0,
@@ -73,13 +93,14 @@ var severity = {
   FATAL4: 24,
 };
 
-var ddLog = function (severityText, messageBody, attr) {
+var ddLog = function (severityText, messageBody, hostname, attr) {
   var severityTextNumber = severity[severityText];
   logger.emit({
     severityNumber: severityTextNumber,
     severityText: severityText,
     body: messageBody,
     attributes: attr,
+    hostname: hostname
   });
 };
 

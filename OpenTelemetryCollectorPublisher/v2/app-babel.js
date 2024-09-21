@@ -21,7 +21,23 @@ var environment = {
   }
 };
 var loggerProvider = new _sdkLogs.LoggerProvider({
-  resource: new _resources.Resource(_defineProperty(_defineProperty({}, _semanticConventions.SEMRESATTRS_SERVICE_NAME, "famwebclient"), _semanticConventions.SEMRESATTRS_SERVICE_NAMESPACE, "famwebclient"))
+  resource: new _resources.Resource(_defineProperty(_defineProperty({
+    'service.name': 'famwebclient',
+    'service.instance.id': '627cc493-f310-47de-96bd-71410b7dec09',
+    source: 'web-app',
+    'host.name': 'HP-Pavilion-Laptop-14-dv1xxx',
+    'host.arch': 'amd64',
+    'host.type': 'n1-standard-1',
+    'os.name': 'linux',
+    'os.version': '6.0',
+    'process.pid': 1,
+    'process.executable.name': 'node',
+    'process.command': '/usr/src/app/app.js',
+    'process.command_line': '/usr/local/bin/node /usr/src/app/app.js',
+    'process.runtime.version': '18.9.0',
+    'process.runtime.name': 'nodejs',
+    'process.runtime.description': 'Node.js'
+  }, _semanticConventions.SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT, 'development'), _semanticConventions.SemanticResourceAttributes.SERVICE_INSTANCE_ID, '123'))
 });
 loggerProvider.addLogRecordProcessor(new _sdkLogs.SimpleLogRecordProcessor(new _sdkLogs.ConsoleLogRecordExporter()));
 loggerProvider.addLogRecordProcessor(new _sdkLogs.BatchLogRecordProcessor(new _exporterLogsOtlpHttp.OTLPLogExporter({
@@ -30,7 +46,7 @@ loggerProvider.addLogRecordProcessor(new _sdkLogs.BatchLogRecordProcessor(new _e
   timeoutMillis: 10000
 })));
 _apiLogs.logs.setGlobalLoggerProvider(loggerProvider);
-var logger = loggerProvider.getLogger("default", "1.0.0");
+var logger = loggerProvider.getLogger("famwebclientlogger", "1.0.0");
 var severity = {
   UNSPECIFIED: 0,
   TRACE: 1,
@@ -58,13 +74,14 @@ var severity = {
   FATAL3: 23,
   FATAL4: 24
 };
-var ddLog = function ddLog(severityText, messageBody, attr) {
+var ddLog = function ddLog(severityText, messageBody, hostname, attr) {
   var severityTextNumber = severity[severityText];
   logger.emit({
     severityNumber: severityTextNumber,
     severityText: severityText,
     body: messageBody,
-    attributes: attr
+    attributes: attr,
+    hostname: hostname
   });
 };
 module.exports = {
