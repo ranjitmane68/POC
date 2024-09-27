@@ -1,53 +1,43 @@
-// Helper function to convert Base64 to byte array
-function base64ToBytes(base64) {
-    return Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+const crypto = require('crypto');
+
+// Function to decrypt AES-256-CBC encrypted text
+function decryptAES(encryptedText, key64) {
+    // Split the encrypted text into IV and ciphertext
+    const [ivBase64, encryptedBase64] = encryptedText.split(':');
+
+    // Decode Base64 strings to byte arrays
+    const iv = Buffer.from(ivBase64, 'base64');
+    const encrypted = Buffer.from(encryptedBase64, 'base64');
+
+    // Truncate the key to 32 bytes (AES-256 key size)
+    const key = Buffer.from(key64.slice(0, 32), 'utf-8');
+
+    // Create a decipher object
+    const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+    decipher.setAutoPadding(true);
+
+    // Decrypt the ciphertext
+    let decrypted = decipher.update(encrypted, 'base64', 'utf-8');
+    decrypted += decipher.final('utf-8');
+
+    return decrypted;
 }
 
-// Helper function to convert byte array to UTF-8 string
-function bytesToString(bytes) {
-    return new TextDecoder().decode(bytes);
+// Example usage
+const key64 = '23A6AB1AD0A65E719689FF714BF62464487BF0CA655C7C75704E7DAAD3DFDD63';
+const encryptedText1 = 'OAK1Wq4FORKsbpmPIjkxkg==:2fQVtqoMpteVB0cwNwqhKvJCR/snoNtPkcFnlmRsBUFo4CV9zVBhSjYlMrWoGKD+'; 
+const encryptedText2 = 'HG+n75rakLyzVECuQfaiKA==:xPBX8t2NWgTm0IyTxVpR/Qb4jtmt9qEwWvf2vtUeiOKjqwWeEr2Di2mtjEJg9BnF'; 
+const encryptedText3 = 'dClFnHesQoyb25upxDG+QA==:BA+FzLlv0KhcjkPJmzcNRCMpVYZU6s7KbQy68UOGrEg='; 
+
+try {
+    const decryptedMessage = decryptAES(encryptedText1, key64);
+    console.log('Decrypted message1:', decryptedMessage);
+
+    const decryptedMessage2 = decryptAES(encryptedText2, key64);
+    console.log('Decrypted message2:', decryptedMessage2);
+
+    const decryptedMessage3 = decryptAES(encryptedText3, key64);
+    console.log('Decrypted message3:', decryptedMessage3);
+} catch (error) {
+    console.error('Decryption failed:', error.message);
 }
-
-// Decrypt AES-CBC ciphertext
-async function decryptAES(cipherTextBase64, keyBase64, ivBase64) {
-    try {
-        // Decode the key, iv, and ciphertext from Base64
-        const keyBytes = base64ToBytes(keyBase64);
-        const ivBytes = base64ToBytes(ivBase64);
-        const cipherBytes = base64ToBytes(cipherTextBase64);
-
-        // Import the key for AES-CBC decryption
-        const cryptoKey = await crypto.subtle.importKey(
-            "raw",                               // Raw key data
-            keyBytes,                            // Key bytes (must be 16, 24, or 32 bytes for AES)
-            { name: "AES-CBC" },                 // Algorithm to use
-            false,                               // Key is not extractable
-            ["decrypt"]                          // Key usage is decryption
-        );
-
-        // Perform the decryption using AES-CBC and the IV
-        const decryptedBytes = await crypto.subtle.decrypt(
-            { name: "AES-CBC", iv: ivBytes },    // AES-CBC with initialization vector (IV)
-            cryptoKey,                           // Decryption key
-            cipherBytes                          // Encrypted ciphertext bytes
-        );
-
-        // Convert the decrypted bytes into a readable UTF-8 string
-        const decryptedText = bytesToString(new Uint8Array(decryptedBytes));
-        console.log("Decrypted Text:", decryptedText);
-        return decryptedText;
-    } catch (error) {
-        console.error("Decryption failed:", error);
-        throw error;
-    }
-}
-
-// Example encrypted data in Base64 format
-const cipherTextBase64 = "SJSF83J8nVY/nhVn2Pt6MA==";   // Encrypted text (Base64 encoded)
-const keyBase64 = btoa("thisisaverystrongencryptionkey!!"); // Key as Base64 string (AES-256, 32-byte key)
-const ivBase64 = btoa("\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"); // 16-byte IV (Base64 encoded)
-
-// Call the decryption function
-decryptAES(cipherTextBase64, keyBase64, ivBase64).then((decryptedText) => {
-    console.log("Final Decrypted Text:", decryptedText);
-});
