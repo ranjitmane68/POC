@@ -1,43 +1,47 @@
-# Define a plaintext string and encryption key
-$plaintext = "This is a secret message"
-$key = "thisisaverystrongencryptionkey!!"  # Must be 16, 24, or 32 characters for AES
-
-# Ensure the key is 32 bytes long for AES-256 (you can adjust for AES-128 or AES-192 as needed)
-if ($key.Length -ne 16 -and $key.Length -ne 24 -and $key.Length -ne 32) {
-    throw "Key must be exactly 16, 24, or 32 characters long."
+# Function to convert string to a byte array
+function ConvertTo-ByteArray($inputString) {
+    return [System.Text.Encoding]::UTF8.GetBytes($inputString)
 }
 
-# Convert the key to a byte array
-$keyBytes = [Text.Encoding]::UTF8.GetBytes($key)
+# AES Encryption function
+function Encrypt-AES {
+    param (
+        [string]$PlainText,
+        [string]$Key64Char,  # 64-character key
+        [string]$IV          # Initialization Vector
+    )
 
-# Define a static 16-byte IV (for AES, IV must be 16 bytes)
-$iv = New-Object byte[] 16
-[System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($iv)  # Randomize IV in real-world use cases
+    # Convert the key to a 256-bit key (truncate to 32 bytes/256 bits)
+    $KeyBytes = ConvertTo-ByteArray($Key64Char.Substring(0, 32))
 
-# Create AES object
-$aes = [System.Security.Cryptography.Aes]::Create()
-$aes.Mode = [System.Security.Cryptography.CipherMode]::CBC
-$aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
-$aes.Key = $keyBytes
-$aes.IV = $iv
+    # Convert IV to byte array (AES uses a 16-byte IV for 128-bit block size)
+    $IVBytes = ConvertTo-ByteArray($IV.Substring(0, 16))
 
-# Encryption process
-$encryptor = $aes.CreateEncryptor()
-$plaintextBytes = [Text.Encoding]::UTF8.GetBytes($plaintext)
-$encryptedBytes = $encryptor.TransformFinalBlock($plaintextBytes, 0, $plaintextBytes.Length)
+    # Convert the plaintext to a byte array
+    $PlainTextBytes = ConvertTo-ByteArray($PlainText)
 
-# Convert encrypted data to Base64 string for storage
-$encryptedText = [Convert]::ToBase64String($encryptedBytes)
-Write-Output "Encrypted Text: $encryptedText"
+    # Create AES object
+    $aes = [System.Security.Cryptography.AesManaged]::new()
+    $aes.Key = $KeyBytes
+    $aes.IV = $IVBytes
+    $aes.Mode = [System.Security.Cryptography.CipherMode]::CBC
+    $aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
 
-# Decryption process
-$decryptor = $aes.CreateDecryptor()
-$encryptedBytesBack = [Convert]::FromBase64String($encryptedText)
-$decryptedBytes = $decryptor.TransformFinalBlock($encryptedBytesBack, 0, $encryptedBytesBack.Length)
+    # Create encryptor
+    $encryptor = $aes.CreateEncryptor()
 
-# Convert decrypted bytes back to string
-$decryptedText = [Text.Encoding]::UTF8.GetString($decryptedBytes)
-Write-Output "Decrypted Text: $decryptedText"
+    # Encrypt the plaintext
+    $encryptedBytes = $encryptor.TransformFinalBlock($PlainTextBytes, 0, $PlainTextBytes.Length)
 
-# Clean up
-$aes.Dispose()
+    # Convert encrypted bytes to base64 string and return
+    return [Convert]::ToBase64String($encryptedBytes)
+}
+
+# Example usage:
+$plainText = "This is a secret message."
+$key64 = "C021F0300F31E6B7B14A663F5E9274987B3C3B5D606DE65777DBC83EA409BE13"
+$iv = "1234567890123456"  # 16-character IV (required for AES CBC mode)
+
+$encryptedText = Encrypt-AES -PlainText $plainText -Key64Char $key64 -IV $iv
+
+Write-Host "Encrypted Text: $encryptedText"
