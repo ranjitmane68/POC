@@ -21,35 +21,52 @@ import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { UserInteractionInstrumentation } from "@opentelemetry/instrumentation-user-interaction";
 import crypto from 'crypto';
 
-var algorithm = 'aes256'; 
-var key = '66FC55D2141A82E3F1FF3A1F28D875BDADB1843BB22AE9EE46B665D6292844BD';
+// Example usage
+var key64 = '23A6AB1AD0A65E719689FF714BF62464487BF0CA655C7C75704E7DAAD3DFDD63';
+var encryptedTraceUrl = '6mKephgC7JJvQOZZnyzxcg==:KFEwzy90Dx5orANyCNKMmXmUE4PCMmEabO8LDV+oLC4FlsRaWzjsMoTiJ8t+iX1y'; 
+var encryptedLogsUrl = 'HG+n75rakLyzVECuQfaiKA==:xPBX8t2NWgTm0IyTxVpR/Qb4jtmt9qEwWvf2vtUeiOKjqwWeEr2Di2mtjEJg9BnF'; 
+var encryptedBasicAuthToken = 'dClFnHesQoyb25upxDG+QA==:BA+FzLlv0KhcjkPJmzcNRCMpVYZU6s7KbQy68UOGrEg='; 
 
-function encrypt(plainText) {
-  var cipher = crypto.createCipher(algorithm, key);  
-  var encrypted = cipher.update(plainText, 'utf8', 'hex') + cipher.final('hex');
-  return encrypted;  
+
+// Function to decrypt AES-256-CBC encrypted text
+function decryptAES(encryptedText, key64) {
+    // Split the encrypted text into IV and ciphertext
+    const [ivBase64, encryptedBase64] = encryptedText.split(':');
+
+    // Decode Base64 strings to byte arrays
+    const iv = Buffer.from(ivBase64, 'base64');
+    const encrypted = Buffer.from(encryptedBase64, 'base64');
+
+    // Truncate the key to 32 bytes (AES-256 key size)
+    const key = Buffer.from(key64.slice(0, 32), 'utf-8');
+
+    // Create a decipher object
+    const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+    decipher.setAutoPadding(true);
+
+    // Decrypt the ciphertext
+    let decrypted = decipher.update(encrypted, 'base64', 'utf-8');
+    decrypted += decipher.final('utf-8');
+
+    return decrypted;
 }
 
-var encyptedTraceUrl = encrypt('https://devtelemetry.cchaxcess.com/v1/traces');
-console.log(encyptedTraceUrl);
-var encryptedLogsUrl = encrypt('https://devtelemetry.cchaxcess.com/v1/logs');
-console.log(encryptedLogsUrl);
-var encryptedAuthToken = encrypt('YWRtaW46YWRtaW4=');
-console.log(encryptedAuthToken);
 
-function decrypt (encryptedText) {
-  var decipher = crypto.createDecipher(algorithm, key);
-  var decrypted = decipher.update(encryptedText, 'hex', 'utf8') + decipher.final('utf8');
-  return decrypted;
-}
+const decryptedMessage1 = decryptAES(encryptedTraceUrl, key64);
+console.log('Decrypted message:', decryptedMessage1);
+
+const decryptedMessage2 = decryptAES(encryptedLogsUrl, key64);
+console.log('Decrypted message:', decryptedMessage2);
+
+const decryptedMessage3 = decryptAES(encryptedBasicAuthToken, key64);
+console.log('Decrypted message:', decryptedMessage3);
 
 
-var token = decrypt('6f872bccac6996374905707c1f76fa04b98610516ac381f7fd5b1970378a69da');
-var authToken = 'basic ' + token;
+var authToken = 'basic ' + decryptedMessage3;
 var environment = {
   production: false,
-  OTEL_TRACE_URL: "https://devtelemetry.cchaxcess.com/v1/traces",
-  OTEL_LOGS_URL: "https://devtelemetry.cchaxcess.com/v1/logs",
+  OTEL_TRACE_URL: decryptedMessage1,
+  OTEL_LOGS_URL: decryptedMessage2,
   OTEL_HEADER: {
     Authorization: authToken
   }
