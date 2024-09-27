@@ -2,8 +2,8 @@
 
 # step 1
 
-# npx babel src/app1.js --out-file src/app1-babel.js
+# npx babel app.js --out-file app-babel.js
 
 # step 2
 
-# browserify main.js -o bundle.js
+# npx browserify main.js -o bundle.js

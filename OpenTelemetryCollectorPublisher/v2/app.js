@@ -8,48 +8,73 @@ import { logs } from "@opentelemetry/api-logs";
 import * as logsAPI from "@opentelemetry/api-logs";
 import { OTLPLogExporter } from "@opentelemetry/exporter-logs-otlp-http";
 import { Resource } from "@opentelemetry/resources";
-import {
-  HOSTARCHVALUES_ARM64,
-  SEMRESATTRS_HOST_ID,
-  SEMRESATTRS_HOST_NAME,
-  SEMRESATTRS_SERVICE_NAME,
-  SEMRESATTRS_SERVICE_NAMESPACE
-} from "@opentelemetry/semantic-conventions";
+import os from 'os';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 
+import { Span, Tracer, WebTracerProvider } from "@opentelemetry/sdk-trace-web";
+import { SimpleSpanProcessor } from "@opentelemetry/sdk-trace-base";
+import { registerInstrumentations } from "@opentelemetry/instrumentation";
+import { FetchInstrumentation } from "@opentelemetry/instrumentation-fetch";
+import { XMLHttpRequestInstrumentation } from "@opentelemetry/instrumentation-xml-http-request";
+import { DocumentLoadInstrumentation } from "@opentelemetry/instrumentation-document-load";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
+import { UserInteractionInstrumentation } from "@opentelemetry/instrumentation-user-interaction";
+import crypto from 'crypto';
+
+var algorithm = 'aes256'; 
+var key = '66FC55D2141A82E3F1FF3A1F28D875BDADB1843BB22AE9EE46B665D6292844BD';
+
+function encrypt(plainText) {
+  var cipher = crypto.createCipher(algorithm, key);  
+  var encrypted = cipher.update(plainText, 'utf8', 'hex') + cipher.final('hex');
+  return encrypted;  
+}
+
+var encyptedTraceUrl = encrypt('https://devtelemetry.cchaxcess.com/v1/traces');
+console.log(encyptedTraceUrl);
+var encryptedLogsUrl = encrypt('https://devtelemetry.cchaxcess.com/v1/logs');
+console.log(encryptedLogsUrl);
+var encryptedAuthToken = encrypt('YWRtaW46YWRtaW4=');
+console.log(encryptedAuthToken);
+
+function decrypt (encryptedText) {
+  var decipher = crypto.createDecipher(algorithm, key);
+  var decrypted = decipher.update(encryptedText, 'hex', 'utf8') + decipher.final('utf8');
+  return decrypted;
+}
+
+
+var token = decrypt('6f872bccac6996374905707c1f76fa04b98610516ac381f7fd5b1970378a69da');
+var authToken = 'basic ' + token;
 var environment = {
   production: false,
   OTEL_TRACE_URL: "https://devtelemetry.cchaxcess.com/v1/traces",
   OTEL_LOGS_URL: "https://devtelemetry.cchaxcess.com/v1/logs",
-  OTEL_HEADER: { Authorization: "Basic YWRtaW46YWRtaW4=" },
+  OTEL_HEADER: {
+    Authorization: authToken
+  }
 };
 
-const loggerProvider = new LoggerProvider({
-   resource: new Resource({   
-    'service.name': 'famwebclient',
-    'service.instance.id': '627cc493-f310-47de-96bd-71410b7dec09',
-      source: 'web-app',
-    'host.name': 'HP-Pavilion-Laptop-14-dv1xxx', 
-    'host.arch':'amd64',
-    'host.type': 'n1-standard-1',
-    'os.name': 'linux',
-    'os.version': '6.0' ,
-    'process.pid': 1,
-    'process.executable.name': 'node',
-    'process.command': '/usr/src/app/app.js',
-    'process.command_line': '/usr/local/bin/node /usr/src/app/app.js',
-    'process.runtime.version': '18.9.0',
-    'process.runtime.name': 'nodejs',
-    'process.runtime.description': 'Node.js',
-    [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: 'development',
-    [SemanticResourceAttributes.SERVICE_INSTANCE_ID]: '123',
+var res = Resource.default().merge(new Resource({   
+  [SemanticResourceAttributes.SERVICE_NAME]: 'famwebclient',
+  [SemanticResourceAttributes.SERVICE_VERSION]: '1.0.0',
+  [SemanticResourceAttributes.OS_TYPE]: os.type(),
+  [SemanticResourceAttributes.HOST_NAME]: os.hostname(),
+  [SemanticResourceAttributes.HOST_ARCH]: os.arch(),
+  [SemanticResourceAttributes.HOST_TYPE]: os.platform(),
+  [SemanticResourceAttributes.OS_NAME]: os.release(),
+  [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: "dev",
+  [SemanticResourceAttributes.SERVICE_INSTANCE_ID]: '1.0.0'}));
 
-  })
+
+const loggerProvider = new LoggerProvider({
+   resource: res
 });
 
 loggerProvider.addLogRecordProcessor(
   new SimpleLogRecordProcessor(new ConsoleLogRecordExporter())
 );
+
 
 loggerProvider.addLogRecordProcessor(
   new BatchLogRecordProcessor(
@@ -93,17 +118,76 @@ var severity = {
   FATAL4: 24,
 };
 
-var ddLog = function (severityText, messageBody, hostname, attr) {
+var ddLog = function (severityText, messageBody, attr) {
   var severityTextNumber = severity[severityText];
   logger.emit({
     severityNumber: severityTextNumber,
     severityText: severityText,
     body: messageBody,
-    attributes: attr,
-    hostname: hostname
+    attributes: attr
   });
 };
 
+
+const provider = new WebTracerProvider({
+  resource: res
+});
+
+
+var tracer = provider.getTracer("famwebclient");
+
+registerInstrumentations({
+  instrumentations: [
+    new FetchInstrumentation(),
+    new XMLHttpRequestInstrumentation(),
+    new DocumentLoadInstrumentation(),
+    new UserInteractionInstrumentation({
+      eventNames: ["click", "submit"],
+    }),
+  ],
+});
+
+window.onerror = function (message, source, lineno, colno, error) {
+  const tracer = provider.getTracer("error-tracer");
+
+  const span = tracer.startSpan("error", {
+    attributes: {
+      "error.message": message,
+      "error.source": source,
+      "error.lineno": lineno,
+      "error.colno": colno,
+      "error.stack": error ? error.stack : "",
+    },
+  });
+
+  span.end();
+};
+
+window.addEventListener("unhandledrejection", function (event) {
+  const tracer = provider.getTracer("unhandled-rejection-tracer");
+
+  const span = tracer.startSpan("unhandled-rejection", {
+    attributes: {
+      "error.message": event.reason ? event.reason.message : "unknown",
+      "error.stack": event.reason ? event.reason.stack : "",
+    },
+  });
+
+  span.end();
+});
+
+
+const otlpTraceExporter = new OTLPTraceExporter({
+  url: environment.OTEL_TRACE_URL,
+  headers: environment.OTEL_HEADER,
+  timeoutMillis: 10000,
+});
+
+provider.addSpanProcessor(new SimpleSpanProcessor(otlpTraceExporter));
+
+provider.register();
+
 module.exports = {
   logData: ddLog,
+  tracer: tracer
 };
